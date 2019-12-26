@@ -60,9 +60,6 @@ class Player:
             self.HP += ((self.damage - Boss.armor) * (self.vampirizm / 100))
             self.HP = math.ceil(self.HP)
 
-    def proverka(self):
-        pass
-
 
 class blade_of_despair:
     def __init__(self):
@@ -173,3 +170,87 @@ class forse_of_ice:
     def use(self):
         Player.damage += self.damagebath
         Player.HP += self.damagebath
+
+
+class trident:
+    def __init__(self):
+        self.damagebath = 80
+
+    def use(self):
+        Player.damage += self.damagebath
+
+
+class golden_meteor:
+    def __init__(self):
+        self.damagebath = 60
+        self.vampirizmbath = 5
+
+    def use(self):
+        Player.damage += self.damagebath
+        Player.vampirizm += self.vampirizmbath
+
+
+class a_shot_of_the_hunter:
+    def __init__(self):
+        self.damagebath = 80
+
+    def use(self):
+        Player.damage += self.damagebath
+
+
+class the_Golden_stick:
+    def __init__(self):
+        self.damagebath = 100
+
+    def use(self):
+        Player.damage += self.damagebath
+
+
+class the_giants_axe:
+    def __init__(self):
+        self.damagebath = 30
+        self.HPbath = 230
+
+    def use(self):
+        Player.damage += self.damagebath
+        Player.HP += self.HPbath
+
+
+class the_sword_of_the_legionnaire:
+    def __init__(self):
+        self.damagebath = 60
+
+    def use(self):
+        Player.damage += self.damagebath
+
+
+class dagger:
+    def __init__(self):
+        self.damsgebath = 15
+
+    def use(self):
+        Player.damage += self.damsgebath
+
+
+class an_ordinary_spear:
+    def __init__(self):
+        self.damagebath = 40
+
+    def use(self):
+        Player.damage += self.damagebath
+
+
+class hammer_of_wrath:
+    def __init__(self):
+        self.damsgebath = 35
+
+    def use(self):
+        Player.damage += self.damsgebath
+
+
+class an_angry_growl:
+    def __init__(self):
+        self.damagebath = 60
+
+    def use(self):
+        Player.damage += self.damagebath
