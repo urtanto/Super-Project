@@ -85,7 +85,7 @@ class blade_of_the_seven_seas:
 class berserker_rage:
     def __init__(self):
         self.damagebath = 65
-        self.boost = 1.025
+        self.boost = 1.25
 
     def use(self):
         Player.damage += self.damagebath
@@ -132,3 +132,44 @@ class nature_wind:
     def use(self):
         Player.damage += self.damagebath
         Player.vampirizm += self.vampirizm
+
+
+class armor_blade:
+    def __init__(self):
+        self.armorbath = 90
+
+    def use(self):
+        Player.armor += self.armorbath
+
+
+class benefit_of_courage:
+    def __init__(self):
+        self.HPbath = 770
+        self.vampirismbath = 45
+        self.boost = 1.1
+
+    def use(self):
+        Player.HP += self.HPbath
+        Player.vampirizm += self.vampirismbath
+        Player.armor = math.ceil(Player.armor * self.boost)
+        Player.damage = math.ceil(Player.damage * self.boost)
+
+
+class caller_of_the_devil:
+    def __init__(self):
+        self.HPbath = 770
+        self.damagebath = 15
+
+    def use(self):
+        Player.damage += self.damagebath
+        Player.HP += self.HPbath
+
+
+class forse_of_ice:
+    def __init__(self):
+        self.damagebath = 30
+        self.HPbath = 1000
+
+    def use(self):
+        Player.damage += self.damagebath
+        Player.HP += self.damagebath
