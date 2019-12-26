@@ -10,17 +10,17 @@ class Boss:
 
     def __init__(self, hard_of_level):
         if hard_of_level == 1:
-            self.HP = 10000
-            self.armor = 200
-            self.damage = 100
+            self.HP = 150000
+            self.armor = 0
+            self.damage = 1250
         elif hard_of_level == 2:
-            self.HP = 50000
-            self.armor = 1000
-            self.damage = 500
-        elif hard_of_level == 3:
-            self.HP = 250000
-            self.armor = 5000
+            self.HP = 500000
+            self.armor = 500
             self.damage = 2500
+        elif hard_of_level == 3:
+            self.HP = 1000000
+            self.armor = 2000
+            self.damage = 7500
 
     def taking_damage(self):
         if Player.damage - self.armor > 0:
