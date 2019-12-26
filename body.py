@@ -4,10 +4,11 @@ hard_of_level = int(input())
 
 
 class Boss:
+    HP = 9999999999
+    armor = 9999999999
+    damage = 9999999999
+
     def __init__(self, hard_of_level):
-        self.HP = 9999999999
-        self.armor = 9999999999
-        self.damage = 9999999999
         if hard_of_level == 1:
             self.HP = 10000
             self.armor = 200
@@ -30,11 +31,12 @@ class Boss:
 
 
 class Player:
+    HP = 1
+    armor = 1
+    damage = 1
+    vampirizm = 0
+
     def __init__(self, hard_of_level):
-        self.HP = 1
-        self.armor = 1
-        self.damage = 1
-        self.vampirizm = 0
         if hard_of_level == 1:
             self.HP = 100
             self.armor = 200
