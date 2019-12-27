@@ -78,8 +78,8 @@ class Player:
     def kill(self):
         if self.death >= 0 and self.HP > 0:
             self.death -= 1
-            self.HP = self.SHP * 0.15
-            self.SHP = self.HP
+            self.SHP = self.SHP * 0.15
+            self.HP = self.SHP
         else:
             pass  # допиши это конец ишры
 
