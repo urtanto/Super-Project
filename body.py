@@ -43,20 +43,24 @@ class Player:
     vampirizm = 0
     regen = 1
     death = 0
+    SHP = HP
 
     def __init__(self, hard_of_level):
         if hard_of_level == 1:
             self.HP = 100
+            self.SHP = self.HP
             self.armor = 200
             self.damage = 100
             self.regen = 25
         elif hard_of_level == 2:
             self.HP = 50
+            self.SHP = self.HP
             self.armor = 100
             self.damage = 20
             self.regen = 4
         elif hard_of_level == 3:
             self.HP = 10
+            self.SHP = self.HP
             self.armor = 50
             self.damage = 0
             self.regen = 1
@@ -72,9 +76,10 @@ class Player:
             self.HP = math.ceil(self.HP)
 
     def kill(self):
-        if self.death >= 0:
+        if self.death >= 0 and self.HP > 0:
             self.death -= 1
-            self.HP = self.HP * 0.15
+            self.HP = self.SHP * 0.15
+            self.SHP = self.HP
         else:
             pass  # допиши это конец ишры
 
@@ -94,7 +99,8 @@ class blade_of_the_seven_seas:
 
     def use(self):
         Player.damage += self.damagebath
-        Player.HP += self.HPbfth
+        Player.SHP += self.HPbfth
+        Player.HP = Player.SHP
 
 
 class berserker_rage:
@@ -125,7 +131,8 @@ class endless_battle:
 
     def use(self):
         Player.damage += self.damagebath
-        Player.HP += self.HPbath
+        Player.SHP += self.HPbath
+        Player.HP = Player.SHP
         Player.vampirizm += self.vampirizmbath
 
 
@@ -164,7 +171,8 @@ class benefit_of_courage:
         self.boost = 1.1
 
     def use(self):
-        Player.HP += self.HPbath
+        Player.SHP += self.HPbath
+        Player.HP = Player.SHP
         Player.vampirizm += self.vampirismbath
         Player.armor = math.ceil(Player.armor * self.boost)
         Player.damage = math.ceil(Player.damage * self.boost)
@@ -177,7 +185,8 @@ class caller_of_the_devil:
 
     def use(self):
         Player.damage += self.damagebath
-        Player.HP += self.HPbath
+        Player.SHP += self.HPbath
+        Player.HP = Player.SHP
 
 
 class forse_of_ice:
@@ -187,7 +196,8 @@ class forse_of_ice:
 
     def use(self):
         Player.damage += self.damagebath
-        Player.HP += self.damagebath
+        Player.SHP += self.HPbath
+        Player.HP = Player.SHP
 
 
 class trident:
@@ -231,7 +241,8 @@ class the_giants_axe:
 
     def use(self):
         Player.damage += self.damagebath
-        Player.HP += self.HPbath
+        Player.SHP += self.HPbath
+        Player.HP = Player.SHP
 
 
 class the_sword_of_the_legionnaire:
@@ -279,7 +290,8 @@ class health_crystal:
         self.HPbath = 230
 
     def use(self):
-        Player.HP += self.HPbath
+        Player.SHP += self.HPbath
+        Player.HP = Player.SHP
 
 
 class leather_armor:
@@ -303,7 +315,8 @@ class the_belt_of_ares:
         self.HPbath = 770
 
     def use(self):
-        Player.HP += self.HPbath
+        Player.SHP += self.HPbath
+        Player.HP = Player.SHP
 
 
 class studded_armor:
@@ -320,7 +333,8 @@ class queens_wings:
         self.damagebath = 15
 
     def use(self):
-        Player.HP += self.HPbath
+        Player.SHP += self.HPbath
+        Player.HP = Player.SHP
         Player.damage = self.damagebath
 
 
@@ -330,7 +344,8 @@ class storm_belt:
         self.armorbath = 40
 
     def use(self):
-        Player.HP += self.HPbath
+        Player.SHP += self.HPbath
+        Player.HP = Player.SHP
         Player.armor += self.armorbath
 
 
@@ -340,7 +355,8 @@ class protective_helmet:
         self.HPbath = 1550
 
     def use(self):
-        Player.HP += self.HPbath
+        Player.SHP += self.HPbath
+        Player.HP = Player.SHP
         Player.regen += self.regenbath
 
 
@@ -351,5 +367,6 @@ class immortality:
 
     def use(self):
         Player.armor += self.armorbath
-        Player.HP += self.HPbath
+        Player.SHP += self.HPbath
+        Player.HP = Player.SHP
         Player.death += 1
