@@ -35,20 +35,24 @@ class Player:
     armor = 1
     damage = 1
     vampirizm = 0
+    regen = 1
 
     def __init__(self, hard_of_level):
         if hard_of_level == 1:
             self.HP = 100
             self.armor = 200
             self.damage = 100
+            self.regen = 10
         elif hard_of_level == 2:
             self.HP = 50
             self.armor = 100
             self.damage = 20
+            self.regen = 2
         elif hard_of_level == 3:
             self.HP = 10
             self.armor = 50
             self.damage = 0
+            self.regen = 1
 
     def taking_damage(self):
         if Boss.damage - self.armor > 0:
@@ -254,3 +258,63 @@ class an_angry_growl:
 
     def use(self):
         Player.damage += self.damagebath
+
+
+class health_crystal:
+    def __init__(self):
+        self.HPbath = 230
+
+    def use(self):
+        Player.HP += self.HPbath
+
+
+class leather_armor:
+    def __init__(self):
+        self.armorbath = 15
+
+    def use(self):
+        Player.armor += self.armorbath
+
+
+class healing_necklace:
+    def __init__(self):
+        self.rehenbath = 20
+
+    def use(self):
+        Player.regen += self.rehenbath
+
+
+class the_belt_of_ares:
+    def __init__(self):
+        self.HPbath = 770
+
+    def use(self):
+        Player.HP += self.HPbath
+
+
+class studded_armor:
+    def __init__(self):
+        self.armorbath = 90
+
+    def use(self):
+        Player.armor += self.armorbath
+
+
+class queens_wings:
+    def __init__(self):
+        self.HPbath = 1000
+        self.damagebath = 15
+
+    def use(self):
+        Player.HP += self.HPbath
+        Player.damage = self.damagebath
+
+
+class storm_belt:
+    def __init__(self):
+        self.HPbath = 800
+        self.armorbath = 40
+
+    def use(self):
+        Player.HP += self.HPbath
+        Player.armor += self.armorbath
