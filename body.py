@@ -1,4 +1,5 @@
 import math
+import random
 
 hard_of_level = int(input())
 
@@ -22,9 +23,14 @@ class Boss:
             self.armor = 2000
             self.damage = 7500
 
-    def taking_damage(self):
-        if Player.damage - self.armor > 0:
-            self.HP -= (Player.damage - self.armor)
+    def taking_damage(self, hard_of_level):
+        if hard_of_level != 3:
+            if Player.damage - self.armor > 0:
+                self.HP -= (Player.damage - self.armor)
+        else:
+            if random.choice([True, False]):
+                if Player.damage - self.armor > 0:
+                    self.HP -= (Player.damage - self.armor)
 
     def giving_damage(self):
         Player.taking_damage()
@@ -36,18 +42,19 @@ class Player:
     damage = 1
     vampirizm = 0
     regen = 1
+    death = 0
 
     def __init__(self, hard_of_level):
         if hard_of_level == 1:
             self.HP = 100
             self.armor = 200
             self.damage = 100
-            self.regen = 10
+            self.regen = 25
         elif hard_of_level == 2:
             self.HP = 50
             self.armor = 100
             self.damage = 20
-            self.regen = 2
+            self.regen = 4
         elif hard_of_level == 3:
             self.HP = 10
             self.armor = 50
@@ -63,6 +70,13 @@ class Player:
         if self.damage - Boss.armor > 0:
             self.HP += ((self.damage - Boss.armor) * (self.vampirizm / 100))
             self.HP = math.ceil(self.HP)
+
+    def kill(self):
+        if self.death >= 0:
+            self.death -= 1
+            self.HP = self.HP * 0.15
+        else:
+            pass  # допиши это конец ишры
 
 
 class blade_of_despair:
@@ -318,3 +332,24 @@ class storm_belt:
     def use(self):
         Player.HP += self.HPbath
         Player.armor += self.armorbath
+
+
+class protective_helmet:
+    def __init__(self):
+        self.regenbath = 100
+        self.HPbath = 1550
+
+    def use(self):
+        Player.HP += self.HPbath
+        Player.regen += self.regenbath
+
+
+class immortality:
+    def __init__(self):
+        self.HPbath = 800
+        self.armorbath = 40
+
+    def use(self):
+        Player.armor += self.armorbath
+        Player.HP += self.HPbath
+        Player.death += 1
