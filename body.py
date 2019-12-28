@@ -25,12 +25,44 @@ class Boss:
 
     def taking_damage(self, hard_of_level):
         if hard_of_level != 3:
-            if Player.damage - self.armor > 0:
-                self.HP -= (Player.damage - self.armor)
+            if Player.damage - (self.armor - Player.physical_penetration) > 0:
+                self.HP -= (Player.damage - (self.armor - Player.physical_penetration))
         else:
             if random.choice([True, False]):
-                if Player.damage - self.armor > 0:
-                    self.HP -= (Player.damage - self.armor)
+                if Player.damage - (self.armor - Player.physical_penetration) > 0:
+                    self.HP -= (Player.damage - (self.armor - Player.physical_penetration))
+
+    def giving_damage(self):
+        Player.taking_damage()
+
+
+class miniBoss:
+    HP = 9999999999
+    armor = 9999999999
+    damage = 9999999999
+
+    def __init__(self, hard_of_level):
+        if hard_of_level == 1:
+            self.HP = 15000
+            self.armor = 0
+            self.damage = 125
+        elif hard_of_level == 2:
+            self.HP = 50000
+            self.armor = 50
+            self.damage = 250
+        elif hard_of_level == 3:
+            self.HP = 100000
+            self.armor = 200
+            self.damage = 750
+
+    def taking_damage(self, hard_of_level):
+        if hard_of_level != 3:
+            if Player.damage - (self.armor - Player.physical_penetration) > 0:
+                self.HP -= (Player.damage - (self.armor - Player.physical_penetration))
+        else:
+            if random.choice([True, False]):
+                if Player.damage - (self.armor - Player.physical_penetration) > 0:
+                    self.HP -= (Player.damage - (self.armor - Player.physical_penetration))
 
     def giving_damage(self):
         Player.taking_damage()
@@ -44,23 +76,25 @@ class Player:
     regen = 1
     death = 0
     SHP = HP
+    dod = 0
+    physical_penetration = 0
 
     def __init__(self, hard_of_level):
         if hard_of_level == 1:
-            self.HP = 100
-            self.SHP = self.HP
+            self.SHP = 100
+            self.HP = self.SHP
             self.armor = 200
             self.damage = 100
             self.regen = 25
         elif hard_of_level == 2:
-            self.HP = 50
-            self.SHP = self.HP
+            self.SHP = 50
+            self.HP = self.SHP
             self.armor = 100
             self.damage = 20
             self.regen = 4
         elif hard_of_level == 3:
-            self.HP = 10
-            self.SHP = self.HP
+            self.SHP = 10
+            self.HP = self.SHP
             self.armor = 50
             self.damage = 0
             self.regen = 1
@@ -69,14 +103,17 @@ class Player:
         if Boss.damage - self.armor > 0:
             self.HP -= (Boss.damage - self.armor)
 
-    def giving_damage(self):
-        Boss.taking_damage()
-        if self.damage - Boss.armor > 0:
-            self.HP += ((self.damage - Boss.armor) * (self.vampirizm / 100))
+    def giving_damage(self, hero):
+        hero.taking_damage()
+        if self.damage - hero.armor > 0:
+            self.HP += ((self.damage - hero.armor) * (self.vampirizm / 100))
             self.HP = math.ceil(self.HP)
+        if hero.HP <= 50 and self.dod > 0:
+            self.dod = 0
+            self.damage = math.ceil(self.damage * 1.25)
 
     def kill(self):
-        if self.death >= 0 and self.HP > 0:
+        if self.death > 0 and self.HP > 0:
             self.death -= 1
             self.SHP = self.SHP * 0.15
             self.HP = self.SHP
@@ -87,6 +124,7 @@ class Player:
 class blade_of_despair:
     def __init__(self):
         self.damagebath = 170
+        Player.dod += 1
 
     def use(self):
         Player.damage += self.damagebath
@@ -96,10 +134,12 @@ class blade_of_the_seven_seas:
     def __init__(self):
         self.damagebath = 65
         self.HPbfth = 250
+        self.physical_penetrationbath = 15
 
     def use(self):
         Player.damage += self.damagebath
         Player.SHP += self.HPbfth
+        Player.physical_penetration += self.physical_penetrationbath
         Player.HP = Player.SHP
 
 
@@ -272,17 +312,21 @@ class an_ordinary_spear:
 class hammer_of_wrath:
     def __init__(self):
         self.damsgebath = 35
+        self.physical_penetrationbath = 15
 
     def use(self):
         Player.damage += self.damsgebath
+        Player.physical_penetration += self.physical_penetrationbath
 
 
 class an_angry_growl:
     def __init__(self):
         self.damagebath = 60
+        self.physical_penetrationbath = 40
 
     def use(self):
         Player.damage += self.damagebath
+        Player.physical_penetration += self.physical_penetrationbath
 
 
 class health_crystal:
