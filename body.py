@@ -25,15 +25,14 @@ class Boss:
 
     def taking_damage(self, hard_of_level):
         if hard_of_level != 3:
-            if Player.damage - (self.armor - Player.physical_penetration) > 0:
-                self.HP -= (Player.damage - (self.armor - Player.physical_penetration))
+            if pc.damage - (self.armor - pc.physical_penetration) > 0:
+                self.HP -= (pc.damage - (self.armor - pc.physical_penetration))
         else:
             if random.choice([True, False]):
-                if Player.damage - (self.armor - Player.physical_penetration) > 0:
-                    self.HP -= (Player.damage - (self.armor - Player.physical_penetration))
-
+                if pc.damage - (self.armor - pc.physical_penetration) > 0:
+                    self.HP -= (pc.damage - (self.armor - pc.physical_penetration))
     def giving_damage(self):
-        Player.taking_damage()
+        pc.taking_damage()
 
 
 class miniBoss:
@@ -57,18 +56,18 @@ class miniBoss:
 
     def taking_damage(self, hard_of_level):
         if hard_of_level != 3:
-            if Player.damage - (self.armor - Player.physical_penetration) > 0:
-                self.HP -= (Player.damage - (self.armor - Player.physical_penetration))
+            if pc.damage - (self.armor - pc.physical_penetration) > 0:
+                self.HP -= (pc.damage - (self.armor - pc.physical_penetration))
         else:
             if random.choice([True, False]):
-                if Player.damage - (self.armor - Player.physical_penetration) > 0:
-                    self.HP -= (Player.damage - (self.armor - Player.physical_penetration))
+                if pc.damage - (self.armor - pc.physical_penetration) > 0:
+                    self.HP -= (pc.damage - (self.armor - pc.physical_penetration))
 
     def giving_damage(self):
-        Player.taking_damage()
+        pc.taking_damage()
 
 
-class Player:
+class Player_characters:
     HP = 1
     armor = 1
     damage = 1
@@ -120,145 +119,268 @@ class Player:
         else:
             pass  # допиши это конец ишры
 
+    def all_characters(self):
+        print(str(self.HP) + '/' + str(self.SHP) + 'HP')
+        print('Защита:', pc.armor)
+        print('Урон:', pc.damage)
+        print('Вампиризм', pc.vampirizm)
+        print('Реген:', pc.regen)
+        print('Жизней:', pc.death)
+        print('Физ-проникновение:', pc.physical_penetration)
 
 def blade_of_despair():
-    Player.dod += 1
-    Player.damage += 170
+    pc.dod += 1
+    pc.damage += 170
 
 
 def blade_of_the_seven_seas():
-    Player.damage += 65
-    Player.SHP += 250
-    Player.physical_penetration += 15
+    pc.damage += 65
+    pc.SHP += 250
+    pc.physical_penetration += 15
 
 
 def berserker_rage():
-    Player.damage += 65
-    Player.damage = math.ceil(Player.damage * 1.25)
+
+    pc.damage += 65
+
+    pc.damage = math.ceil(pc.damage * 1.25)
+
+
+
 
 
 def axe_of_bloodlust():
-    Player.damage += 70
-    Player.vampirizm += 20
+
+    pc.damage += 70
+
+    pc.vampirizm += 20
+
+
+
 
 
 def endless_battle():
-    Player.damage += 65
-    Player.SHP += 250
-    Player.vampirizm += 15
+
+    pc.damage += 65
+
+    pc.SHP += 250
+
+    pc.vampirizm += 15
+
+
+
 
 
 def claws_of_chaos():
-    Player.damage += 70
-    Player.vampirizm += 20
+
+    pc.damage += 70
+
+    pc.vampirizm += 20
+
+
+
 
 
 def nature_wind():
-    Player.damage += 10
-    Player.vampirizm += 15
+
+    pc.damage += 10
+
+    pc.vampirizm += 15
+
+
+
 
 
 def armor_blade():
-    Player.armor += 90
+
+    pc.armor += 90
+
+
+
 
 
 def benefit_of_courage():
-    Player.SHP += 770
-    Player.vampirizm += 45
-    Player.armor = math.ceil(Player.armor * 1.1)
-    Player.damage = math.ceil(Player.damage * 1.1)
+
+    pc.SHP += 770
+
+    pc.vampirizm += 45
+
+    pc.armor = math.ceil(pc.armor * 1.1)
+
+    pc.damage = math.ceil(pc.damage * 1.1)
+
+
+
 
 
 def caller_of_the_devil():
-    Player.damage += 15
-    Player.SHP += 770
+
+    pc.damage += 15
+
+    pc.SHP += 770
+
+
+
 
 
 def forse_of_ice():
-    Player.damage += 30
-    Player.SHP += 1000
+
+    pc.damage += 30
+
+    pc.SHP += 1000
+
+
+
 
 
 def trident():
-    Player.damage += 80
+
+    pc.damage += 80
+
+
+
 
 
 def golden_meteor():
-    Player.damage += 60
-    Player.vampirizm += 5
+
+    pc.damage += 60
+
+    pc.vampirizm += 5
 
 
 def a_shot_of_the_hunter():
-    Player.damage += 80
+    pc.damage += 80
 
 
 def the_Golden_stick():
-    Player.damage += 100
+    pc.damage += 100
 
 
 def the_giants_axe():
-    Player.damage += 30
-    Player.SHP += 250
+    pc.damage += 30
+    pc.SHP += 250
 
 
 def the_sword_of_the_legionnaire():
-    Player.damage += 60
+    pc.damage += 60
 
 
 def dagger():
-    Player.damage += 15
+    pc.damage += 15
 
 
 def an_ordinary_spear():
-    Player.damage += 40
+    pc.damage += 40
 
 
 def hammer_of_wrath():
-    Player.damage += 35
-    Player.physical_penetration += 15
+    pc.damage += 35
+    pc.physical_penetration += 15
 
 
 def an_angry_growl():
-    Player.damage += 60
-    Player.physical_penetration += 40
+    pc.damage += 60
+    pc.physical_penetration += 40
 
 
 def health_crystal():
-    Player.SHP += 230
+    pc.SHP += 230
 
 
 def leather_armor():
-    Player.armor += 15
+    pc.armor += 15
 
 
 def healing_necklace():
-    Player.regen += 20
+    pc.regen += 20
 
 
 def the_belt_of_ares():
-    Player.SHP += 770
+    pc.SHP += 770
 
 
 def studded_armor():
-    Player.armor += 90
+    pc.armor += 90
 
 
 def queens_wings():
-    Player.SHP += 1000
-    Player.damage = 15
+    pc.SHP += 1000
+    pc.damage += 15
 
 
 def storm_belt():
-    Player.SHP += 800
-    Player.armor += 40
+    pc.SHP += 800
+    pc.armor += 40
 
 
 def protective_helmet():
-    Player.SHP += 1550
-    Player.regen += 100
+    pc.SHP += 1550
+    pc.regen += 100
 
 
 def immortality():
-    Player.armor += 40
-    Player.SHP += 800
-    Player.death += 1
+    pc.armor += 40
+    pc.SHP += 800
+    pc.death += 1
+
+
+def what_the_item(item):
+    if item == 'a':
+        axe_of_bloodlust()
+    elif item == 'b':
+        berserker_rage()
+    elif item == 'c':
+        blade_of_despair()
+    elif item == 'd':
+        blade_of_the_seven_seas()
+    elif item == 'e':
+        claws_of_chaos()
+    elif item == 'g':
+        endless_battle()
+    elif item == 'f':
+        nature_wind()
+    elif item == 'h':
+        a_shot_of_the_hunter()
+    elif item == 'i':
+        an_ordinary_spear()
+    elif item == 'j':
+        armor_blade()
+    elif item == 'k':
+        benefit_of_courage()
+    elif item == 'l':
+        caller_of_the_devil()
+    elif item == 'm':
+        dagger()
+    elif item == 'n':
+        golden_meteor()
+    elif item == 'o':
+        hammer_of_wrath()
+    elif item == 'p':
+        healing_necklace()
+    elif item == 'q':
+        health_crystal()
+    elif item == 'r':
+        leather_armor()
+    elif item == 's':
+        queens_wings()
+    elif item == 'u':
+        storm_belt()
+    elif item == 'v':
+        studded_armor()
+    elif item == 'w':
+        the_Golden_stick()
+    elif item == 'x':
+        the_giants_axe()
+    elif item == 'y':
+        the_sword_of_the_legionnaire()
+    elif item == 't':
+        trident()
+    elif item == 'z':
+        protective_helmet()
+    elif item == 'A':
+        immortality()
+
+
+pc = Player_characters(hard_of_level)
+
+
