@@ -121,296 +121,144 @@ class Player:
             pass  # допиши это конец ишры
 
 
-class blade_of_despair:
-    def __init__(self):
-        self.damagebath = 170
-        Player.dod += 1
+def blade_of_despair():
+    Player.dod += 1
+    Player.damage += 170
 
-    def use(self):
-        Player.damage += self.damagebath
 
+def blade_of_the_seven_seas():
+    Player.damage += 65
+    Player.SHP += 250
+    Player.physical_penetration += 15
 
-class blade_of_the_seven_seas:
-    def __init__(self):
-        self.damagebath = 65
-        self.HPbfth = 250
-        self.physical_penetrationbath = 15
 
-    def use(self):
-        Player.damage += self.damagebath
-        Player.SHP += self.HPbfth
-        Player.physical_penetration += self.physical_penetrationbath
-        Player.HP = Player.SHP
+def berserker_rage():
+    Player.damage += 65
+    Player.damage = math.ceil(Player.damage * 1.25)
 
 
-class berserker_rage:
-    def __init__(self):
-        self.damagebath = 65
-        self.boost = 1.25
+def axe_of_bloodlust():
+    Player.damage += 70
+    Player.vampirizm += 20
 
-    def use(self):
-        Player.damage += self.damagebath
-        Player.damage = math.ceil(Player.damage * self.boost)
 
+def endless_battle():
+    Player.damage += 65
+    Player.SHP += 250
+    Player.vampirizm += 15
 
-class axe_of_bloodlust:
-    def __init__(self):
-        self.damagebath = 70
-        self.vampirizmbath = 20
 
-    def use(self):
-        Player.damage += self.damagebath
-        Player.vampirizm += self.vampirizmbath
+def claws_of_chaos():
+    Player.damage += 70
+    Player.vampirizm += 20
 
 
-class endless_battle:
-    def __init__(self):
-        self.damagebath = 65
-        self.HPbath = 250
-        self.vampirizmbath = 15
+def nature_wind():
+    Player.damage += 10
+    Player.vampirizm += 15
 
-    def use(self):
-        Player.damage += self.damagebath
-        Player.SHP += self.HPbath
-        Player.HP = Player.SHP
-        Player.vampirizm += self.vampirizmbath
 
+def armor_blade():
+    Player.armor += 90
 
-class claws_of_chaos:
-    def __init__(self):
-        self.damagebath = 70
-        self.vampirismbath = 20
 
-    def use(self):
-        Player.damage += self.damagebath
-        Player.vampirizm += self.vampirismbath
+def benefit_of_courage():
+    Player.SHP += 770
+    Player.vampirizm += 45
+    Player.armor = math.ceil(Player.armor * 1.1)
+    Player.damage = math.ceil(Player.damage * 1.1)
 
 
-class nature_wind:
-    def __init__(self):
-        self.damagebath = 10
-        self.vampirizm = 15
+def caller_of_the_devil():
+    Player.damage += 15
+    Player.SHP += 770
 
-    def use(self):
-        Player.damage += self.damagebath
-        Player.vampirizm += self.vampirizm
 
+def forse_of_ice():
+    Player.damage += 30
+    Player.SHP += 1000
 
-class armor_blade:
-    def __init__(self):
-        self.armorbath = 90
 
-    def use(self):
-        Player.armor += self.armorbath
+def trident():
+    Player.damage += 80
 
 
-class benefit_of_courage:
-    def __init__(self):
-        self.HPbath = 770
-        self.vampirismbath = 45
-        self.boost = 1.1
+def golden_meteor():
+    Player.damage += 60
+    Player.vampirizm += 5
 
-    def use(self):
-        Player.SHP += self.HPbath
-        Player.HP = Player.SHP
-        Player.vampirizm += self.vampirismbath
-        Player.armor = math.ceil(Player.armor * self.boost)
-        Player.damage = math.ceil(Player.damage * self.boost)
 
+def a_shot_of_the_hunter():
+    Player.damage += 80
 
-class caller_of_the_devil:
-    def __init__(self):
-        self.HPbath = 770
-        self.damagebath = 15
 
-    def use(self):
-        Player.damage += self.damagebath
-        Player.SHP += self.HPbath
-        Player.HP = Player.SHP
+def the_Golden_stick():
+    Player.damage += 100
 
 
-class forse_of_ice:
-    def __init__(self):
-        self.damagebath = 30
-        self.HPbath = 1000
+def the_giants_axe():
+    Player.damage += 30
+    Player.SHP += 250
 
-    def use(self):
-        Player.damage += self.damagebath
-        Player.SHP += self.HPbath
-        Player.HP = Player.SHP
 
+def the_sword_of_the_legionnaire():
+    Player.damage += 60
 
-class trident:
-    def __init__(self):
-        self.damagebath = 80
 
-    def use(self):
-        Player.damage += self.damagebath
+def dagger():
+    Player.damage += 15
 
 
-class golden_meteor:
-    def __init__(self):
-        self.damagebath = 60
-        self.vampirizmbath = 5
+def an_ordinary_spear():
+    Player.damage += 40
 
-    def use(self):
-        Player.damage += self.damagebath
-        Player.vampirizm += self.vampirizmbath
 
+def hammer_of_wrath():
+    Player.damage += 35
+    Player.physical_penetration += 15
 
-class a_shot_of_the_hunter:
-    def __init__(self):
-        self.damagebath = 80
 
-    def use(self):
-        Player.damage += self.damagebath
+def an_angry_growl():
+    Player.damage += 60
+    Player.physical_penetration += 40
 
 
-class the_Golden_stick:
-    def __init__(self):
-        self.damagebath = 100
+def health_crystal():
+    Player.SHP += 230
 
-    def use(self):
-        Player.damage += self.damagebath
 
+def leather_armor():
+    Player.armor += 15
 
-class the_giants_axe:
-    def __init__(self):
-        self.damagebath = 30
-        self.HPbath = 230
 
-    def use(self):
-        Player.damage += self.damagebath
-        Player.SHP += self.HPbath
-        Player.HP = Player.SHP
+def healing_necklace():
+    Player.regen += 20
 
 
-class the_sword_of_the_legionnaire:
-    def __init__(self):
-        self.damagebath = 60
+def the_belt_of_ares():
+    Player.SHP += 770
 
-    def use(self):
-        Player.damage += self.damagebath
 
+def studded_armor():
+    Player.armor += 90
 
-class dagger:
-    def __init__(self):
-        self.damsgebath = 15
 
-    def use(self):
-        Player.damage += self.damsgebath
+def queens_wings():
+    Player.SHP += 1000
+    Player.damage = 15
 
 
-class an_ordinary_spear:
-    def __init__(self):
-        self.damagebath = 40
+def storm_belt():
+    Player.SHP += 800
+    Player.armor += 40
 
-    def use(self):
-        Player.damage += self.damagebath
 
+def protective_helmet():
+    Player.SHP += 1550
+    Player.regen += 100
 
-class hammer_of_wrath:
-    def __init__(self):
-        self.damsgebath = 35
-        self.physical_penetrationbath = 15
 
-    def use(self):
-        Player.damage += self.damsgebath
-        Player.physical_penetration += self.physical_penetrationbath
-
-
-class an_angry_growl:
-    def __init__(self):
-        self.damagebath = 60
-        self.physical_penetrationbath = 40
-
-    def use(self):
-        Player.damage += self.damagebath
-        Player.physical_penetration += self.physical_penetrationbath
-
-
-class health_crystal:
-    def __init__(self):
-        self.HPbath = 230
-
-    def use(self):
-        Player.SHP += self.HPbath
-        Player.HP = Player.SHP
-
-
-class leather_armor:
-    def __init__(self):
-        self.armorbath = 15
-
-    def use(self):
-        Player.armor += self.armorbath
-
-
-class healing_necklace:
-    def __init__(self):
-        self.rehenbath = 20
-
-    def use(self):
-        Player.regen += self.rehenbath
-
-
-class the_belt_of_ares:
-    def __init__(self):
-        self.HPbath = 770
-
-    def use(self):
-        Player.SHP += self.HPbath
-        Player.HP = Player.SHP
-
-
-class studded_armor:
-    def __init__(self):
-        self.armorbath = 90
-
-    def use(self):
-        Player.armor += self.armorbath
-
-
-class queens_wings:
-    def __init__(self):
-        self.HPbath = 1000
-        self.damagebath = 15
-
-    def use(self):
-        Player.SHP += self.HPbath
-        Player.HP = Player.SHP
-        Player.damage = self.damagebath
-
-
-class storm_belt:
-    def __init__(self):
-        self.HPbath = 800
-        self.armorbath = 40
-
-    def use(self):
-        Player.SHP += self.HPbath
-        Player.HP = Player.SHP
-        Player.armor += self.armorbath
-
-
-class protective_helmet:
-    def __init__(self):
-        self.regenbath = 100
-        self.HPbath = 1550
-
-    def use(self):
-        Player.SHP += self.HPbath
-        Player.HP = Player.SHP
-        Player.regen += self.regenbath
-
-
-class immortality:
-    def __init__(self):
-        self.HPbath = 800
-        self.armorbath = 40
-
-    def use(self):
-        Player.armor += self.armorbath
-        Player.SHP += self.HPbath
-        Player.HP = Player.SHP
-        Player.death += 1
+def immortality():
+    Player.armor += 40
+    Player.SHP += 800
+    Player.death += 1
