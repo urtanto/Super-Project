@@ -335,7 +335,7 @@ while True:
                     camera.apply(sprite)
     heal_pc += 1
     if heal_pc == 25:
-        if pc.regen >= pc.SHP - pc.HP:
+        if pc.HP + pc.regen >= pc.SHP:
             pc.HP = pc.SHP
         else:
             pc.HP += pc.regen

@@ -25,11 +25,11 @@ class Boss:
 
     def taking_damage(self, hard_of_level):
         if hard_of_level != 3:
-            if pc.damage - (self.armor - pc.physical_penetration) > 0:
+            if pc.damage - (self.armor - pc.physical_penetration) > 0 and self.armor - pc.physical_penetration > 0:
                 self.HP -= (pc.damage - (self.armor - pc.physical_penetration))
         else:
             if random.choice([True, False]):
-                if pc.damage - (self.armor - pc.physical_penetration) > 0:
+                if pc.damage - (self.armor - pc.physical_penetration) > 0 and self.armor - pc.physical_penetration > 0:
                     self.HP -= (pc.damage - (self.armor - pc.physical_penetration))
 
     def giving_damage(self):
@@ -57,11 +57,11 @@ class miniBoss:
 
     def taking_damage(self, hard_of_level):
         if hard_of_level != 3:
-            if pc.damage - (self.armor - pc.physical_penetration) > 0:
+            if pc.damage - (self.armor - pc.physical_penetration) > 0 and self.armor - pc.physical_penetration > 0:
                 self.HP -= (pc.damage - (self.armor - pc.physical_penetration))
         else:
             if random.choice([True, False]):
-                if pc.damage - (self.armor - pc.physical_penetration) > 0:
+                if pc.damage - (self.armor - pc.physical_penetration) > 0 and self.armor - pc.physical_penetration > 0:
                     self.HP -= (pc.damage - (self.armor - pc.physical_penetration))
 
     def giving_damage(self):
@@ -106,14 +106,14 @@ class Player_characters:
     def giving_damage(self, hero):
         hero.taking_damage()
         if self.damage - hero.armor > 0:
-            self.HP += ((self.damage - hero.armor) * (self.vampirizm / 100))
+            self.HP += ((self.damage - hero.armor) * (self.vampirizm / 1000))
             self.HP = math.ceil(self.HP)
         if hero.HP <= 50 and self.dod > 0:
             self.dod = 0
             self.damage = math.ceil(self.damage * 1.25)
 
     def kill(self):
-        if self.death > 0 and self.HP > 0:
+        if self.death > 0 and self.HP < 0:
             self.death -= 1
             self.SHP = self.SHP * 0.15
             self.HP = self.SHP
@@ -121,13 +121,15 @@ class Player_characters:
             pass  # РґРѕРїРёС€Рё СЌС‚Рѕ РєРѕРЅРµС† РёС€СЂС‹
 
     def all_characters(self):
+        print('-------------------------')
         print(str(self.HP) + '/' + str(self.SHP) + 'HP')
-        print('Р—Р°С‰РёС‚Р°:', pc.armor)
-        print('РЈСЂРѕРЅ:', pc.damage)
-        print('Р’Р°РјРїРёСЂРёР·Рј', pc.vampirizm)
-        print('Р РµРіРµРЅ:', pc.regen)
-        print('Р–РёР·РЅРµР№:', pc.death)
-        print('Р¤РёР·-РїСЂРѕРЅРёРєРЅРѕРІРµРЅРёРµ:', pc.physical_penetration)
+        print('защита:', pc.armor)
+        print('урон:', pc.damage)
+        print('вампиризм:', pc.vampirizm)
+        print('реген:', pc.regen)
+        print('жизни:', pc.death)
+        print('Физ-проникновение:', pc.physical_penetration)
+        print('-------------------------')
 
 
 def blade_of_despair():
