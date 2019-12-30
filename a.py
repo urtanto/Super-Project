@@ -3,10 +3,49 @@ import os
 import sys
 from body import *
 
+
+class Timer:
+    def __init__(self):
+        self.dtime = 0
+        self.htime = 0
+        self.mtime = 0
+        self.stime = 0
+
+    def tick(self, time=1):
+        global heal_pc, pc
+        for i in range(time):
+            pc.HP += pc.regen
+            self.stime += 1
+            if self.stime == 60:
+                self.stime = 0
+                self.mtime += 1
+            if self.mtime == 60:
+                self.mtime = 0
+                self.htime += 1
+            if self.htime == 24:
+                self.htime = 0
+                self.dtime += 1
+            if self.dtime == 99:
+                terminate()
+            if pc.HP > pc.SHP:
+                pc.HP = pc.SHP
+        heal_pc = 0
+        pc.all_characters()
+
+    def print(self):
+        d = str(self.dtime) if len(str(self.dtime)) == 2 else '0' + str(self.dtime)
+        h = str(self.htime) if len(str(self.htime)) == 2 else '0' + str(self.htime)
+        m = str(self.mtime) if len(str(self.mtime)) == 2 else '0' + str(self.mtime)
+        s = str(self.stime) if len(str(self.stime)) == 2 else '0' + str(self.stime)
+        return d + ':' + h + ':' + m + ':' + s
+
+
 size = width, height = 1000, 1000
 screen = pygame.display.set_mode(size)
 running = True
+t = Timer()
 a = input()
+pc.all_characters()
 if not os.path.exists('data/' + a):
     sys.exit()
 sp = []
@@ -333,14 +372,12 @@ while True:
                     camera.update(player)
                 for sprite in all_sprites:
                     camera.apply(sprite)
+        elif k[pygame.K_t]:
+            t.tick(10)
     heal_pc += 1
     if heal_pc == 25:
-        if pc.HP + pc.regen >= pc.SHP:
-            pc.HP = pc.SHP
-        else:
-            pc.HP += pc.regen
-        heal_pc = 0
-        pc.all_characters()
+        print(t.print())
+        t.tick()
     screen.fill((0, 0, 0))
     all_sprites.draw(screen)
     tiles_group.draw(screen)
