@@ -74,7 +74,7 @@ class Player_characters:
     damage = 1
     vampirizm = 0
     regen = 1
-    death = 0
+    extra_life = 0
     SHP = HP
     dod = 0
     physical_penetration = 0
@@ -113,8 +113,8 @@ class Player_characters:
             self.damage = math.ceil(self.damage * 1.25)
 
     def kill(self):
-        if self.death > 0 and self.HP < 0:
-            self.death -= 1
+        if self.extra_life > 0 and self.HP < 0:
+            self.extra_life -= 1
             self.SHP = self.SHP * 0.15
             self.HP = self.SHP
         else:
@@ -127,7 +127,7 @@ class Player_characters:
         print('урон:', pc.damage)
         print('вампиризм:', pc.vampirizm)
         print('реген:', pc.regen)
-        print('жизни:', pc.death)
+        print('жизни:', pc.extra_life)
         print('Физ-проникновение:', pc.physical_penetration)
         print('-------------------------')
 
@@ -284,7 +284,7 @@ def protective_helmet():
 def immortality():
     pc.armor += 40
     pc.SHP += 800
-    pc.death += 1
+    pc.extra_life += 1
 
 
 def what_the_item(item):
