@@ -17,8 +17,8 @@ class Timer:
         self.stime = 0
 
     def tick(self, time=1):
-        self.stime += 1
         for i in range(time):
+            self.stime += 1
             if pc.regen >= pc.SHP - pc.HP:
                 pc.HP = pc.SHP
             else:
