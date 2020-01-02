@@ -110,9 +110,9 @@ class Player_characters:
         elif hard_of_level == 0:
             return
 
-    def taking_damage(self):
-        if Boss.damage - self.armor > 0:
-            self.HP -= (Boss.damage - self.armor)
+    def taking_damage(self, hero):
+        if hero.damage - self.armor > 0:
+            self.HP -= (hero.damage - self.armor)
 
     def giving_damage(self, hero):
         hero.taking_damage()
@@ -390,18 +390,29 @@ def start_screen():
                     event.pos[0] < 784) and (event.pos[1] < 553):
                 hard_of_level = 1
                 stop = False
-                return
+                break
             elif event.type == pygame.MOUSEBUTTONDOWN and (event.pos[0] > 208) and (event.pos[1] > 570) and (
                     event.pos[0] < 776) and (event.pos[1] < 728):
                 hard_of_level = 2
                 stop = False
-                return
+                break
             elif event.type == pygame.MOUSEBUTTONDOWN and (event.pos[0] > 208) and (event.pos[1] > 745) and (
                     event.pos[0] < 774) and (event.pos[1] < 902):
                 hard_of_level = 3
                 stop = False
+                break
+        pygame.display.flip()
+        clock.tick(FPS)
+    stop = True
+    fon = pygame.transform.scale(load_image('characteristic.jpg', True), (1000, 1000))
+    screen.blit(fon, (0, 0))
+    while stop:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                terminate()
+            elif event.type == pygame.KEYDOWN or event.type == pygame.MOUSEBUTTONDOWN:
+                stop = False
                 return
-
         pygame.display.flip()
         clock.tick(FPS)
 
@@ -646,6 +657,8 @@ class Camera:
 
 heal_pc = 0
 pc = Player_characters(hard_of_level)
+b = Boss(hard_of_level)
+mb = miniBoss(hard_of_level)
 camera = Camera()
 camera.update(player)
 for sprite in all_sprites:
@@ -739,30 +752,40 @@ while True:
     all_sprites.draw(screen)
     tiles_group.draw(screen)
     player_group.draw(screen)
-    pygame.draw.rect(screen, [200, 0, 0], [700, 0, 1000, 300])
-    f1 = pygame.font.Font(None, 28)
+    pygame.draw.rect(screen, [0, 0, 200], [800, 0, 1000, 110])
+    pygame.draw.rect(screen, [200, 0, 0], [800, 110, 1000, 280])
+    f1 = pygame.font.Font(None, 24)
+    text1 = f1.render(str(b.HP) + 'HP', 0, (0, 0, 0))
+    screen.blit(text1, (810, 10))
+    f1 = pygame.font.Font(None, 24)
+    text1 = f1.render('armor: ' + str(b.armor), 0, (0, 0, 0))
+    screen.blit(text1, (810, 44))
+    f1 = pygame.font.Font(None, 24)
+    text1 = f1.render('damage: ' + str(b.damage), 0, (0, 0, 0))
+    screen.blit(text1, (810, 78))
+    f1 = pygame.font.Font(None, 24)
     text1 = f1.render('Time: ' + t.print(), 0, (0, 0, 0))
-    screen.blit(text1, (710, 10))
-    f1 = pygame.font.Font(None, 28)
+    screen.blit(text1, (810, 120))
+    f1 = pygame.font.Font(None, 24)
     text1 = f1.render(str(pc.HP) + '/' + str(pc.SHP) + 'HP', 0, (0, 0, 0))
-    screen.blit(text1, (710, 48))
-    f1 = pygame.font.Font(None, 28)
+    screen.blit(text1, (810, 154))
+    f1 = pygame.font.Font(None, 24)
     text1 = f1.render('armor: ' + str(pc.armor), 0, (0, 0, 0))
-    screen.blit(text1, (710, 86))
-    f1 = pygame.font.Font(None, 28)
+    screen.blit(text1, (810, 188))
+    f1 = pygame.font.Font(None, 24)
     text1 = f1.render('damage: ' + str(pc.damage), 0, (0, 0, 0))
-    screen.blit(text1, (710, 124))
-    f1 = pygame.font.Font(None, 28)
+    screen.blit(text1, (810, 223))
+    f1 = pygame.font.Font(None, 24)
     text1 = f1.render('vampirizm: ' + str(pc.vampirizm), 0, (0, 0, 0))
-    screen.blit(text1, (710, 160))
-    f1 = pygame.font.Font(None, 28)
+    screen.blit(text1, (810, 256))
+    f1 = pygame.font.Font(None, 24)
     text1 = f1.render('regen: ' + str(pc.regen), 0, (0, 0, 0))
-    screen.blit(text1, (710, 198))
-    f1 = pygame.font.Font(None, 28)
+    screen.blit(text1, (810, 290))
+    f1 = pygame.font.Font(None, 24)
     text1 = f1.render('extra life: ' + str(pc.extra_life), 0, (0, 0, 0))
-    screen.blit(text1, (710, 236))
-    f1 = pygame.font.Font(None, 28)
+    screen.blit(text1, (810, 324))
+    f1 = pygame.font.Font(None, 24)
     text1 = f1.render('physical penetration: ' + str(pc.physical_penetration), 0, (0, 0, 0))
-    screen.blit(text1, (710, 274))
+    screen.blit(text1, (810, 358))
     pygame.display.flip()
     clock.tick(FPS)
