@@ -149,8 +149,8 @@ class Player_characters:
         if hard_of_level == 1:
             self.SHP = 100
             self.HP = self.SHP
-            self.armor = 1200  # 200
-            self.damage = 50000  # 100
+            self.armor = 200
+            self.damage = 100
             self.regen = 25
         elif hard_of_level == 2:
             self.SHP = 50
