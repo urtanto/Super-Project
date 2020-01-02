@@ -68,18 +68,34 @@ class Boss:
     def geting_damage(self, hard_of_level):
         if hard_of_level != 3:
             if pc.damage - (
-                    self.armor - pc.physical_penetration) > 0 and \
-                    self.armor - pc.physical_penetration > 0:
-                self.HP -= (pc.damage - (self.armor - pc.physical_penetration))
+                    b.armor - pc.physical_penetration) > 0 and \
+                    b.armor - pc.physical_penetration > 0:
+                b.HP -= (pc.damage - (b.armor - pc.physical_penetration))
+            else:
+                b.HP -= pc.damage
         else:
             if random.choice([True, False]):
                 if pc.damage - (
-                        self.armor - pc.physical_penetration) > 0 and \
-                        self.armor - pc.physical_penetration > 0:
-                    self.HP -= (pc.damage - (self.armor - pc.physical_penetration))
+                        b.armor - pc.physical_penetration) > 0 and \
+                        b.armor - pc.physical_penetration > 0:
+                    b.HP -= (pc.damage - (b.armor - pc.physical_penetration))
+        if b.HP <= 0:
+            b.kill()
 
     def giving_damage(self):
         pc.geting_damage(b)
+
+    def kill(self):
+        fon = pygame.transform.scale(load_image('win.jpg', True), (1000, 1000))
+        screen.blit(fon, (0, 0))
+        while True:
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    terminate()
+                elif event.type == pygame.KEYDOWN or event.type == pygame.MOUSEBUTTONDOWN:
+                    terminate()
+            pygame.display.flip()
+            clock.tick(FPS)
 
 
 class miniBoss:
@@ -103,14 +119,16 @@ class miniBoss:
 
     def geting_damage(self, hard_of_level):
         if hard_of_level != 3:
-            if pc.damage - (self.armor - pc.physical_penetration) > 0 and \
-                    self.armor - pc.physical_penetration > 0:
-                self.HP -= (pc.damage - (self.armor - pc.physical_penetration))
+            if pc.damage - (mb.armor - pc.physical_penetration) > 0 and \
+                    mb.armor - pc.physical_penetration > 0:
+                mb.HP -= (pc.damage - (mb.armor - pc.physical_penetration))
+            else:
+                mb.HP -= pc.damage
         else:
             if random.choice([True, False]):
-                if pc.damage - (self.armor - pc.physical_penetration) > 0 and \
-                        self.armor - pc.physical_penetration > 0:
-                    self.HP -= (pc.damage - (self.armor - pc.physical_penetration))
+                if pc.damage - (mb.armor - pc.physical_penetration) > 0 and \
+                        mb.armor - pc.physical_penetration > 0:
+                    mb.HP -= (pc.damage - (mb.armor - pc.physical_penetration))
 
     def giving_damage(self):
         pc.geting_damage(mb)
@@ -131,8 +149,8 @@ class Player_characters:
         if hard_of_level == 1:
             self.SHP = 100
             self.HP = self.SHP
-            self.armor = 200
-            self.damage = 100
+            self.armor = 1200  # 200
+            self.damage = 50000  # 100
             self.regen = 25
         elif hard_of_level == 2:
             self.SHP = 50
@@ -152,8 +170,8 @@ class Player_characters:
             pc.HP -= (hero.damage - pc.armor)
 
     def giving_damage(self, hero):
-        hero.geting_damage()
-        if pc.damage - hero.armor > 0:
+        hero.geting_damage(hard_of_level)
+        if (pc.damage - hero.armor > 0) and (pc.HP + ((pc.damage - hero.armor) * (pc.vampirizm / 1000)) < pc.SHP):
             pc.HP += ((pc.damage - hero.armor) * (pc.vampirizm / 1000))
             pc.HP = math.ceil(pc.HP)
         if hero.HP <= 50 and pc.dod > 0:
@@ -779,7 +797,7 @@ while True:
                     camera.apply(sprite)
         elif k[pygame.K_SPACE]:
             if coords in kick_boss:
-                pc.geting_damage(b)
+                pc.giving_damage(b)
             elif coords in kick_miniboss:
                 pc.giving_damage(mb)
         elif k[pygame.K_d]:
