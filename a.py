@@ -73,12 +73,14 @@ class Boss:
                 b.HP -= (pc.damage - (b.armor - pc.physical_penetration))
             else:
                 b.HP -= pc.damage
+            b.giving_damage()
         else:
             if random.choice([True, False]):
                 if pc.damage - (
                         b.armor - pc.physical_penetration) > 0 and \
                         b.armor - pc.physical_penetration > 0:
                     b.HP -= (pc.damage - (b.armor - pc.physical_penetration))
+                b.giving_damage()
         if b.HP <= 0:
             b.kill()
 
@@ -168,6 +170,8 @@ class Player_characters:
     def geting_damage(self, hero):
         if hero.damage - pc.armor > 0:
             pc.HP -= (hero.damage - pc.armor)
+        if pc.HP <= 0:
+            pc.kill()
 
     def giving_damage(self, hero):
         hero.geting_damage(hard_of_level)
