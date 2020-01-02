@@ -739,7 +739,7 @@ while True:
     all_sprites.draw(screen)
     tiles_group.draw(screen)
     player_group.draw(screen)
-    pygame.draw.rect(screen, [255, 50, 50], [700, 0, 1000, 300])
+    pygame.draw.rect(screen, [200, 0, 0], [700, 0, 1000, 300])
     f1 = pygame.font.Font(None, 28)
     text1 = f1.render('Time: ' + t.print(), 0, (0, 0, 0))
     screen.blit(text1, (710, 10))
