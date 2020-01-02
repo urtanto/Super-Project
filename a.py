@@ -4,7 +4,46 @@ import sys
 import math
 import random
 from time import sleep
-from taimer import *
+
+kick_boss = [[149, 148], [150, 148], [151, 149], [151, 150], [150, 151], [149, 151], [148, 150], [148, 149]]
+kick_miniboss = []
+
+
+class Timer:
+    def __init__(self):
+        self.dtime = 0
+        self.htime = 0
+        self.mtime = 0
+        self.stime = 0
+
+    def tick(self, time=1):
+        self.stime += 1
+        for i in range(time):
+            if pc.regen >= pc.SHP - pc.HP:
+                pc.HP = pc.SHP
+            else:
+                pc.HP += pc.regen
+            if self.stime == 60:
+                self.stime = 0
+                self.mtime += 1
+            if self.mtime == 60:
+                self.mtime = 0
+                self.htime += 1
+            if self.htime == 24:
+                self.htime = 0
+                self.dtime += 1
+            if self.dtime == 10:
+                terminate()
+
+    def print(self):
+        d = str(self.dtime) if len(str(self.dtime)) == 2 else '0' + str(self.dtime)
+        h = str(self.htime) if len(str(self.htime)) == 2 else '0' + str(self.htime)
+        m = str(self.mtime) if len(str(self.mtime)) == 2 else '0' + str(self.mtime)
+        s = str(self.stime) if len(str(self.stime)) == 2 else '0' + str(self.stime)
+        return d + ':' + h + ':' + m + ':' + s
+
+
+t = Timer()
 
 
 class Boss:
@@ -26,7 +65,7 @@ class Boss:
             self.armor = 2000
             self.damage = 7500
 
-    def taking_damage(self, hard_of_level):
+    def geting_damage(self, hard_of_level):
         if hard_of_level != 3:
             if pc.damage - (
                     self.armor - pc.physical_penetration) > 0 and \
@@ -40,7 +79,7 @@ class Boss:
                     self.HP -= (pc.damage - (self.armor - pc.physical_penetration))
 
     def giving_damage(self):
-        pc.taking_damage()
+        pc.geting_damage(b)
 
 
 class miniBoss:
@@ -62,7 +101,7 @@ class miniBoss:
             self.armor = 200
             self.damage = 750
 
-    def taking_damage(self, hard_of_level):
+    def geting_damage(self, hard_of_level):
         if hard_of_level != 3:
             if pc.damage - (self.armor - pc.physical_penetration) > 0 and \
                     self.armor - pc.physical_penetration > 0:
@@ -74,7 +113,7 @@ class miniBoss:
                     self.HP -= (pc.damage - (self.armor - pc.physical_penetration))
 
     def giving_damage(self):
-        pc.taking_damage()
+        pc.geting_damage(mb)
 
 
 class Player_characters:
@@ -107,27 +146,26 @@ class Player_characters:
             self.armor = 50
             self.damage = 0
             self.regen = 1
-        elif hard_of_level == 0:
-            return
 
-    def taking_damage(self, hero):
-        if hero.damage - self.armor > 0:
-            self.HP -= (hero.damage - self.armor)
+    def geting_damage(self, hero):
+        if hero.damage - pc.armor > 0:
+            pc.HP -= (hero.damage - pc.armor)
 
     def giving_damage(self, hero):
-        hero.taking_damage()
-        if self.damage - hero.armor > 0:
-            self.HP += ((self.damage - hero.armor) * (self.vampirizm / 1000))
-            self.HP = math.ceil(self.HP)
-        if hero.HP <= 50 and self.dod > 0:
-            self.dod = 0
-            self.damage = math.ceil(self.damage * 1.25)
+        hero.geting_damage()
+        if pc.damage - hero.armor > 0:
+            pc.HP += ((pc.damage - hero.armor) * (pc.vampirizm / 1000))
+            pc.HP = math.ceil(pc.HP)
+        if hero.HP <= 50 and pc.dod > 0:
+            pc.dod = 0
+            pc.damage = math.ceil(pc.damage * 1.25)
 
     def kill(self):
-        if self.extra_life > 0 and self.HP < 0:
-            self.extra_life -= 1
-            self.SHP = self.SHP * 0.15
-            self.HP = self.SHP
+        if (pc.extra_life > 0) or (pc.HP < 0):
+            pc.extra_life -= 1
+            pc.SHP = pc.SHP * 0.15
+            pc.SHP = math.ceil(pc.SHP)
+            pc.HP = pc.SHP
         else:
             fon = pygame.transform.scale(load_image('game_over.jpg', True), (1000, 1000))
             screen.blit(fon, (0, 0))
@@ -137,6 +175,8 @@ class Player_characters:
                         terminate()
                     elif event.type == pygame.KEYDOWN or event.type == pygame.MOUSEBUTTONDOWN:
                         terminate()
+                pygame.display.flip()
+                clock.tick(FPS)
 
 
 def blade_of_despair():
@@ -639,26 +679,23 @@ player, level_x, level_y = generate_level(level_map)
 
 
 class Camera:
-    # Р·Р°РґР°РґРёРј РЅР°С‡Р°Р»СЊРЅС‹Р№ СЃРґРІРёРі РєР°РјРµСЂС‹
     def __init__(self):
         self.dx = 0
         self.dy = 0
 
-    # СЃРґРІРёРЅСѓС‚СЊ РѕР±СЉРµРєС‚ obj РЅР° СЃРјРµС‰РµРЅРёРµ РєР°РјРµСЂС‹
     def apply(self, obj):
         obj.rect.x += self.dx
         obj.rect.y += self.dy
 
-    # РїРѕР·РёС†РёРѕРЅРёСЂРѕРІР°С‚СЊ РєР°РјРµСЂСѓ РЅР° РѕР±СЉРµРєС‚Рµ target
     def update(self, target):
         self.dx = -(target.rect.x + target.rect.w // 2 - width // 2)
         self.dy = -(target.rect.y + target.rect.h // 2 - height // 2)
 
 
-heal_pc = 0
-pc = Player_characters(hard_of_level)
 b = Boss(hard_of_level)
 mb = miniBoss(hard_of_level)
+heal_pc = 0
+pc = Player_characters(hard_of_level)
 camera = Camera()
 camera.update(player)
 for sprite in all_sprites:
@@ -740,13 +777,18 @@ while True:
                     camera.update(player)
                 for sprite in all_sprites:
                     camera.apply(sprite)
+        elif k[pygame.K_SPACE]:
+            if coords in kick_boss:
+                pc.geting_damage(b)
+            elif coords in kick_miniboss:
+                pc.giving_damage(mb)
+        elif k[pygame.K_d]:
+            pc.kill()
+        elif k[pygame.K_t]:
+            t.tick(10)
     heal_pc += 1
     if heal_pc == 25:
         t.tick()
-        if pc.regen >= pc.SHP - pc.HP:
-            pc.HP = pc.SHP
-        else:
-            pc.HP += pc.regen
         heal_pc = 0
     screen.fill((0, 0, 0))
     all_sprites.draw(screen)
