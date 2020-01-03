@@ -4,9 +4,50 @@ import sys
 import math
 import random
 from time import sleep
+from random import choice as c
+import sys
 
 kick_boss = [[149, 148], [150, 148], [151, 149], [151, 150], [150, 151], [149, 151], [148, 150], [148, 149]]
 kick_miniboss = []
+
+
+def create_file():
+    f = open("data/map.txt", 'w')
+    st = []
+    flag = False
+    for i in range(300):
+        for j in range(300):
+            if flag:
+                flag = False
+                continue
+            if i == 299 and j == 289:
+                st.append('#.#...#...@')
+                print(f.write(''.join(st) + '\n'))
+                flag = 'a'
+                break
+            elif i == 149 and j == 149:
+                st.append('B#')
+                flag = True
+            elif i == 150 and j == 149:
+                st.append('##')
+                flag = True
+            else:
+                a = c(
+                    ['#', '#', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.',
+                     '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '#', '.', '.', '.', '#',
+                     '.', '.', '.', '#', '.', '.', '.', '#', '.', '.', '.', '#', '.', '.', '.', '#', '.', '.', '.', '#',
+                     '.', '.', '.', '#', '.', '.', '.', '#', '.', '.', '.', '#', '.', '.', '.', '#', '.', '.', '.', '#',
+                     'P'])
+                if a == 'P':
+                    a = c(
+                        ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's',
+                         't', 'u', 'v', 'w', 'x', 'y', 'z', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l',
+                         'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', 'A'])
+                st.append(a)
+        if flag == 'a':
+            break
+        print(f.write(''.join(st) + '\n'))
+        st = []
 
 
 class Timer:
@@ -19,6 +60,7 @@ class Timer:
     def tick(self, time=1):
         for i in range(time):
             self.stime += 1
+            pc.cash += 1
             if pc.regen >= pc.SHP - pc.HP:
                 pc.HP = pc.SHP
             else:
@@ -53,17 +95,17 @@ class Boss:
 
     def __init__(self, hard_of_level):
         if hard_of_level == 1:
-            self.HP = 150000
-            self.armor = 0
-            self.damage = 1250
-        elif hard_of_level == 2:
-            self.HP = 500000
+            self.HP = 1500000
             self.armor = 500
             self.damage = 2500
+        elif hard_of_level == 2:
+            self.HP = 5000000
+            self.armor = 2500
+            self.damage = 5000
         elif hard_of_level == 3:
-            self.HP = 1000000
-            self.armor = 2000
-            self.damage = 7500
+            self.HP = 10000000
+            self.armor = 12500
+            self.damage = 10000
 
     def geting_damage(self, hard_of_level):
         if hard_of_level != 3:
@@ -107,17 +149,17 @@ class miniBoss:
 
     def __init__(self, hard_of_level):
         if hard_of_level == 1:
-            self.HP = 15000
-            self.armor = 0
-            self.damage = 125
+            self.HP = 150000
+            self.armor = 500
+            self.damage = 1000
         elif hard_of_level == 2:
-            self.HP = 50000
-            self.armor = 50
-            self.damage = 250
+            self.HP = 500000
+            self.armor = 2500
+            self.damage = 2000
         elif hard_of_level == 3:
-            self.HP = 100000
-            self.armor = 200
-            self.damage = 750
+            self.HP = 1000000
+            self.armor = 12500
+            self.damage = 5000
 
     def geting_damage(self, hard_of_level):
         if hard_of_level != 3:
@@ -135,6 +177,9 @@ class miniBoss:
     def giving_damage(self):
         pc.geting_damage(mb)
 
+    def kill(self):
+        pc.cash += 100
+
 
 class Player_characters:
     SHP = 0
@@ -146,6 +191,7 @@ class Player_characters:
     HP = SHP
     dod = 0
     physical_penetration = 0
+    cash = 6000  # 0
 
     def __init__(self, hard_of_level):
         if hard_of_level == 1:
@@ -183,7 +229,7 @@ class Player_characters:
             pc.damage = math.ceil(pc.damage * 1.25)
 
     def kill(self):
-        if (pc.extra_life > 0) or (pc.HP < 0):
+        if pc.extra_life > 0:
             pc.extra_life -= 1
             pc.SHP = pc.SHP * 0.15
             pc.SHP = math.ceil(pc.SHP)
@@ -405,10 +451,8 @@ pygame.init()
 size = width, height = 1000, 1000
 screen = pygame.display.set_mode(size)
 running = True
-# a = input()
+create_file()
 a = 'map.txt'
-if not os.path.exists('data/' + a):
-    sys.exit()
 sp = []
 clock = pygame.time.Clock()
 game_map = []
@@ -461,6 +505,27 @@ def start_screen():
             elif event.type == pygame.MOUSEBUTTONDOWN and (event.pos[0] > 208) and (event.pos[1] > 745) and (
                     event.pos[0] < 774) and (event.pos[1] < 902):
                 hard_of_level = 3
+                stop = False
+                break
+        pygame.display.flip()
+        clock.tick(FPS)
+    stop = True
+    fon = pygame.transform.scale(load_image('theme.jpg', True), (1000, 1000))
+    screen.blit(fon, (0, 0))
+    while stop:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                terminate()
+            elif event.type == pygame.MOUSEBUTTONDOWN and (event.pos[0] > 194) and (event.pos[1] > 280) and (
+                    event.pos[0] < 808) and (event.pos[1] < 382):
+                tile_images['wall'] = load_image('box.png')
+                tile_images['empty'] = load_image('grass.png')
+                stop = False
+                break
+            elif event.type == pygame.MOUSEBUTTONDOWN and (event.pos[0] > 194) and (event.pos[1] > 542) and (
+                    event.pos[0] < 817) and (event.pos[1] < 651):
+                tile_images['wall'] = load_image('wall.png')
+                tile_images['empty'] = load_image('floor.png')
                 stop = False
                 break
         pygame.display.flip()
@@ -714,6 +779,73 @@ class Camera:
         self.dy = -(target.rect.y + target.rect.h // 2 - height // 2)
 
 
+def shop():
+    stop = True
+    item1 = True
+    item2 = True
+    item3 = True
+    item4 = True
+    fon = pygame.transform.scale(load_image('shop.jpg', True), (1000, 1000))
+    screen.blit(fon, (0, 0))
+    while stop:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                terminate()
+            elif event.type == pygame.MOUSEBUTTONDOWN and (event.pos[0] > 100) and (event.pos[1] > 200) and (
+                    event.pos[0] < 400) and (event.pos[1] < 500) and item1 and pc.cash >= 1500:
+                item1 = False
+                pc.cash -= 1500
+                pc.SHP = pc.SHP * 2
+                pygame.draw.rect(screen, [200, 0, 0], [59, 179, 451, 390])
+            elif event.type == pygame.MOUSEBUTTONDOWN and (event.pos[0] > 600) and (event.pos[1] > 200) and (
+                    event.pos[0] < 900) and (event.pos[1] < 500) and item2 and pc.cash >= 1500:
+                item2 = False
+                pc.cash -= 1500
+                pc.physical_penetration += 1000
+                pygame.draw.rect(screen, [200, 0, 0], [559, 179, 951, 391])
+            elif event.type == pygame.MOUSEBUTTONDOWN and (event.pos[0] > 100) and (event.pos[1] > 600) and (
+                    event.pos[0] < 400) and (event.pos[1] < 900) and item3 and pc.cash >= 1500:
+                item3 = False
+                pc.cash -= 1500
+                pc.damage = pc.damage * 2
+                pygame.draw.rect(screen, [200, 0, 0], [59, 579, 451, 1000])
+            elif event.type == pygame.MOUSEBUTTONDOWN and (event.pos[0] > 600) and (event.pos[1] > 600) and (
+                    event.pos[0] < 900) and (event.pos[1] < 900) and item4 and pc.cash >= 1500:
+                item4 = False
+                pc.cash -= 1500
+                pc.armor += 1000
+                pygame.draw.rect(screen, [200, 0, 0], [559, 579, 951, 1000])
+            elif event.type == pygame.MOUSEBUTTONDOWN and (event.pos[0] > 5) and (event.pos[1] > 10) and (
+                    event.pos[0] < 210) and (event.pos[1] < 125):
+                return menu()
+        pygame.draw.rect(screen, [200, 0, 0], [800, 0, 1000, 100])
+        f1 = pygame.font.Font(None, 36)
+        text1 = f1.render('cash: ' + str(pc.cash), 0, (0, 0, 0))
+        screen.blit(text1, (810, 10))
+        pygame.display.flip()
+        clock.tick(FPS)
+
+
+def menu():
+    fon = pygame.transform.scale(load_image('menu.jpg', True), (1000, 1000))
+    screen.blit(fon, (0, 0))
+    while True:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                terminate()
+            elif event.type == pygame.MOUSEBUTTONDOWN and (event.pos[0] > 120) and (event.pos[1] > 170) and (
+                    event.pos[0] < 877) and (event.pos[1] < 345):
+                return
+            elif event.type == pygame.MOUSEBUTTONDOWN and (event.pos[0] > 121) and (event.pos[1] > 374) and (
+                    event.pos[0] < 878) and (event.pos[1] < 575):
+                shop()
+            elif event.type == pygame.MOUSEBUTTONDOWN and (event.pos[0] > 121) and (event.pos[1] > 592) and (
+                    event.pos[0] < 878) and (event.pos[1] < 817):
+                terminate()
+        pygame.display.flip()
+        clock.tick(FPS)
+
+
 b = Boss(hard_of_level)
 mb = miniBoss(hard_of_level)
 heal_pc = 0
@@ -808,6 +940,9 @@ while True:
             pc.kill()
         elif k[pygame.K_t]:
             t.tick(10)
+        elif k[pygame.K_ESCAPE]:
+            menu()
+
     heal_pc += 1
     if heal_pc == 25:
         t.tick()
@@ -817,7 +952,7 @@ while True:
     tiles_group.draw(screen)
     player_group.draw(screen)
     pygame.draw.rect(screen, [0, 0, 200], [800, 0, 1000, 110])
-    pygame.draw.rect(screen, [200, 0, 0], [800, 110, 1000, 320])
+    pygame.draw.rect(screen, [200, 0, 0], [800, 110, 1000, 354])
     f1 = pygame.font.Font(None, 24)
     text1 = f1.render(str(b.HP) + 'HP', 0, (0, 0, 0))
     screen.blit(text1, (810, 10))
@@ -854,5 +989,8 @@ while True:
     f1 = pygame.font.Font(None, 24)
     text1 = f1.render('coords: ' + str(coords[0] + 1) + ',' + str(coords[1] + 1), 0, (0, 0, 0))
     screen.blit(text1, (810, 392))
+    f1 = pygame.font.Font(None, 24)
+    text1 = f1.render('cash: ' + str(pc.cash), 0, (0, 0, 0))
+    screen.blit(text1, (810, 426))
     pygame.display.flip()
     clock.tick(FPS)
