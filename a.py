@@ -57,10 +57,10 @@ class Timer:
         self.mtime = 0
         self.stime = 0
 
-    def tick(self, time=1):
+    def tick(self, time=1, h=1):
         for i in range(time):
             self.stime += 1
-            pc.cash += 1
+            pc.cash += h
             if pc.regen >= pc.SHP - pc.HP:
                 pc.HP = pc.SHP
             else:
@@ -191,7 +191,7 @@ class Player_characters:
     HP = SHP
     dod = 0
     physical_penetration = 0
-    cash = 6000  # 0
+    cash = 0
 
     def __init__(self, hard_of_level):
         if hard_of_level == 1:
@@ -763,6 +763,10 @@ def terminate():
 start_screen()
 level_map = load_level(a)
 player, level_x, level_y = generate_level(level_map)
+item1 = True
+item2 = True
+item3 = True
+item4 = True
 
 
 class Camera:
@@ -780,13 +784,18 @@ class Camera:
 
 
 def shop():
+    global item1, item2, item3, item4
     stop = True
-    item1 = True
-    item2 = True
-    item3 = True
-    item4 = True
     fon = pygame.transform.scale(load_image('shop.jpg', True), (1000, 1000))
     screen.blit(fon, (0, 0))
+    if not item1:
+        pygame.draw.rect(screen, [200, 0, 0], [59, 179, 451, 390])
+    if not item2:
+        pygame.draw.rect(screen, [200, 0, 0], [559, 179, 951, 391])
+    if not item3:
+        pygame.draw.rect(screen, [200, 0, 0], [59, 579, 451, 1000])
+    if not item4:
+        pygame.draw.rect(screen, [200, 0, 0], [559, 579, 951, 1000])
     while stop:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -838,7 +847,7 @@ def menu():
                 return
             elif event.type == pygame.MOUSEBUTTONDOWN and (event.pos[0] > 121) and (event.pos[1] > 374) and (
                     event.pos[0] < 878) and (event.pos[1] < 575):
-                shop()
+                return shop()
             elif event.type == pygame.MOUSEBUTTONDOWN and (event.pos[0] > 121) and (event.pos[1] > 592) and (
                     event.pos[0] < 878) and (event.pos[1] < 817):
                 terminate()
@@ -851,6 +860,7 @@ mb = miniBoss(hard_of_level)
 heal_pc = 0
 pc = Player_characters(hard_of_level)
 camera = Camera()
+how_much = 1
 camera.update(player)
 for sprite in all_sprites:
     camera.apply(sprite)
@@ -860,6 +870,10 @@ while True:
         if event.type == pygame.QUIT:
             terminate()
         if k[pygame.K_LEFT]:
+            heal_pc += 1
+            if heal_pc == 25:
+                t.tick(1, how_much)
+                heal_pc = 0
             if coords[0] - 1 > -1:
                 if dikt[(coords[1]), coords[0] - 1].isalpha():
                     what_the_item(dikt[(coords[1]), coords[0] - 1])
@@ -878,6 +892,10 @@ while True:
                 for sprite in all_sprites:
                     camera.apply(sprite)
         elif k[pygame.K_RIGHT]:
+            heal_pc += 1
+            if heal_pc == 25:
+                t.tick(1, how_much)
+                heal_pc = 0
             if coords[0] + 1 < 300:
                 if dikt[(coords[1]), coords[0] + 1].isalpha():
                     what_the_item(dikt[(coords[1]), coords[0] + 1])
@@ -896,6 +914,10 @@ while True:
                 for sprite in all_sprites:
                     camera.apply(sprite)
         elif k[pygame.K_UP]:
+            heal_pc += 1
+            if heal_pc == 25:
+                t.tick(1, how_much)
+                heal_pc = 0
             if coords[1] - 1 > -1:
                 if dikt[(coords[1] - 1), coords[0]].isalpha():
                     what_the_item(dikt[(coords[1] - 1), coords[0]])
@@ -914,6 +936,10 @@ while True:
                 for sprite in all_sprites:
                     camera.apply(sprite)
         elif k[pygame.K_DOWN]:
+            heal_pc += 1
+            if heal_pc == 25:
+                t.tick(1, how_much)
+                heal_pc = 0
             if coords[1] + 1 < 300:
                 if dikt[(coords[1] + 1), coords[0]].isalpha():
                     what_the_item(dikt[(coords[1] + 1), coords[0]])
@@ -932,20 +958,41 @@ while True:
                 for sprite in all_sprites:
                     camera.apply(sprite)
         elif k[pygame.K_SPACE]:
+            heal_pc += 1
+            if heal_pc == 25:
+                t.tick(1, how_much)
+                heal_pc = 0
             if coords in kick_boss:
                 pc.giving_damage(b)
             elif coords in kick_miniboss:
                 pc.giving_damage(mb)
         elif k[pygame.K_d]:
+            heal_pc += 1
+            if heal_pc == 25:
+                t.tick(1, how_much)
+                heal_pc = 0
             pc.kill()
         elif k[pygame.K_t]:
-            t.tick(10)
+            heal_pc += 1
+            if heal_pc == 25:
+                t.tick(1, how_much)
+                heal_pc = 0
+            t.tick(10, how_much)
         elif k[pygame.K_ESCAPE]:
+            heal_pc += 1
+            if heal_pc == 25:
+                t.tick(1, how_much)
+                heal_pc = 0
             menu()
-
+        elif k[pygame.K_m]:
+            heal_pc += 1
+            if heal_pc == 25:
+                t.tick(1, how_much)
+                heal_pc = 0
+            how_much = 10
     heal_pc += 1
     if heal_pc == 25:
-        t.tick()
+        t.tick(1, how_much)
         heal_pc = 0
     screen.fill((0, 0, 0))
     all_sprites.draw(screen)
