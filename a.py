@@ -5,10 +5,11 @@ import math
 import random
 from time import sleep
 from random import choice as c
-import sys
 
 kick_boss = [[149, 148], [150, 148], [151, 149], [151, 150], [150, 151], [149, 151], [148, 150], [148, 149]]
 kick_miniboss = []
+fight = False
+chance = None
 
 
 def create_file():
@@ -56,10 +57,13 @@ class Timer:
         self.htime = 0
         self.mtime = 0
         self.stime = 0
+        self.atak_time = -1
+        self.slep = 0
 
     def tick(self, time=1, h=1):
         for i in range(time):
             self.stime += 1
+            t.sleep()
             pc.cash += h
             if pc.regen >= pc.SHP - pc.HP:
                 pc.HP = pc.SHP
@@ -84,6 +88,13 @@ class Timer:
         s = str(self.stime) if len(str(self.stime)) == 2 else '0' + str(self.stime)
         return d + ':' + h + ':' + m + ':' + s
 
+    def sleep(self):
+        if t.stime == t.atak_time:
+            b.taking_damage()
+            t.slep = t.stime + 2
+        if t.slep == t.stime:
+            b.giving_damage()
+
 
 t = Timer()
 
@@ -92,6 +103,7 @@ class Boss:
     HP = 9999999999
     armor = 9999999999
     damage = 9999999999
+    first_kik = 0
 
     def __init__(self, hard_of_level):
         if hard_of_level == 1:
@@ -108,26 +120,156 @@ class Boss:
             self.damage = 10000
 
     def geting_damage(self, hard_of_level):
-        if hard_of_level != 3:
-            if pc.damage - (
-                    b.armor - pc.physical_penetration) > 0 and \
-                    b.armor - pc.physical_penetration > 0:
-                b.HP -= (pc.damage - (b.armor - pc.physical_penetration))
-            else:
-                b.HP -= pc.damage
+        global player, level_x, level_y, level_map, mapFile, sp, game_map, coords, a, all_sprites, \
+            tiles_group, boss_group, player_group, fight, camera, player
+        if b.first_kik == 0:
+            sp = []
+            fight = True
+            all_sprites = None
+            tiles_group = None
+            boss_group = None
+            player_group = None
+            all_sprites = pygame.sprite.Group()
+            tiles_group = pygame.sprite.Group()
+            boss_group = pygame.sprite.Group()
+            player_group = pygame.sprite.Group()
+            game_map = []
+            a = 'fight.txt'
+            b.first_kik += 1
+            with open('data/' + a, 'r') as mapFile:
+                le = [line.strip() for line in mapFile]
+                level_map = le[-1].split()
+                for el in range(len(le)):
+                    game_map.append(list(le[el]))
+                    for ell in range(len(le[el])):
+                        if le[el][ell] == '#' or le[el][ell] == 'B':
+                            sp.append([ell, el])
+            level_map = load_level(a)
+            player, level_x, level_y = generate_level(level_map, False)
+            coords = [12, 12]
+            camera.update(player)
+            for sprite in all_sprites:
+                camera.apply(sprite)
+            pygame.display.flip()
             b.giving_damage()
         else:
-            if random.choice([True, False]):
+            if hard_of_level != 3:
                 if pc.damage - (
                         b.armor - pc.physical_penetration) > 0 and \
                         b.armor - pc.physical_penetration > 0:
                     b.HP -= (pc.damage - (b.armor - pc.physical_penetration))
-                b.giving_damage()
-        if b.HP <= 0:
-            b.kill()
+                elif pc.damage > (b.armor - pc.physical_penetration):
+                    b.HP -= pc.damage
+            else:
+                if random.choice([True, False]):
+                    if pc.damage - (
+                            b.armor - pc.physical_penetration) > 0 and \
+                            b.armor - pc.physical_penetration > 0:
+                        b.HP -= (pc.damage - (b.armor - pc.physical_penetration))
+            if b.HP <= 0:
+                b.kill()
 
     def giving_damage(self):
-        pc.geting_damage(b)
+        global player, level_x, level_y, tile_width, tile_height, chance, coords, all_sprites, tiles_group, boss_group, \
+            player_group, level_map, mapFile, sp, game_map, atak_time, fight
+        t.atak_time = t.stime + 5
+        if t.atak_time >= 60:
+            t.atak_time -= 60
+            if t.atak_time == 0:
+                t.atak_time = 1
+        chance = [9, 9]
+        while chance in [[9, 9], [10, 9], [9, 10], [10, 10]]:
+            chance = [random.choice([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19]),
+                      random.choice([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19])]
+        sp = []
+        fight = True
+        all_sprites = None
+        tiles_group = None
+        boss_group = None
+        player_group = None
+        all_sprites = pygame.sprite.Group()
+        tiles_group = pygame.sprite.Group()
+        boss_group = pygame.sprite.Group()
+        player_group = pygame.sprite.Group()
+        game_map = []
+        a = 'fight.txt'
+        with open('data/' + a, 'r') as mapFile:
+            le = [line.strip() for line in mapFile]
+            level_map = le[-1].split()
+            for el in range(len(le)):
+                game_map.append(list(le[el]))
+                for ell in range(len(le[el])):
+                    if le[el][ell] == '#' or le[el][ell] == 'B':
+                        sp.append([ell, el])
+        level_map = load_level(a)
+        player, level_x, level_y = generate_level(level_map, True)
+        coords = [9, 11]
+        camera.update(player)
+        for sprite in all_sprites:
+            camera.apply(sprite)
+        pygame.display.flip()
+
+    def taking_damage(self):
+        global player, level_x, level_y, tile_width, tile_height, chance, coords, all_sprites, tiles_group, \
+            boss_group, player_group, level_map, mapFile, sp, game_map, a, fight
+        if coords != chance:
+            pc.geting_damage(b)
+            sp = []
+            fight = True
+            all_sprites = None
+            tiles_group = None
+            boss_group = None
+            player_group = None
+            all_sprites = pygame.sprite.Group()
+            tiles_group = pygame.sprite.Group()
+            boss_group = pygame.sprite.Group()
+            player_group = pygame.sprite.Group()
+            game_map = []
+            a = 'fight.txt'
+            with open('data/' + a, 'r') as mapFile:
+                le = [line.strip() for line in mapFile]
+                level_map = le[-1].split()
+                for el in range(len(le)):
+                    game_map.append(list(le[el]))
+                    for ell in range(len(le[el])):
+                        if le[el][ell] == '#' or le[el][ell] == 'B':
+                            sp.append([ell, el])
+            level_map = load_level(a)
+            player, level_x, level_y = generate_level(level_map, False)
+            coords = [9, 11]
+            camera.update(player)
+            for sprite in all_sprites:
+                camera.apply(sprite)
+            pygame.display.flip()
+        else:
+            print('False')
+            sp = []
+            all_sprites = None
+            tiles_group = None
+            boss_group = None
+            player_group = None
+            all_sprites = pygame.sprite.Group()
+            tiles_group = pygame.sprite.Group()
+            boss_group = pygame.sprite.Group()
+            player_group = pygame.sprite.Group()
+            game_map = []
+            a = 'fight.txt'
+            with open('data/' + a, 'r') as mapFile:
+                le = [line.strip() for line in mapFile]
+                level_map = le[-1].split()
+                for el in range(len(le)):
+                    game_map.append(list(le[el]))
+                    for ell in range(len(le[el])):
+                        if le[el][ell] == '#' or le[el][ell] == 'B':
+                            sp.append([ell, el])
+            level_map = load_level(a)
+            player, level_x, level_y = generate_level(level_map, False)
+            coords = [9, 11]
+            camera.update(player)
+            pygame.display.flip()
+            for sprite in all_sprites:
+                camera.apply(sprite)
+            pygame.display.flip()
 
     def kill(self):
         fon = pygame.transform.scale(load_image('win.jpg', True), (1000, 1000))
@@ -140,6 +282,9 @@ class Boss:
                     terminate()
             pygame.display.flip()
             clock.tick(FPS)
+
+
+atak_time = 0
 
 
 class miniBoss:
@@ -390,6 +535,10 @@ def immortality():
     pc.extra_life += 1
 
 
+def coin():
+    pc.cash += 50
+
+
 def what_the_item(item):
     if item == 'a':
         axe_of_bloodlust()
@@ -445,6 +594,8 @@ def what_the_item(item):
         protective_helmet()
     elif item == 'A':
         immortality()
+    elif item == 'C':
+        coin()
 
 
 pygame.init()
@@ -573,18 +724,23 @@ def load_image(name, color_key=None):
 bx, by = 0, 0
 
 
-def generate_level(level):
-    global bx, by
+def generate_level(level, atak):
+    global bx, by, chance
     new_player, x, y = None, None, None
     for y in range(len(level)):
         for x in range(len(level[y])):
             if [y, x] in sp_of_gotten_things:
                 Tile('empty', x, y)
+            elif level[y][x] == '.' and chance != [x, y] and atak:
+                Tile('empty1', x, y)
             elif level[y][x] == '.':
                 Tile('empty', x, y)
             elif level[y][x] == '#':
                 Tile('wall', x, y)
                 sp.append((x * 50 + 15, y * 50 + 5))
+            elif level[y][x] == '@' and chance != [x, y] and atak:
+                Tile('empty1', x, y)
+                new_player = Player(x, y)
             elif level[y][x] == '@':
                 Tile('empty', x, y)
                 new_player = Player(x, y)
@@ -644,11 +800,14 @@ def generate_level(level):
                 Tile('immortality', x, y)
             elif level[y][x] == 'B':
                 Tile('boss', x, y)
+            elif level[y][x] == 'C':
+                Tile('coin', x, y)
             dikt[(y, x)] = level[y][x]
     return new_player, x, y
 
 
-tile_images = {'boss': pygame.transform.scale(load_image('boss.png', True), (100, 100)), 'wall': load_image('box.png'),
+tile_images = {'coin': load_image('coin.jpg'), 'empty1': load_image('atak_floor.png'),
+               'boss': pygame.transform.scale(load_image('boss.png', True), (100, 100)), 'wall': load_image('box.png'),
                'empty': load_image('floor.png'), 'axe_of_bloodlust': load_image('axe_of_bloodlust.png'),
                'berserker_rage': load_image('berserker_rage.png'),
                'blade_of_despair': load_image('blade_of_despair.png'),
@@ -712,39 +871,67 @@ class Player(pygame.sprite.Sprite):
 
     def movel(self):
         global coords
-        if self.rect.left - 50 > 0 and self.rect.left - 50 < 1000 and [coords[0] - 1, coords[1]] not in sp and coords[
-            0] - 1 != -1:
-            self.rect.topleft = (self.rect.left - 50, self.rect.top)
-            game_map[coords[1]][coords[0]] = '.'
-            coords = [coords[0] - 1, coords[1]]
-            game_map[coords[1]][coords[0]] = '@'
+        if (self.rect.left - 50 > 0) and (self.rect.left - 50 < 1000) and [coords[0] - 1, coords[1]] not in sp and \
+                coords[0] - 1 != -1:
+            if fight and coords in [[11, 9], [11, 10]]:
+                return
+            else:
+                self.rect.topleft = (self.rect.left - 50, self.rect.top)
+                game_map[coords[1]][coords[0]] = '.'
+                coords = [coords[0] - 1, coords[1]]
+                game_map[coords[1]][coords[0]] = '@'
 
     def mover(self):
-        global coords
-        if self.rect.left + 50 > 0 and self.rect.left + 50 < 1000 and [coords[0] + 1, coords[1]] not in sp and coords[
-            0] + 1 != 300:
-            self.rect.topleft = (self.rect.left + 50, self.rect.top)
-            game_map[coords[1]][coords[0]] = '.'
-            coords = [coords[0] + 1, coords[1]]
-            game_map[coords[1]][coords[0]] = '@'
+        global coords, fight
+        if fight:
+            if (self.rect.left + 50 > 0) and (self.rect.left + 50 < 1000) and [coords[0] + 1, coords[1]] not in sp and \
+                    coords[0] + 1 != 20:
+                if coords == [8, 10]:
+                    return
+                else:
+                    self.rect.topleft = (self.rect.left + 50, self.rect.top)
+                    game_map[coords[1]][coords[0]] = '.'
+                    coords = [coords[0] + 1, coords[1]]
+                    game_map[coords[1]][coords[0]] = '@'
+        else:
+            if (self.rect.left + 50 > 0) and (self.rect.left + 50 < 1000) and [coords[0] + 1, coords[1]] not in sp and \
+                    coords[0] + 1 != 300:
+                self.rect.topleft = (self.rect.left + 50, self.rect.top)
+                game_map[coords[1]][coords[0]] = '.'
+                coords = [coords[0] + 1, coords[1]]
+                game_map[coords[1]][coords[0]] = '@'
 
     def moveu(self):
         global coords
-        if self.rect.top - 50 > 0 and self.rect.top - 50 < 1000 and [coords[0], coords[1] - 1] not in sp and coords[
-            1] - 1 != -1:
-            self.rect.topleft = (self.rect.left, self.rect.top - 50)
-            game_map[coords[1]][coords[0]] = '.'
-            coords = [coords[0], coords[1] - 1]
-            game_map[coords[1]][coords[0]] = '@'
+        if (self.rect.top - 50 > 0) and (self.rect.top - 50 < 1000) and [coords[0], coords[1] - 1] not in sp and \
+                coords[1] - 1 != -1:
+            if fight and coords in [[9, 11], [10, 11]]:
+                return
+            else:
+                self.rect.topleft = (self.rect.left, self.rect.top - 50)
+                game_map[coords[1]][coords[0]] = '.'
+                coords = [coords[0], coords[1] - 1]
+                game_map[coords[1]][coords[0]] = '@'
 
     def moved(self):
-        global coords
-        if self.rect.top + 50 > 0 and self.rect.top + 50 < 1000 and [coords[0], coords[1] + 1] not in sp and coords[
-            1] + 1 != 300:
-            self.rect.topleft = (self.rect.left, self.rect.top + 50)
-            game_map[coords[1]][coords[0]] = '.'
-            coords = [coords[0], coords[1] + 1]
-            game_map[coords[1]][coords[0]] = '@'
+        global coords, fight
+        if fight:
+            if (self.rect.top + 50 > 0) and (self.rect.top + 50 < 1000) and [coords[0], coords[1] + 1] not in sp and \
+                    coords[1] + 1 != 20:
+                if coords == [10, 8]:
+                    return
+                else:
+                    self.rect.topleft = (self.rect.left, self.rect.top + 50)
+                    game_map[coords[1]][coords[0]] = '.'
+                    coords = [coords[0], coords[1] + 1]
+                    game_map[coords[1]][coords[0]] = '@'
+        else:
+            if (self.rect.top + 50 > 0) and (self.rect.top + 50 < 1000) and [coords[0], coords[1] + 1] not in sp and \
+                    coords[1] + 1 != 300:
+                self.rect.topleft = (self.rect.left, self.rect.top + 50)
+                game_map[coords[1]][coords[0]] = '.'
+                coords = [coords[0], coords[1] + 1]
+                game_map[coords[1]][coords[0]] = '@'
 
 
 def load_level(filename):
@@ -762,7 +949,7 @@ def terminate():
 
 start_screen()
 level_map = load_level(a)
-player, level_x, level_y = generate_level(level_map)
+player, level_x, level_y = generate_level(level_map, False)
 item1 = True
 item2 = True
 item3 = True
@@ -883,7 +1070,7 @@ while True:
                     all_sprites = pygame.sprite.Group()
                     tiles_group = pygame.sprite.Group()
                     player_group = pygame.sprite.Group()
-                    player, level_x, level_y = generate_level(game_map)
+                    player, level_x, level_y = generate_level(game_map, False)
                     tile_width = tile_height = 50
                     camera.update(player)
                 else:
@@ -905,7 +1092,7 @@ while True:
                     all_sprites = pygame.sprite.Group()
                     tiles_group = pygame.sprite.Group()
                     player_group = pygame.sprite.Group()
-                    player, level_x, level_y = generate_level(game_map)
+                    player, level_x, level_y = generate_level(game_map, False)
                     tile_width = tile_height = 50
                     camera.update(player)
                 else:
@@ -927,7 +1114,7 @@ while True:
                     all_sprites = pygame.sprite.Group()
                     tiles_group = pygame.sprite.Group()
                     player_group = pygame.sprite.Group()
-                    player, level_x, level_y = generate_level(game_map)
+                    player, level_x, level_y = generate_level(game_map, False)
                     tile_width = tile_height = 50
                     camera.update(player)
                 else:
@@ -949,7 +1136,7 @@ while True:
                     all_sprites = pygame.sprite.Group()
                     tiles_group = pygame.sprite.Group()
                     player_group = pygame.sprite.Group()
-                    player, level_x, level_y = generate_level(game_map)
+                    player, level_x, level_y = generate_level(game_map, False)
                     tile_width = tile_height = 50
                     camera.update(player)
                 else:
@@ -963,6 +1150,10 @@ while True:
                 t.tick(1, how_much)
                 heal_pc = 0
             if coords in kick_boss:
+                pc.giving_damage(b)
+            elif coords in [[8, 8], [9, 8], [10, 8], [11, 8],
+                            [8, 9], [8, 10], [11, 9], [11, 10],
+                            [8, 11], [9, 11], [10, 11], [11, 11]] and fight:
                 pc.giving_damage(b)
             elif coords in kick_miniboss:
                 pc.giving_damage(mb)
@@ -990,6 +1181,12 @@ while True:
                 t.tick(1, how_much)
                 heal_pc = 0
             how_much = 10
+        elif k[pygame.K_b]:
+            heal_pc += 1
+            if heal_pc == 25:
+                t.tick(1, how_much)
+                heal_pc = 0
+            b.geting_damage(hard_of_level)
     heal_pc += 1
     if heal_pc == 25:
         t.tick(1, how_much)
@@ -1034,7 +1231,7 @@ while True:
     text1 = f1.render('physical penetration: ' + str(pc.physical_penetration), 0, (0, 0, 0))
     screen.blit(text1, (810, 358))
     f1 = pygame.font.Font(None, 24)
-    text1 = f1.render('coords: ' + str(coords[0] + 1) + ',' + str(coords[1] + 1), 0, (0, 0, 0))
+    text1 = f1.render('coords: ' + str(coords[0]) + ',' + str(coords[1]), 0, (0, 0, 0))
     screen.blit(text1, (810, 392))
     f1 = pygame.font.Font(None, 24)
     text1 = f1.render('cash: ' + str(pc.cash), 0, (0, 0, 0))
