@@ -43,7 +43,7 @@ def create_file():
                     a = c(
                         ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's',
                          't', 'u', 'v', 'w', 'x', 'y', 'z', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l',
-                         'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', 'A'])
+                         'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', 'A', 'C'])
                 st.append(a)
         if flag == 'a':
             break
@@ -109,15 +109,15 @@ class Boss:
         if hard_of_level == 1:
             self.HP = 1500000
             self.armor = 500
-            self.damage = 2500
+            self.damage = 5000
         elif hard_of_level == 2:
             self.HP = 5000000
             self.armor = 2500
-            self.damage = 5000
+            self.damage = 10000
         elif hard_of_level == 3:
             self.HP = 10000000
             self.armor = 12500
-            self.damage = 10000
+            self.damage = 15000
 
     def geting_damage(self, hard_of_level):
         global player, level_x, level_y, level_map, mapFile, sp, game_map, coords, a, all_sprites, \
@@ -1009,7 +1009,7 @@ def shop():
                     event.pos[0] < 900) and (event.pos[1] < 900) and item4 and pc.cash >= 1500:
                 item4 = False
                 pc.cash -= 1500
-                pc.armor += 1000
+                pc.armor *= 2
                 pygame.draw.rect(screen, [200, 0, 0], [559, 579, 951, 1000])
             elif event.type == pygame.MOUSEBUTTONDOWN and (event.pos[0] > 5) and (event.pos[1] > 10) and (
                     event.pos[0] < 210) and (event.pos[1] < 125):
