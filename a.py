@@ -1157,12 +1157,6 @@ while True:
                 pc.giving_damage(b)
             elif coords in kick_miniboss:
                 pc.giving_damage(mb)
-        elif k[pygame.K_d]:
-            heal_pc += 1
-            if heal_pc == 25:
-                t.tick(1, how_much)
-                heal_pc = 0
-            pc.kill()
         elif k[pygame.K_t]:
             heal_pc += 1
             if heal_pc == 25:
@@ -1181,12 +1175,6 @@ while True:
                 t.tick(1, how_much)
                 heal_pc = 0
             how_much = 10
-        elif k[pygame.K_b]:
-            heal_pc += 1
-            if heal_pc == 25:
-                t.tick(1, how_much)
-                heal_pc = 0
-            b.geting_damage(hard_of_level)
     heal_pc += 1
     if heal_pc == 25:
         t.tick(1, how_much)
