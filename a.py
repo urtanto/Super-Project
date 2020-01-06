@@ -622,7 +622,7 @@ coords = [299, 299]
 
 
 def start_screen():
-    global hard_of_level
+    global hard_of_level, manage
     stop = True
     fon = pygame.transform.scale(load_image('first_fon.jpg', True), (1000, 1000))
     screen.blit(fon, (0, 0))
@@ -676,6 +676,25 @@ def start_screen():
                     event.pos[0] < 817) and (event.pos[1] < 651):
                 tile_images['wall'] = load_image('wall.png')
                 tile_images['empty'] = load_image('floor.png')
+                stop = False
+                break
+        pygame.display.flip()
+        clock.tick(FPS)
+    stop = True
+    fon = pygame.transform.scale(load_image('manage.jpg', True), (1000, 1000))
+    screen.blit(fon, (0, 0))
+    while stop:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                terminate()
+            elif event.type == pygame.MOUSEBUTTONDOWN and (event.pos[0] > 0) and (event.pos[1] > 300) and (
+                    event.pos[0] < 500) and (event.pos[1] < 1000):
+                manage = 1
+                stop = False
+                break
+            elif event.type == pygame.MOUSEBUTTONDOWN and (event.pos[0] > 500) and (event.pos[1] > 300) and (
+                    event.pos[0] < 1000) and (event.pos[1] < 1000):
+                manage = 2
                 stop = False
                 break
         pygame.display.flip()
@@ -832,7 +851,7 @@ tiles_group = pygame.sprite.Group()
 boss_group = pygame.sprite.Group()
 player_group = pygame.sprite.Group()
 tile_width = tile_height = 50
-
+manage = None
 FPS = 50
 
 
@@ -1055,7 +1074,7 @@ while True:
         k = pygame.key.get_pressed()
         if event.type == pygame.QUIT:
             terminate()
-        if k[pygame.K_LEFT]:
+        if k[pygame.K_LEFT] and manage == 2:
             heal_pc += 1
             if heal_pc == 25:
                 t.tick(1, how_much)
@@ -1077,7 +1096,7 @@ while True:
                     camera.update(player)
                 for sprite in all_sprites:
                     camera.apply(sprite)
-        elif k[pygame.K_RIGHT]:
+        elif k[pygame.K_RIGHT] and manage == 2:
             heal_pc += 1
             if heal_pc == 25:
                 t.tick(1, how_much)
@@ -1099,7 +1118,7 @@ while True:
                     camera.update(player)
                 for sprite in all_sprites:
                     camera.apply(sprite)
-        elif k[pygame.K_UP]:
+        elif k[pygame.K_UP] and manage == 2:
             heal_pc += 1
             if heal_pc == 25:
                 t.tick(1, how_much)
@@ -1121,7 +1140,95 @@ while True:
                     camera.update(player)
                 for sprite in all_sprites:
                     camera.apply(sprite)
-        elif k[pygame.K_DOWN]:
+        elif k[pygame.K_DOWN] and manage == 2:
+            heal_pc += 1
+            if heal_pc == 25:
+                t.tick(1, how_much)
+                heal_pc = 0
+            if coords[1] + 1 < 300:
+                if dikt[(coords[1] + 1), coords[0]].isalpha():
+                    what_the_item(dikt[(coords[1] + 1), coords[0]])
+                    Player.moved(player)
+                    camera.update(player)
+                    player_image = load_image('mar.png', -1)
+                    all_sprites = pygame.sprite.Group()
+                    tiles_group = pygame.sprite.Group()
+                    player_group = pygame.sprite.Group()
+                    player, level_x, level_y = generate_level(game_map, False)
+                    tile_width = tile_height = 50
+                    camera.update(player)
+                else:
+                    Player.moved(player)
+                    camera.update(player)
+                for sprite in all_sprites:
+                    camera.apply(sprite)
+        elif k[pygame.K_a] and manage == 1:
+            heal_pc += 1
+            if heal_pc == 25:
+                t.tick(1, how_much)
+                heal_pc = 0
+            if coords[0] - 1 > -1:
+                if dikt[(coords[1]), coords[0] - 1].isalpha():
+                    what_the_item(dikt[(coords[1]), coords[0] - 1])
+                    Player.movel(player)
+                    camera.update(player)
+                    player_image = load_image('mar.png', -1)
+                    all_sprites = pygame.sprite.Group()
+                    tiles_group = pygame.sprite.Group()
+                    player_group = pygame.sprite.Group()
+                    player, level_x, level_y = generate_level(game_map, False)
+                    tile_width = tile_height = 50
+                    camera.update(player)
+                else:
+                    Player.movel(player)
+                    camera.update(player)
+                for sprite in all_sprites:
+                    camera.apply(sprite)
+        elif k[pygame.K_d] and manage == 1:
+            heal_pc += 1
+            if heal_pc == 25:
+                t.tick(1, how_much)
+                heal_pc = 0
+            if coords[0] + 1 < 300:
+                if dikt[(coords[1]), coords[0] + 1].isalpha():
+                    what_the_item(dikt[(coords[1]), coords[0] + 1])
+                    Player.mover(player)
+                    camera.update(player)
+                    player_image = load_image('mar.png', -1)
+                    all_sprites = pygame.sprite.Group()
+                    tiles_group = pygame.sprite.Group()
+                    player_group = pygame.sprite.Group()
+                    player, level_x, level_y = generate_level(game_map, False)
+                    tile_width = tile_height = 50
+                    camera.update(player)
+                else:
+                    Player.mover(player)
+                    camera.update(player)
+                for sprite in all_sprites:
+                    camera.apply(sprite)
+        elif k[pygame.K_w] and manage == 1:
+            heal_pc += 1
+            if heal_pc == 25:
+                t.tick(1, how_much)
+                heal_pc = 0
+            if coords[1] - 1 > -1:
+                if dikt[(coords[1] - 1), coords[0]].isalpha():
+                    what_the_item(dikt[(coords[1] - 1), coords[0]])
+                    Player.moveu(player)
+                    camera.update(player)
+                    player_image = load_image('mar.png', -1)
+                    all_sprites = pygame.sprite.Group()
+                    tiles_group = pygame.sprite.Group()
+                    player_group = pygame.sprite.Group()
+                    player, level_x, level_y = generate_level(game_map, False)
+                    tile_width = tile_height = 50
+                    camera.update(player)
+                else:
+                    Player.moveu(player)
+                    camera.update(player)
+                for sprite in all_sprites:
+                    camera.apply(sprite)
+        elif k[pygame.K_s] and manage == 1:
             heal_pc += 1
             if heal_pc == 25:
                 t.tick(1, how_much)
