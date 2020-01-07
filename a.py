@@ -534,8 +534,13 @@ def immortality():
     pc.extra_life += 1
 
 
-def coin():
-    pc.cash += 50
+def coin(h):
+    if h == 1:
+        pc.cash += 200
+    elif h == 2:
+        pc.cash += 100
+    elif h == 3:
+        pc.cash += 50
 
 
 def what_the_item(item):
@@ -594,7 +599,7 @@ def what_the_item(item):
     elif item == 'A':
         immortality()
     elif item == 'C':
-        coin()
+        coin(hard_of_level)
 
 
 pygame.init()
