@@ -3,6 +3,7 @@ import os
 import sys
 import math
 import random
+import sqlite3
 from time import sleep
 from random import choice as c
 
@@ -10,6 +11,137 @@ kick_boss = [[149, 148], [150, 148], [151, 149], [151, 150], [150, 151], [149, 1
 kick_miniboss = []
 fight = False
 chance = None
+
+
+def sq(name, cp):
+    # переводим переменную в строку
+    name = str(name[0]).upper() + str(name[1:])
+    con = sqlite3.connect('chet.db')
+    # Создаём курсор
+    cur = con.cursor()
+    # Получаем имя и счёт из БД в порядке убывания и переводим в матрицу из списков для дальнеёшего изменения
+    result = cur.execute("SELECT name, CP FROM che ORDER BY CP DESC, name").fetchall()
+    result = [list(i) for i in result]
+
+    con.commit()
+    # Делаем тоже самое только в другую переменную, эту му будем изменять, а из той брать старую информацию
+    r2esult = cur.execute("SELECT name, CP FROM che ORDER BY CP DESC, name").fetchall()
+    r2esult = [list(i) for i in r2esult]
+    # Изменение рейтинга
+    if name == r2esult[0][0]:
+        if cp > r2esult[0][1]:
+            r2esult[0] = [name, cp]
+    elif name == r2esult[1][0]:
+        if cp > r2esult[0][1]:
+            r2esult[0] = [name, cp]
+            r2esult[1] = result[0]
+        elif cp > r2esult[1][1]:
+            r2esult[1] = [name, cp]
+    elif name == r2esult[2][0]:
+        if cp > r2esult[0][1]:
+            r2esult[0] = [name, cp]
+            r2esult[1] = result[0]
+            r2esult[2] = result[1]
+        elif cp > r2esult[1][1]:
+            r2esult[1] = [name, cp]
+            r2esult[2] = result[1]
+        elif cp > r2esult[2][1]:
+            r2esult[2] = [name, cp]
+    elif name == r2esult[3][0]:
+        if cp > r2esult[0][1]:
+            r2esult[0] = [name, cp]
+            r2esult[1] = result[0]
+            r2esult[2] = result[1]
+            r2esult[3] = result[2]
+        elif cp > r2esult[1][1]:
+            r2esult[1] = [name, cp]
+            r2esult[2] = result[1]
+            r2esult[3] = result[2]
+        elif cp > r2esult[2][1]:
+            r2esult[2] = [name, cp]
+            r2esult[3] = result[2]
+        elif cp > r2esult[3][1]:
+            r2esult[3] = [name, cp]
+    elif name == r2esult[4][0]:
+        if cp > r2esult[0][1]:
+            r2esult[0] = [name, cp]
+            r2esult[1] = result[0]
+            r2esult[2] = result[1]
+            r2esult[3] = result[2]
+            r2esult[4] = result[3]
+        elif cp > r2esult[1][1]:
+            r2esult[1] = [name, cp]
+            r2esult[2] = result[1]
+            r2esult[3] = result[2]
+            r2esult[4] = result[3]
+        elif cp > r2esult[2][1]:
+            r2esult[2] = [name, cp]
+            r2esult[3] = result[2]
+            r2esult[4] = result[3]
+        elif cp > r2esult[3][1]:
+            r2esult[3] = [name, cp]
+            r2esult[4] = result[3]
+        elif cp > r2esult[4][1]:
+            r2esult[4] = [name, cp]
+    else:
+        if cp > r2esult[0][1]:
+            r2esult[0] = [name, cp]
+            r2esult[1] = result[0]
+            r2esult[2] = result[1]
+            r2esult[3] = result[2]
+            r2esult[4] = result[3]
+        elif cp > r2esult[1][1]:
+            r2esult[1] = [name, cp]
+            r2esult[2] = result[1]
+            r2esult[3] = result[2]
+            r2esult[4] = result[3]
+        elif cp > r2esult[2][1]:
+            r2esult[2] = [name, cp]
+            r2esult[3] = result[2]
+            r2esult[4] = result[3]
+        elif cp > r2esult[3][1]:
+            r2esult[3] = [name, cp]
+            r2esult[4] = result[3]
+        elif cp > r2esult[4][1]:
+            r2esult[4] = [name, cp]
+    con.commit()
+    # Обновление данных в БД
+    forma = "UPDATE che SET name = '" + r2esult[0][0] + "' WHERE nom = 1"
+    cur.execute(forma).fetchall()
+    con.commit()
+    forma = "UPDATE che SET CP = " + str(r2esult[0][1]) + " WHERE nom = 1"
+    cur.execute(forma).fetchall()
+    con.commit()
+
+    forma = "UPDATE che SET name = '" + r2esult[1][0] + "' WHERE nom = 2"
+    cur.execute(forma).fetchall()
+    con.commit()
+    forma = "UPDATE che SET CP = " + str(r2esult[1][1]) + " WHERE nom = 2"
+    cur.execute(forma).fetchall()
+    con.commit()
+
+    forma = "UPDATE che SET name = '" + r2esult[2][0] + "' WHERE nom = 3"
+    cur.execute(forma).fetchall()
+    con.commit()
+    forma = "UPDATE che SET CP = " + str(r2esult[2][1]) + " WHERE nom = 3"
+    cur.execute(forma).fetchall()
+    con.commit()
+
+    forma = "UPDATE che SET name = '" + r2esult[3][0] + "' WHERE nom = 4"
+    cur.execute(forma).fetchall()
+    con.commit()
+    forma = "UPDATE che SET CP = " + str(r2esult[3][1]) + " WHERE nom = 4"
+    cur.execute(forma).fetchall()
+    con.commit()
+
+    forma = "UPDATE che SET name = '" + r2esult[4][0] + "' WHERE nom = 5"
+    cur.execute(forma).fetchall()
+    con.commit()
+    forma = "UPDATE che SET CP = " + str(r2esult[4][1]) + " WHERE nom = 5"
+    cur.execute(forma).fetchall()
+    con.commit()
+    con.close()
+    terminate()
 
 
 def create_file():
@@ -271,14 +403,83 @@ class Boss:
             pygame.display.flip()
 
     def kill(self):
+        sp = []
+        fight = True
+        all_sprites = None
+        tiles_group = None
+        boss_group = None
+        player_group = None
+        game_map = []
         fon = pygame.transform.scale(load_image('win.jpg', True), (1000, 1000))
         screen.blit(fon, (0, 0))
+        name1 = ''
         while True:
             for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    terminate()
-                elif event.type == pygame.KEYDOWN or event.type == pygame.MOUSEBUTTONDOWN:
-                    terminate()
+                k = pygame.key.get_pressed()
+                if k[pygame.K_q] and len(name1) < 20:
+                    name1 += 'q'
+                if k[pygame.K_w] and len(name1) < 20:
+                    name1 += 'w'
+                if k[pygame.K_e] and len(name1) < 20:
+                    name1 += 'e'
+                if k[pygame.K_r] and len(name1) < 20:
+                    name1 += 'r'
+                if k[pygame.K_t] and len(name1) < 20:
+                    name1 += 't'
+                if k[pygame.K_y] and len(name1) < 20:
+                    name1 += 'y'
+                if k[pygame.K_u] and len(name1) < 20:
+                    name1 += 'u'
+                if k[pygame.K_i] and len(name1) < 20:
+                    name1 += 'i'
+                if k[pygame.K_o] and len(name1) < 20:
+                    name1 += 'o'
+                if k[pygame.K_p] and len(name1) < 20:
+                    name1 += 'p'
+                if k[pygame.K_a] and len(name1) < 20:
+                    name1 += 'a'
+                if k[pygame.K_s] and len(name1) < 20:
+                    name1 += 's'
+                if k[pygame.K_d] and len(name1) < 20:
+                    name1 += 'd'
+                if k[pygame.K_f] and len(name1) < 20:
+                    name1 += 'f'
+                if k[pygame.K_g] and len(name1) < 20:
+                    name1 += 'g'
+                if k[pygame.K_h] and len(name1) < 20:
+                    name1 += 'h'
+                if k[pygame.K_j] and len(name1) < 20:
+                    name1 += 'j'
+                if k[pygame.K_k] and len(name1) < 20:
+                    name1 += 'k'
+                if k[pygame.K_l] and len(name1) < 20:
+                    name1 += 'l'
+                if k[pygame.K_z] and len(name1) < 20:
+                    name1 += 'z'
+                if k[pygame.K_x] and len(name1) < 20:
+                    name1 += 'x'
+                if k[pygame.K_c] and len(name1) < 20:
+                    name1 += 'c'
+                if k[pygame.K_v] and len(name1) < 20:
+                    name1 += 'v'
+                if k[pygame.K_b] and len(name1) < 20:
+                    name1 += 'b'
+                if k[pygame.K_n] and len(name1) < 20:
+                    name1 += 'n'
+                if k[pygame.K_m] and len(name1) < 20:
+                    name1 += 'm'
+                if k[pygame.K_BACKSPACE] and len(name1) > 0:
+                    name1 = name1[: -1: 1]
+                if k[pygame.K_KP_ENTER]:
+                    sq(name1, pc.HP + pc.damage + pc.regen + pc.physical_penetration + pc.vampirizm + pc.armor -
+                       pc.cash - t.dtime * 24 * 60 * 60 - t.htime * 60 * 60 - t.mtime * 60 - t.stime)
+            pygame.draw.rect(screen, [200, 0, 0], [300, 450, 450, 100])
+            f1 = pygame.font.Font(None, 24)
+            text1 = f1.render('Put your name:', 0, (0, 0, 0))
+            screen.blit(text1, (350, 500))
+            pygame.draw.rect(screen, [255, 255, 255], [480, 500, 220, 24])
+            text1 = f1.render(name1, 0, (0, 0, 0))
+            screen.blit(text1, (480, 500))
             pygame.display.flip()
             clock.tick(FPS)
 
@@ -1056,14 +1257,47 @@ def shop():
         clock.tick(FPS)
 
 
+def rt():
+    fon = pygame.transform.scale(load_image('rt.jpg', True), (1000, 1000))
+    screen.blit(fon, (0, 0))
+    con = sqlite3.connect('chet.db')
+    # Создаём курсор
+    cur = con.cursor()
+    result = cur.execute("SELECT name, CP FROM che ORDER BY CP DESC, name").fetchall()
+    result = [list(i) for i in result]
+    while True:
+        for event in pygame.event.get():
+            if event.type == pygame.MOUSEBUTTONDOWN and (event.pos[0] > 0) and (event.pos[1] > 0) and (
+                    event.pos[0] < 205) and (event.pos[1] < 203):
+                return menu()
+        f1 = pygame.font.Font(None, 50)
+        text1 = f1.render('Rating:', 0, (0, 0, 0))
+        screen.blit(text1, (400, 200))
+        f1 = pygame.font.Font(None, 50)
+        text1 = f1.render('1: ' + str(result[0][0]) + ' ' + str(result[0][1]) + 'CP', 0, (0, 0, 0))
+        screen.blit(text1, (400, 300))
+        f1 = pygame.font.Font(None, 50)
+        text1 = f1.render('2: ' + str(result[1][0]) + ' ' + str(result[1][1]) + 'CP', 0, (0, 0, 0))
+        screen.blit(text1, (400, 400))
+        f1 = pygame.font.Font(None, 50)
+        text1 = f1.render('3: ' + str(result[2][0]) + ' ' + str(result[2][1]) + 'CP', 0, (0, 0, 0))
+        screen.blit(text1, (400, 500))
+        f1 = pygame.font.Font(None, 50)
+        text1 = f1.render('4: ' + str(result[3][0]) + ' ' + str(result[3][1]) + 'CP', 0, (0, 0, 0))
+        screen.blit(text1, (400, 600))
+        f1 = pygame.font.Font(None, 50)
+        text1 = f1.render('5: ' + str(result[4][0]) + ' ' + str(result[4][1]) + 'CP', 0, (0, 0, 0))
+        screen.blit(text1, (400, 700))
+        pygame.display.flip()
+        clock.tick(FPS)
+
+
 def menu():
     fon = pygame.transform.scale(load_image('menu.jpg', True), (1000, 1000))
     screen.blit(fon, (0, 0))
     while True:
         for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                terminate()
-            elif event.type == pygame.MOUSEBUTTONDOWN and (event.pos[0] > 120) and (event.pos[1] > 170) and (
+            if event.type == pygame.MOUSEBUTTONDOWN and (event.pos[0] > 120) and (event.pos[1] > 170) and (
                     event.pos[0] < 877) and (event.pos[1] < 345):
                 return
             elif event.type == pygame.MOUSEBUTTONDOWN and (event.pos[0] > 121) and (event.pos[1] > 374) and (
@@ -1072,6 +1306,9 @@ def menu():
             elif event.type == pygame.MOUSEBUTTONDOWN and (event.pos[0] > 121) and (event.pos[1] > 592) and (
                     event.pos[0] < 878) and (event.pos[1] < 817):
                 terminate()
+            elif event.type == pygame.MOUSEBUTTONDOWN and (event.pos[0] > 895) and (event.pos[1] > 0) and (
+                    event.pos[0] < 1000) and (event.pos[1] < 105):
+                return rt()
         pygame.display.flip()
         clock.tick(FPS)
 
@@ -1083,6 +1320,7 @@ pc = Player_characters(hard_of_level)
 camera = Camera()
 how_much = 1
 camera.update(player)
+name = ''
 for sprite in all_sprites:
     camera.apply(sprite)
 while True:
