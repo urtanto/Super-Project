@@ -989,7 +989,8 @@ class Camera:
 
 
 def shop():
-    global item1, item2, item3, item4
+    global item1, item2, item3, item4, player_image, player_group, all_sprites, tiles_group, tile_height, tile_width, \
+        player, level_y, level_x
     stop = True
     fon = pygame.transform.scale(load_image('shop.jpg', True), (1000, 1000))
     screen.blit(fon, (0, 0))
@@ -1029,6 +1030,16 @@ def shop():
                 pc.cash -= 1500
                 pc.armor *= 2
                 pygame.draw.rect(screen, [200, 0, 0], [559, 579, 951, 1000])
+                player_image = load_image('armorx2.png', -1)
+                all_sprites = pygame.sprite.Group()
+                tiles_group = pygame.sprite.Group()
+                player_group = pygame.sprite.Group()
+                player, level_x, level_y = generate_level(game_map, False)
+                tile_width = tile_height = 50
+                camera.update(player)
+                for sprite in all_sprites:
+                    camera.apply(sprite)
+                pygame.display.flip()
             elif event.type == pygame.MOUSEBUTTONDOWN and (event.pos[0] > 5) and (event.pos[1] > 10) and (
                     event.pos[0] < 210) and (event.pos[1] < 125):
                 return menu()
@@ -1084,7 +1095,10 @@ while True:
                     what_the_item(dikt[(coords[1]), coords[0] - 1])
                     Player.movel(player)
                     camera.update(player)
-                    player_image = load_image('mar.png', -1)
+                    if not item4:
+                        player_image = load_image('armorx2.png', -1)
+                    else:
+                        player_image = load_image('mar.png', -1)
                     all_sprites = pygame.sprite.Group()
                     tiles_group = pygame.sprite.Group()
                     player_group = pygame.sprite.Group()
@@ -1106,7 +1120,10 @@ while True:
                     what_the_item(dikt[(coords[1]), coords[0] + 1])
                     Player.mover(player)
                     camera.update(player)
-                    player_image = load_image('mar.png', -1)
+                    if not item4:
+                        player_image = load_image('armorx2.png', -1)
+                    else:
+                        player_image = load_image('mar.png', -1)
                     all_sprites = pygame.sprite.Group()
                     tiles_group = pygame.sprite.Group()
                     player_group = pygame.sprite.Group()
@@ -1128,7 +1145,10 @@ while True:
                     what_the_item(dikt[(coords[1] - 1), coords[0]])
                     Player.moveu(player)
                     camera.update(player)
-                    player_image = load_image('mar.png', -1)
+                    if not item4:
+                        player_image = load_image('armorx2.png', -1)
+                    else:
+                        player_image = load_image('mar.png', -1)
                     all_sprites = pygame.sprite.Group()
                     tiles_group = pygame.sprite.Group()
                     player_group = pygame.sprite.Group()
@@ -1150,7 +1170,10 @@ while True:
                     what_the_item(dikt[(coords[1] + 1), coords[0]])
                     Player.moved(player)
                     camera.update(player)
-                    player_image = load_image('mar.png', -1)
+                    if not item4:
+                        player_image = load_image('armorx2.png', -1)
+                    else:
+                        player_image = load_image('mar.png', -1)
                     all_sprites = pygame.sprite.Group()
                     tiles_group = pygame.sprite.Group()
                     player_group = pygame.sprite.Group()
@@ -1172,7 +1195,10 @@ while True:
                     what_the_item(dikt[(coords[1]), coords[0] - 1])
                     Player.movel(player)
                     camera.update(player)
-                    player_image = load_image('mar.png', -1)
+                    if not item4:
+                        player_image = load_image('armorx2.png', -1)
+                    else:
+                        player_image = load_image('mar.png', -1)
                     all_sprites = pygame.sprite.Group()
                     tiles_group = pygame.sprite.Group()
                     player_group = pygame.sprite.Group()
@@ -1194,7 +1220,10 @@ while True:
                     what_the_item(dikt[(coords[1]), coords[0] + 1])
                     Player.mover(player)
                     camera.update(player)
-                    player_image = load_image('mar.png', -1)
+                    if not item4:
+                        player_image = load_image('armorx2.png', -1)
+                    else:
+                        player_image = load_image('mar.png', -1)
                     all_sprites = pygame.sprite.Group()
                     tiles_group = pygame.sprite.Group()
                     player_group = pygame.sprite.Group()
@@ -1216,7 +1245,10 @@ while True:
                     what_the_item(dikt[(coords[1] - 1), coords[0]])
                     Player.moveu(player)
                     camera.update(player)
-                    player_image = load_image('mar.png', -1)
+                    if not item4:
+                        player_image = load_image('armorx2.png', -1)
+                    else:
+                        player_image = load_image('mar.png', -1)
                     all_sprites = pygame.sprite.Group()
                     tiles_group = pygame.sprite.Group()
                     player_group = pygame.sprite.Group()
@@ -1238,7 +1270,10 @@ while True:
                     what_the_item(dikt[(coords[1] + 1), coords[0]])
                     Player.moved(player)
                     camera.update(player)
-                    player_image = load_image('mar.png', -1)
+                    if not item4:
+                        player_image = load_image('armorx2.png', -1)
+                    else:
+                        player_image = load_image('mar.png', -1)
                     all_sprites = pygame.sprite.Group()
                     tiles_group = pygame.sprite.Group()
                     player_group = pygame.sprite.Group()
@@ -1325,7 +1360,7 @@ while True:
     text1 = f1.render('physical penetration: ' + str(pc.physical_penetration), 0, (0, 0, 0))
     screen.blit(text1, (760, 358))
     f1 = pygame.font.Font(None, 24)
-    text1 = f1.render('coords: ' + str(coords[0]) + ',' + str(coords[1]), 0, (0, 0, 0))
+    text1 = f1.render('coords: ' + str(coords[0] + 1) + ',' + str(coords[1] + 1), 0, (0, 0, 0))
     screen.blit(text1, (760, 392))
     f1 = pygame.font.Font(None, 24)
     text1 = f1.render('cash: ' + str(pc.cash), 0, (0, 0, 0))
