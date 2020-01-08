@@ -7,11 +7,6 @@ import sqlite3
 from time import sleep
 from random import choice as c
 
-kick_boss = [[149, 148], [150, 148], [151, 149], [151, 150], [150, 151], [149, 151], [148, 150], [148, 149]]
-kick_miniboss = []
-fight = False
-chance = None
-
 
 def sq(name, cp, hard):
     # переводим переменную в строку
@@ -23,102 +18,104 @@ def sq(name, cp, hard):
     result = None
     # Получаем имя и счёт из БД в порядке убывания и переводим в матрицу из списков для дальнеёшего изменения
     if hard == 1:
-        result = cur.execute("SELECT name, CP FROM che1 ORDER BY CP DESC, name").fetchall()
+        result = cur.execute("SELECT name, s FROM che1 ORDER BY s DESC, name").fetchall()
         result = [list(i) for i in result]
         con.commit()
         # Делаем тоже самое только в другую переменную, эту му будем изменять, а из той брать старую информацию
-        r2esult = cur.execute("SELECT name, CP FROM che1 ORDER BY CP DESC, name").fetchall()
+        r2esult = cur.execute("SELECT name, s FROM che1 ORDER BY s DESC, name").fetchall()
         r2esult = [list(i) for i in r2esult]
     elif hard == 2:
-        result = cur.execute("SELECT name, CP FROM che2 ORDER BY CP DESC, name").fetchall()
+        result = cur.execute("SELECT name, s FROM che2 ORDER BY s DESC, name").fetchall()
         result = [list(i) for i in result]
         con.commit()
         # Делаем тоже самое только в другую переменную, эту му будем изменять, а из той брать старую информацию
-        r2esult = cur.execute("SELECT name, CP FROM che2 ORDER BY CP DESC, name").fetchall()
+        r2esult = cur.execute("SELECT name, s FROM che2 ORDER BY s DESC, name").fetchall()
         r2esult = [list(i) for i in r2esult]
     elif hard == 3:
-        result = cur.execute("SELECT name, CP FROM che3 ORDER BY CP DESC, name").fetchall()
+        result = cur.execute("SELECT name, s FROM che3 ORDER BY s DESC, name").fetchall()
         result = [list(i) for i in result]
         con.commit()
         # Делаем тоже самое только в другую переменную, эту му будем изменять, а из той брать старую информацию
-        r2esult = cur.execute("SELECT name, CP FROM che3 ORDER BY CP DESC, name").fetchall()
+        r2esult = cur.execute("SELECT name, s FROM che3 ORDER BY s DESC, name").fetchall()
         r2esult = [list(i) for i in r2esult]
+    result = result[:: -1]
+    r2esult = r2esult[:: -1]
     # Изменение рейтинга
     if name == r2esult[0][0]:
-        if cp > r2esult[0][1]:
+        if cp < r2esult[0][1]:
             r2esult[0] = [name, cp]
     elif name == r2esult[1][0]:
-        if cp > r2esult[0][1]:
+        if cp < r2esult[0][1]:
             r2esult[0] = [name, cp]
             r2esult[1] = result[0]
-        elif cp > r2esult[1][1]:
+        elif cp < r2esult[1][1]:
             r2esult[1] = [name, cp]
     elif name == r2esult[2][0]:
-        if cp > r2esult[0][1]:
+        if cp < r2esult[0][1]:
             r2esult[0] = [name, cp]
             r2esult[1] = result[0]
             r2esult[2] = result[1]
-        elif cp > r2esult[1][1]:
+        elif cp < r2esult[1][1]:
             r2esult[1] = [name, cp]
             r2esult[2] = result[1]
-        elif cp > r2esult[2][1]:
+        elif cp < r2esult[2][1]:
             r2esult[2] = [name, cp]
     elif name == r2esult[3][0]:
-        if cp > r2esult[0][1]:
+        if cp < r2esult[0][1]:
             r2esult[0] = [name, cp]
             r2esult[1] = result[0]
             r2esult[2] = result[1]
             r2esult[3] = result[2]
-        elif cp > r2esult[1][1]:
+        elif cp < r2esult[1][1]:
             r2esult[1] = [name, cp]
             r2esult[2] = result[1]
             r2esult[3] = result[2]
-        elif cp > r2esult[2][1]:
+        elif cp < r2esult[2][1]:
             r2esult[2] = [name, cp]
             r2esult[3] = result[2]
-        elif cp > r2esult[3][1]:
+        elif cp < r2esult[3][1]:
             r2esult[3] = [name, cp]
     elif name == r2esult[4][0]:
-        if cp > r2esult[0][1]:
+        if cp < r2esult[0][1]:
             r2esult[0] = [name, cp]
             r2esult[1] = result[0]
             r2esult[2] = result[1]
             r2esult[3] = result[2]
             r2esult[4] = result[3]
-        elif cp > r2esult[1][1]:
+        elif cp < r2esult[1][1]:
             r2esult[1] = [name, cp]
             r2esult[2] = result[1]
             r2esult[3] = result[2]
             r2esult[4] = result[3]
-        elif cp > r2esult[2][1]:
+        elif cp < r2esult[2][1]:
             r2esult[2] = [name, cp]
             r2esult[3] = result[2]
             r2esult[4] = result[3]
-        elif cp > r2esult[3][1]:
+        elif cp < r2esult[3][1]:
             r2esult[3] = [name, cp]
             r2esult[4] = result[3]
-        elif cp > r2esult[4][1]:
+        elif cp < r2esult[4][1]:
             r2esult[4] = [name, cp]
     else:
-        if cp > r2esult[0][1]:
+        if cp < r2esult[0][1]:
             r2esult[0] = [name, cp]
             r2esult[1] = result[0]
             r2esult[2] = result[1]
             r2esult[3] = result[2]
             r2esult[4] = result[3]
-        elif cp > r2esult[1][1]:
+        elif cp < r2esult[1][1]:
             r2esult[1] = [name, cp]
             r2esult[2] = result[1]
             r2esult[3] = result[2]
             r2esult[4] = result[3]
-        elif cp > r2esult[2][1]:
+        elif cp < r2esult[2][1]:
             r2esult[2] = [name, cp]
             r2esult[3] = result[2]
             r2esult[4] = result[3]
-        elif cp > r2esult[3][1]:
+        elif cp < r2esult[3][1]:
             r2esult[3] = [name, cp]
             r2esult[4] = result[3]
-        elif cp > r2esult[4][1]:
+        elif cp < r2esult[4][1]:
             r2esult[4] = [name, cp]
     con.commit()
     # Обновление данных в БД
@@ -126,97 +123,97 @@ def sq(name, cp, hard):
         forma = "UPDATE che1 SET name = '" + r2esult[0][0] + "' WHERE nom = 1"
         cur.execute(forma).fetchall()
         con.commit()
-        forma = "UPDATE che1 SET CP = " + str(r2esult[0][1]) + " WHERE nom = 1"
+        forma = "UPDATE che1 SET s = " + str(r2esult[0][1]) + " WHERE nom = 1"
         cur.execute(forma).fetchall()
         con.commit()
         forma = "UPDATE che1 SET name = '" + r2esult[1][0] + "' WHERE nom = 2"
         cur.execute(forma).fetchall()
         con.commit()
-        forma = "UPDATE che1 SET CP = " + str(r2esult[1][1]) + " WHERE nom = 2"
+        forma = "UPDATE che1 SET s = " + str(r2esult[1][1]) + " WHERE nom = 2"
         cur.execute(forma).fetchall()
         con.commit()
         forma = "UPDATE che1 SET name = '" + r2esult[2][0] + "' WHERE nom = 3"
         cur.execute(forma).fetchall()
         con.commit()
-        forma = "UPDATE che1 SET CP = " + str(r2esult[2][1]) + " WHERE nom = 3"
+        forma = "UPDATE che1 SET s = " + str(r2esult[2][1]) + " WHERE nom = 3"
         cur.execute(forma).fetchall()
         con.commit()
         forma = "UPDATE che1 SET name = '" + r2esult[3][0] + "' WHERE nom = 4"
         cur.execute(forma).fetchall()
         con.commit()
-        forma = "UPDATE che1 SET CP = " + str(r2esult[3][1]) + " WHERE nom = 4"
+        forma = "UPDATE che1 SET s = " + str(r2esult[3][1]) + " WHERE nom = 4"
         cur.execute(forma).fetchall()
         con.commit()
         forma = "UPDATE che1 SET name = '" + r2esult[4][0] + "' WHERE nom = 5"
         cur.execute(forma).fetchall()
         con.commit()
-        forma = "UPDATE che1 SET CP = " + str(r2esult[4][1]) + " WHERE nom = 5"
+        forma = "UPDATE che1 SET s = " + str(r2esult[4][1]) + " WHERE nom = 5"
         cur.execute(forma).fetchall()
         con.commit()
     elif hard == 2:
         forma = "UPDATE che2 SET name = '" + r2esult[0][0] + "' WHERE nom = 1"
         cur.execute(forma).fetchall()
         con.commit()
-        forma = "UPDATE che2 SET CP = " + str(r2esult[0][1]) + " WHERE nom = 1"
+        forma = "UPDATE che2 SET s = " + str(r2esult[0][1]) + " WHERE nom = 1"
         cur.execute(forma).fetchall()
         con.commit()
         forma = "UPDATE che2 SET name = '" + r2esult[1][0] + "' WHERE nom = 2"
         cur.execute(forma).fetchall()
         con.commit()
-        forma = "UPDATE che2 SET CP = " + str(r2esult[1][1]) + " WHERE nom = 2"
+        forma = "UPDATE che2 SET s = " + str(r2esult[1][1]) + " WHERE nom = 2"
         cur.execute(forma).fetchall()
         con.commit()
         forma = "UPDATE che2 SET name = '" + r2esult[2][0] + "' WHERE nom = 3"
         cur.execute(forma).fetchall()
         con.commit()
-        forma = "UPDATE che2 SET CP = " + str(r2esult[2][1]) + " WHERE nom = 3"
+        forma = "UPDATE che2 SET s = " + str(r2esult[2][1]) + " WHERE nom = 3"
         cur.execute(forma).fetchall()
         con.commit()
         forma = "UPDATE che2 SET name = '" + r2esult[3][0] + "' WHERE nom = 4"
         cur.execute(forma).fetchall()
         con.commit()
-        forma = "UPDATE che2 SET CP = " + str(r2esult[3][1]) + " WHERE nom = 4"
+        forma = "UPDATE che2 SET s = " + str(r2esult[3][1]) + " WHERE nom = 4"
         cur.execute(forma).fetchall()
         con.commit()
         forma = "UPDATE che2 SET name = '" + r2esult[4][0] + "' WHERE nom = 5"
         cur.execute(forma).fetchall()
         con.commit()
-        forma = "UPDATE che2 SET CP = " + str(r2esult[4][1]) + " WHERE nom = 5"
+        forma = "UPDATE che2 SET s = " + str(r2esult[4][1]) + " WHERE nom = 5"
         cur.execute(forma).fetchall()
         con.commit()
     elif hard == 3:
         forma = "UPDATE che3 SET name = '" + r2esult[0][0] + "' WHERE nom = 1"
         cur.execute(forma).fetchall()
         con.commit()
-        forma = "UPDATE che3 SET CP = " + str(r2esult[0][1]) + " WHERE nom = 1"
+        forma = "UPDATE che3 SET s = " + str(r2esult[0][1]) + " WHERE nom = 1"
         cur.execute(forma).fetchall()
         con.commit()
         forma = "UPDATE che3 SET name = '" + r2esult[1][0] + "' WHERE nom = 2"
         cur.execute(forma).fetchall()
         con.commit()
-        forma = "UPDATE che3 SET CP = " + str(r2esult[1][1]) + " WHERE nom = 2"
+        forma = "UPDATE che3 SET s = " + str(r2esult[1][1]) + " WHERE nom = 2"
         cur.execute(forma).fetchall()
         con.commit()
         forma = "UPDATE che3 SET name = '" + r2esult[2][0] + "' WHERE nom = 3"
         cur.execute(forma).fetchall()
         con.commit()
-        forma = "UPDATE che3 SET CP = " + str(r2esult[2][1]) + " WHERE nom = 3"
+        forma = "UPDATE che3 SET s = " + str(r2esult[2][1]) + " WHERE nom = 3"
         cur.execute(forma).fetchall()
         con.commit()
         forma = "UPDATE che3 SET name = '" + r2esult[3][0] + "' WHERE nom = 4"
         cur.execute(forma).fetchall()
         con.commit()
-        forma = "UPDATE che3 SET CP = " + str(r2esult[3][1]) + " WHERE nom = 4"
+        forma = "UPDATE che3 SET s = " + str(r2esult[3][1]) + " WHERE nom = 4"
         cur.execute(forma).fetchall()
         con.commit()
         forma = "UPDATE che3 SET name = '" + r2esult[4][0] + "' WHERE nom = 5"
         cur.execute(forma).fetchall()
         con.commit()
-        forma = "UPDATE che3 SET CP = " + str(r2esult[4][1]) + " WHERE nom = 5"
+        forma = "UPDATE che3 SET s = " + str(r2esult[4][1]) + " WHERE nom = 5"
         cur.execute(forma).fetchall()
         con.commit()
     con.close()
-    start()
+    terminate()
 
 
 def create_file():
@@ -546,8 +543,7 @@ class Boss:
                 if k[pygame.K_BACKSPACE] and len(name1) > 0:
                     name1 = name1[: -1: 1]
                 if k[pygame.K_KP_ENTER]:
-                    sq(name1, pc.HP + pc.damage + pc.regen + pc.physical_penetration + pc.vampirizm + pc.armor -
-                       pc.cash - t.dtime * 24 * 60 * 60 - t.htime * 60 * 60 - t.mtime * 60 - t.stime, hard_of_level)
+                    sq(name1, t.dtime * 24 * 60 * 60 + t.htime * 60 * 60 + t.mtime * 60 + t.stime, hard_of_level)
             pygame.draw.rect(screen, [200, 0, 0], [300, 450, 450, 100])
             f1 = pygame.font.Font(None, 24)
             text1 = f1.render('Put your name:', 0, (0, 0, 0))
@@ -560,45 +556,6 @@ class Boss:
 
 
 atak_time = 0
-
-
-class miniBoss:
-    HP = 9999999999
-    armor = 9999999999
-    damage = 9999999999
-
-    def __init__(self, hard_of_level):
-        if hard_of_level == 1:
-            self.HP = 150000
-            self.armor = 500
-            self.damage = 1000
-        elif hard_of_level == 2:
-            self.HP = 500000
-            self.armor = 2500
-            self.damage = 2000
-        elif hard_of_level == 3:
-            self.HP = 1000000
-            self.armor = 12500
-            self.damage = 5000
-
-    def geting_damage(self, hard_of_level):
-        if hard_of_level != 3:
-            if pc.damage - (mb.armor - pc.physical_penetration) > 0 and \
-                    mb.armor - pc.physical_penetration > 0:
-                mb.HP -= (pc.damage - (mb.armor - pc.physical_penetration))
-            else:
-                mb.HP -= pc.damage
-        else:
-            if random.choice([True, False]):
-                if pc.damage - (mb.armor - pc.physical_penetration) > 0 and \
-                        mb.armor - pc.physical_penetration > 0:
-                    mb.HP -= (pc.damage - (mb.armor - pc.physical_penetration))
-
-    def giving_damage(self):
-        pc.geting_damage(mb)
-
-    def kill(self):
-        pc.cash += 100
 
 
 class Player_characters:
@@ -878,32 +835,8 @@ def what_the_item(item):
         coin(hard_of_level)
 
 
-ok = False
-pygame.init()
-size = width, height = 1000, 1000
-screen = pygame.display.set_mode(size)
-running = True
-create_file()
-a = 'map.txt'
-sp = []
-clock = pygame.time.Clock()
-game_map = []
-dikt = {}
-hard_of_level = 0
-sp_of_gotten_things = []
-with open('data/' + a, 'r') as mapFile:
-    le = [line.strip() for line in mapFile]
-    level_map = le[-1].split()
-    for el in range(len(le)):
-        game_map.append(list(le[el]))
-        for ell in range(len(le[el])):
-            if le[el][ell] == '#' or le[el][ell] == 'B':
-                sp.append([ell, el])
-coords = [299, 299]
-
-
 def ma():
-    global manage
+    global manage, seti
     stop = True
     fon = pygame.transform.scale(load_image('manage.jpg', True), (1000, 1000))
     screen.blit(fon, (0, 0))
@@ -915,17 +848,24 @@ def ma():
                     event.pos[0] < 500) and (event.pos[1] < 1000):
                 manage = 1
                 stop = False
-                return start()
+                if seti:
+                    return setings()
+                else:
+                    return start()
             elif event.type == pygame.MOUSEBUTTONDOWN and (event.pos[0] > 500) and (event.pos[1] > 300) and (
                     event.pos[0] < 1000) and (event.pos[1] < 1000):
                 manage = 2
                 stop = False
-                return start()
+                if seti:
+                    return setings()
+                else:
+                    return start()
         pygame.display.flip()
         clock.tick(FPS)
 
 
 def ch():
+    global seti
     stop = True
     fon = pygame.transform.scale(load_image('characteristic.jpg', True), (1000, 1000))
     screen.blit(fon, (0, 0))
@@ -935,7 +875,10 @@ def ch():
                 terminate()
             elif event.type == pygame.KEYDOWN or event.type == pygame.MOUSEBUTTONDOWN:
                 stop = False
-                return start()
+                if seti:
+                    return setings()
+                else:
+                    return start()
         pygame.display.flip()
         clock.tick(FPS)
 
@@ -968,13 +911,15 @@ def rat():
     con = sqlite3.connect('chet.db')
     # Создаём курсор
     cur = con.cursor()
-    result = None
-    result = cur.execute("SELECT name, CP FROM che1 ORDER BY CP DESC, name").fetchall()
+    result = cur.execute("SELECT name, s FROM che1 ORDER BY s DESC, name").fetchall()
     result = [list(i) for i in result]
-    result1 = cur.execute("SELECT name, CP FROM che2 ORDER BY CP DESC, name").fetchall()
+    result1 = cur.execute("SELECT name, s FROM che2 ORDER BY s DESC, name").fetchall()
     result1 = [list(i) for i in result1]
-    result2 = cur.execute("SELECT name, CP FROM che3 ORDER BY CP DESC, name").fetchall()
+    result2 = cur.execute("SELECT name, s FROM che3 ORDER BY s DESC, name").fetchall()
     result2 = [list(i) for i in result2]
+    result = result[:: -1]
+    result1 = result1[:: -1]
+    result2 = result2[:: -1]
     while True:
         for event in pygame.event.get():
             if event.type == pygame.KEYDOWN or event.type == pygame.MOUSEBUTTONDOWN:
@@ -984,55 +929,55 @@ def rat():
         text1 = f1.render('Easy rating:', 0, (0, 0, 0))
         screen.blit(text1, (400, 0))
         f1 = pygame.font.Font(None, 30)
-        text1 = f1.render('1: ' + str(result[0][0]) + ' ' + str(result[0][1]) + 'CP', 0, (0, 0, 0))
+        text1 = f1.render('1: ' + str(result[0][0]) + ' ' + str(result[0][1]) + 'sec', 0, (0, 0, 0))
         screen.blit(text1, (400, 50))
         f1 = pygame.font.Font(None, 30)
-        text1 = f1.render('2: ' + str(result[1][0]) + ' ' + str(result[1][1]) + 'CP', 0, (0, 0, 0))
+        text1 = f1.render('2: ' + str(result[1][0]) + ' ' + str(result[1][1]) + 'sec', 0, (0, 0, 0))
         screen.blit(text1, (400, 100))
         f1 = pygame.font.Font(None, 30)
-        text1 = f1.render('3: ' + str(result[2][0]) + ' ' + str(result[2][1]) + 'CP', 0, (0, 0, 0))
+        text1 = f1.render('3: ' + str(result[2][0]) + ' ' + str(result[2][1]) + 'sec', 0, (0, 0, 0))
         screen.blit(text1, (400, 150))
         f1 = pygame.font.Font(None, 30)
-        text1 = f1.render('4: ' + str(result[3][0]) + ' ' + str(result[3][1]) + 'CP', 0, (0, 0, 0))
+        text1 = f1.render('4: ' + str(result[3][0]) + ' ' + str(result[3][1]) + 'sec', 0, (0, 0, 0))
         screen.blit(text1, (400, 200))
         f1 = pygame.font.Font(None, 30)
-        text1 = f1.render('5: ' + str(result[4][0]) + ' ' + str(result[4][1]) + 'CP', 0, (0, 0, 0))
+        text1 = f1.render('5: ' + str(result[4][0]) + ' ' + str(result[4][1]) + 'sec', 0, (0, 0, 0))
         screen.blit(text1, (400, 250))
         f1 = pygame.font.Font(None, 50)
         text1 = f1.render('Medium rating:', 0, (0, 0, 0))
         screen.blit(text1, (400, 300))
         f1 = pygame.font.Font(None, 30)
-        text1 = f1.render('1: ' + str(result1[0][0]) + ' ' + str(result1[0][1]) + 'CP', 0, (0, 0, 0))
+        text1 = f1.render('1: ' + str(result1[0][0]) + ' ' + str(result1[0][1]) + 'sec', 0, (0, 0, 0))
         screen.blit(text1, (400, 350))
         f1 = pygame.font.Font(None, 30)
-        text1 = f1.render('2: ' + str(result1[1][0]) + ' ' + str(result1[1][1]) + 'CP', 0, (0, 0, 0))
+        text1 = f1.render('2: ' + str(result1[1][0]) + ' ' + str(result1[1][1]) + 'sec', 0, (0, 0, 0))
         screen.blit(text1, (400, 400))
         f1 = pygame.font.Font(None, 30)
-        text1 = f1.render('3: ' + str(result1[2][0]) + ' ' + str(result1[2][1]) + 'CP', 0, (0, 0, 0))
+        text1 = f1.render('3: ' + str(result1[2][0]) + ' ' + str(result1[2][1]) + 'sec', 0, (0, 0, 0))
         screen.blit(text1, (400, 450))
         f1 = pygame.font.Font(None, 30)
-        text1 = f1.render('4: ' + str(result1[3][0]) + ' ' + str(result1[3][1]) + 'CP', 0, (0, 0, 0))
+        text1 = f1.render('4: ' + str(result1[3][0]) + ' ' + str(result1[3][1]) + 'sec', 0, (0, 0, 0))
         screen.blit(text1, (400, 500))
         f1 = pygame.font.Font(None, 30)
-        text1 = f1.render('5: ' + str(result1[4][0]) + ' ' + str(result1[4][1]) + 'CP', 0, (0, 0, 0))
+        text1 = f1.render('5: ' + str(result1[4][0]) + ' ' + str(result1[4][1]) + 'sec', 0, (0, 0, 0))
         screen.blit(text1, (400, 550))
         f1 = pygame.font.Font(None, 50)
         text1 = f1.render('Hard rating:', 0, (0, 0, 0))
         screen.blit(text1, (400, 600))
         f1 = pygame.font.Font(None, 30)
-        text1 = f1.render('1: ' + str(result2[0][0]) + ' ' + str(result2[0][1]) + 'CP', 0, (0, 0, 0))
+        text1 = f1.render('1: ' + str(result2[0][0]) + ' ' + str(result2[0][1]) + 'sec', 0, (0, 0, 0))
         screen.blit(text1, (400, 650))
         f1 = pygame.font.Font(None, 30)
-        text1 = f1.render('2: ' + str(result2[1][0]) + ' ' + str(result2[1][1]) + 'CP', 0, (0, 0, 0))
+        text1 = f1.render('2: ' + str(result2[1][0]) + ' ' + str(result2[1][1]) + 'sec', 0, (0, 0, 0))
         screen.blit(text1, (400, 700))
         f1 = pygame.font.Font(None, 30)
-        text1 = f1.render('3: ' + str(result2[2][0]) + ' ' + str(result2[2][1]) + 'CP', 0, (0, 0, 0))
+        text1 = f1.render('3: ' + str(result2[2][0]) + ' ' + str(result2[2][1]) + 'sec', 0, (0, 0, 0))
         screen.blit(text1, (400, 750))
         f1 = pygame.font.Font(None, 30)
-        text1 = f1.render('4: ' + str(result2[3][0]) + ' ' + str(result2[3][1]) + 'CP', 0, (0, 0, 0))
+        text1 = f1.render('4: ' + str(result2[3][0]) + ' ' + str(result2[3][1]) + 'sec', 0, (0, 0, 0))
         screen.blit(text1, (400, 800))
         f1 = pygame.font.Font(None, 30)
-        text1 = f1.render('5: ' + str(result2[4][0]) + ' ' + str(result2[4][1]) + 'CP', 0, (0, 0, 0))
+        text1 = f1.render('5: ' + str(result2[4][0]) + ' ' + str(result2[4][1]) + 'sec', 0, (0, 0, 0))
         screen.blit(text1, (400, 850))
         pygame.display.flip()
         clock.tick(FPS)
@@ -1067,6 +1012,34 @@ def start():
                 terminate()
         if ok:
             return
+        pygame.display.flip()
+        clock.tick(FPS)
+
+
+def setings():
+    global hard_of_level, manage, ok, seti
+    stop = True
+    seti = True
+    fon = pygame.transform.scale(load_image('settings.jpg', True), (1000, 1000))
+    screen.blit(fon, (0, 0))
+    while stop:
+        for event in pygame.event.get():
+            if event.type == pygame.MOUSEBUTTONDOWN and (event.pos[0] > 0) and (event.pos[1] > 0) and (
+                    event.pos[0] < 150) and (event.pos[1] < 200):
+                seti = False
+                return menu()
+            elif event.type == pygame.MOUSEBUTTONDOWN and (event.pos[0] > 400) and (event.pos[1] > 300) and (
+                    event.pos[0] < 600) and (event.pos[1] < 400):
+                return ma()
+            elif event.type == pygame.MOUSEBUTTONDOWN and (event.pos[0] > 400) and (event.pos[1] > 450) and (
+                    event.pos[0] < 600) and (event.pos[1] < 550):
+                return ch()
+            elif event.type == pygame.MOUSEBUTTONDOWN and (event.pos[0] > 400) and (event.pos[1] > 600) and (
+                    event.pos[0] < 600) and (event.pos[1] < 700):
+                return  rt(hard_of_level)
+            elif event.type == pygame.MOUSEBUTTONDOWN and (event.pos[0] > 400) and (event.pos[1] > 750) and (
+                    event.pos[0] < 600) and (event.pos[1] < 850):
+                terminate()
         pygame.display.flip()
         clock.tick(FPS)
 
@@ -1126,9 +1099,6 @@ def load_image(name, color_key=None):
     else:
         image = image.convert_alpha()
         return pygame.transform.scale(image, (50, 50))
-
-
-bx, by = 0, 0
 
 
 def generate_level(level, atak):
@@ -1211,37 +1181,6 @@ def generate_level(level, atak):
                 Tile('coin', x, y)
             dikt[(y, x)] = level[y][x]
     return new_player, x, y
-
-
-tile_images = {'coin': load_image('coin.jpg'), 'empty1': load_image('atak_floor.png'),
-               'boss': pygame.transform.scale(load_image('boss.png', True), (100, 100)), 'wall': load_image('box.png'),
-               'empty': load_image('grass.png'), 'axe_of_bloodlust': load_image('axe_of_bloodlust.png'),
-               'berserker_rage': load_image('berserker_rage.png'),
-               'blade_of_despair': load_image('blade_of_despair.png'),
-               'blade_of_seven_seas': load_image('blade_of_the_seven_seas.png'),
-               'claws_of_chaos': load_image('claws_of_chaos.png'), 'endless_battle': load_image('endless_battle.png'),
-               'Wind_of_Nature': load_image('Wind_of_Nature.png'),
-               'the_sword_of_the_legionnaire': load_image('the_sword_of_the_legionnaire.png'),
-               'the_giants_axe': load_image('the_giants_axe.png'),
-               'the_belt_of_ares': load_image('the_belt_of_ares.png'),
-               'the Golden stick': load_image('the Golden stick.png'), 'studded_armor': load_image('studded_armor.png'),
-               'storm_belt': load_image('storm_belt.png'), 'queens_wings': load_image('queens_wings.png'),
-               'leather_armor': load_image('leather_armor.png'), 'health_crystal': load_image('health_crystal.png'),
-               'healing_necklace': load_image('healing_necklace.png'),
-               'hammer_of_wrath': load_image('hammer_of_wrath.png'), 'Golden meteor': load_image('Golden meteor.png'),
-               'dagger': load_image('dagger.png'), 'caller_of_the_devil': load_image('caller_of_the_devil.png'),
-               'benefit_of_courage': load_image('benefit_of_courage.png'), 'armor_blade': load_image('armor_blade.png'),
-               'an_ordinary_spear': load_image('an_ordinary_spear.png'),
-               'a_shot_of_the_hunter': load_image('a_shot_of_the_hunter.png'), 'trident': load_image('trident.png'),
-               'protective_helmet': load_image('protective_helmet.png'), 'immortality': load_image('immortality.png')}
-player_image = load_image('mar.png', -1)
-all_sprites = pygame.sprite.Group()
-tiles_group = pygame.sprite.Group()
-boss_group = pygame.sprite.Group()
-player_group = pygame.sprite.Group()
-tile_width = tile_height = 50
-manage = 2
-FPS = 50
 
 
 class Tile(pygame.sprite.Sprite):
@@ -1354,15 +1293,6 @@ def terminate():
     sys.exit()
 
 
-start()
-level_map = load_level(a)
-player, level_x, level_y = generate_level(level_map, False)
-item1 = True
-item2 = True
-item3 = True
-item4 = True
-
-
 class Camera:
     def __init__(self):
         self.dx = 0
@@ -1448,36 +1378,37 @@ def rt(hard):
     cur = con.cursor()
     result = None
     if hard == 1:
-        result = cur.execute("SELECT name, CP FROM che1 ORDER BY CP DESC, name").fetchall()
+        result = cur.execute("SELECT name, s FROM che1 ORDER BY s DESC, name").fetchall()
         result = [list(i) for i in result]
     elif hard == 2:
-        result = cur.execute("SELECT name, CP FROM che2 ORDER BY CP DESC, name").fetchall()
+        result = cur.execute("SELECT name, s FROM che2 ORDER BY s DESC, name").fetchall()
         result = [list(i) for i in result]
     elif hard == 3:
-        result = cur.execute("SELECT name, CP FROM che3 ORDER BY CP DESC, name").fetchall()
+        result = cur.execute("SELECT name, s FROM che3 ORDER BY s DESC, name").fetchall()
         result = [list(i) for i in result]
+    result = result[:: -1]
     while True:
         for event in pygame.event.get():
             if event.type == pygame.MOUSEBUTTONDOWN and (event.pos[0] > 0) and (event.pos[1] > 0) and (
                     event.pos[0] < 205) and (event.pos[1] < 203):
-                return menu()
+                return setings()
         f1 = pygame.font.Font(None, 50)
         text1 = f1.render('Rating:', 0, (0, 0, 0))
         screen.blit(text1, (400, 200))
         f1 = pygame.font.Font(None, 50)
-        text1 = f1.render('1: ' + str(result[0][0]) + ' ' + str(result[0][1]) + 'CP', 0, (0, 0, 0))
+        text1 = f1.render('1: ' + str(result[0][0]) + ' ' + str(result[0][1]) + 'sec', 0, (0, 0, 0))
         screen.blit(text1, (400, 300))
         f1 = pygame.font.Font(None, 50)
-        text1 = f1.render('2: ' + str(result[1][0]) + ' ' + str(result[1][1]) + 'CP', 0, (0, 0, 0))
+        text1 = f1.render('2: ' + str(result[1][0]) + ' ' + str(result[1][1]) + 'sec', 0, (0, 0, 0))
         screen.blit(text1, (400, 400))
         f1 = pygame.font.Font(None, 50)
-        text1 = f1.render('3: ' + str(result[2][0]) + ' ' + str(result[2][1]) + 'CP', 0, (0, 0, 0))
+        text1 = f1.render('3: ' + str(result[2][0]) + ' ' + str(result[2][1]) + 'sec', 0, (0, 0, 0))
         screen.blit(text1, (400, 500))
         f1 = pygame.font.Font(None, 50)
-        text1 = f1.render('4: ' + str(result[3][0]) + ' ' + str(result[3][1]) + 'CP', 0, (0, 0, 0))
+        text1 = f1.render('4: ' + str(result[3][0]) + ' ' + str(result[3][1]) + 'sec', 0, (0, 0, 0))
         screen.blit(text1, (400, 600))
         f1 = pygame.font.Font(None, 50)
-        text1 = f1.render('5: ' + str(result[4][0]) + ' ' + str(result[4][1]) + 'CP', 0, (0, 0, 0))
+        text1 = f1.render('5: ' + str(result[4][0]) + ' ' + str(result[4][1]) + 'sec', 0, (0, 0, 0))
         screen.blit(text1, (400, 700))
         pygame.display.flip()
         clock.tick(FPS)
@@ -1499,13 +1430,75 @@ def menu():
                 terminate()
             elif event.type == pygame.MOUSEBUTTONDOWN and (event.pos[0] > 895) and (event.pos[1] > 0) and (
                     event.pos[0] < 1000) and (event.pos[1] < 105):
-                return rt(hard_of_level)
+                return setings()
         pygame.display.flip()
         clock.tick(FPS)
 
 
+seti = False
+kick_boss = [[149, 148], [150, 148], [151, 149], [151, 150], [150, 151], [149, 151], [148, 150], [148, 149]]
+pygame.init()
+fight = False
+chance = None
+ok = False
+size = width, height = 1000, 1000
+screen = pygame.display.set_mode(size)
+running = True
+create_file()
+a = 'map.txt'
+sp = []
+clock = pygame.time.Clock()
+game_map = []
+dikt = {}
+hard_of_level = 0
+sp_of_gotten_things = []
+with open('data/' + a, 'r') as mapFile:
+    le = [line.strip() for line in mapFile]
+    level_map = le[-1].split()
+    for el in range(len(le)):
+        game_map.append(list(le[el]))
+        for ell in range(len(le[el])):
+            if le[el][ell] == '#' or le[el][ell] == 'B':
+                sp.append([ell, el])
+coords = [299, 299]
+bx, by = 0, 0
+tile_images = {'coin': load_image('coin.jpg'), 'empty1': load_image('atak_floor.png'),
+               'boss': pygame.transform.scale(load_image('boss.png', True), (100, 100)), 'wall': load_image('box.png'),
+               'empty': load_image('grass.png'), 'axe_of_bloodlust': load_image('axe_of_bloodlust.png'),
+               'berserker_rage': load_image('berserker_rage.png'),
+               'blade_of_despair': load_image('blade_of_despair.png'),
+               'blade_of_seven_seas': load_image('blade_of_the_seven_seas.png'),
+               'claws_of_chaos': load_image('claws_of_chaos.png'), 'endless_battle': load_image('endless_battle.png'),
+               'Wind_of_Nature': load_image('Wind_of_Nature.png'),
+               'the_sword_of_the_legionnaire': load_image('the_sword_of_the_legionnaire.png'),
+               'the_giants_axe': load_image('the_giants_axe.png'),
+               'the_belt_of_ares': load_image('the_belt_of_ares.png'),
+               'the Golden stick': load_image('the Golden stick.png'), 'studded_armor': load_image('studded_armor.png'),
+               'storm_belt': load_image('storm_belt.png'), 'queens_wings': load_image('queens_wings.png'),
+               'leather_armor': load_image('leather_armor.png'), 'health_crystal': load_image('health_crystal.png'),
+               'healing_necklace': load_image('healing_necklace.png'),
+               'hammer_of_wrath': load_image('hammer_of_wrath.png'), 'Golden meteor': load_image('Golden meteor.png'),
+               'dagger': load_image('dagger.png'), 'caller_of_the_devil': load_image('caller_of_the_devil.png'),
+               'benefit_of_courage': load_image('benefit_of_courage.png'), 'armor_blade': load_image('armor_blade.png'),
+               'an_ordinary_spear': load_image('an_ordinary_spear.png'),
+               'a_shot_of_the_hunter': load_image('a_shot_of_the_hunter.png'), 'trident': load_image('trident.png'),
+               'protective_helmet': load_image('protective_helmet.png'), 'immortality': load_image('immortality.png')}
+player_image = load_image('mar.png', -1)
+all_sprites = pygame.sprite.Group()
+tiles_group = pygame.sprite.Group()
+boss_group = pygame.sprite.Group()
+player_group = pygame.sprite.Group()
+tile_width = tile_height = 50
+manage = 2
+FPS = 50
+start()
+level_map = load_level(a)
+player, level_x, level_y = generate_level(level_map, False)
+item1 = True
+item2 = True
+item3 = True
+item4 = True
 b = Boss(hard_of_level)
-mb = miniBoss(hard_of_level)
 heal_pc = 0
 pc = Player_characters(hard_of_level)
 camera = Camera()
@@ -1730,8 +1723,6 @@ while True:
                             [8, 9], [8, 10], [11, 9], [11, 10],
                             [8, 11], [9, 11], [10, 11], [11, 11]] and fight:
                 pc.giving_damage(b)
-            elif coords in kick_miniboss:
-                pc.giving_damage(mb)
         elif k[pygame.K_t]:
             heal_pc += 1
             if heal_pc == 25:
