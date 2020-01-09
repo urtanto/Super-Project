@@ -475,6 +475,7 @@ class Boss:
             pygame.display.flip()
 
     def kill(self):
+        global sp, fight, all_sprites, tiles_group, boss_group, player_group, game_map
         sp = []
         fight = True
         all_sprites = None
@@ -922,7 +923,9 @@ def rat():
     result2 = result2[:: -1]
     while True:
         for event in pygame.event.get():
-            if event.type == pygame.KEYDOWN or event.type == pygame.MOUSEBUTTONDOWN:
+            if event.type == pygame.QUIT:
+                terminate()
+            elif event.type == pygame.KEYDOWN or event.type == pygame.MOUSEBUTTONDOWN:
                 return start()
         pygame.draw.rect(screen, [255, 0, 0], [0, 0, 1000, 1000])
         f1 = pygame.font.Font(None, 50)
@@ -1024,7 +1027,9 @@ def setings():
     screen.blit(fon, (0, 0))
     while stop:
         for event in pygame.event.get():
-            if event.type == pygame.MOUSEBUTTONDOWN and (event.pos[0] > 0) and (event.pos[1] > 0) and (
+            if event.type == pygame.QUIT:
+                terminate()
+            elif event.type == pygame.MOUSEBUTTONDOWN and (event.pos[0] > 0) and (event.pos[1] > 0) and (
                     event.pos[0] < 150) and (event.pos[1] < 200):
                 seti = False
                 return menu()
@@ -1389,7 +1394,9 @@ def rt(hard):
     result = result[:: -1]
     while True:
         for event in pygame.event.get():
-            if event.type == pygame.MOUSEBUTTONDOWN and (event.pos[0] > 0) and (event.pos[1] > 0) and (
+            if event.type == pygame.QUIT:
+                terminate()
+            elif event.type == pygame.MOUSEBUTTONDOWN and (event.pos[0] > 0) and (event.pos[1] > 0) and (
                     event.pos[0] < 205) and (event.pos[1] < 203):
                 return setings()
         f1 = pygame.font.Font(None, 50)
@@ -1419,7 +1426,9 @@ def menu():
     screen.blit(fon, (0, 0))
     while True:
         for event in pygame.event.get():
-            if event.type == pygame.MOUSEBUTTONDOWN and (event.pos[0] > 120) and (event.pos[1] > 170) and (
+            if event.type == pygame.QUIT:
+                terminate()
+            elif event.type == pygame.MOUSEBUTTONDOWN and (event.pos[0] > 120) and (event.pos[1] > 170) and (
                     event.pos[0] < 877) and (event.pos[1] < 345):
                 return
             elif event.type == pygame.MOUSEBUTTONDOWN and (event.pos[0] > 121) and (event.pos[1] > 374) and (
