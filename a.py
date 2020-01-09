@@ -678,11 +678,6 @@ def caller_of_the_devil():
     pc.SHP += 770
 
 
-def forse_of_ice():
-    pc.damage += 30
-    pc.SHP += 1000
-
-
 def trident():
     pc.damage += 80
 
@@ -1472,7 +1467,7 @@ with open('data/' + a, 'r') as mapFile:
 coords = [299, 299]
 bx, by = 0, 0
 tile_images = {'coin': load_image('coin.jpg'), 'empty1': load_image('atak_floor.png'),
-               'boss': pygame.transform.scale(load_image('boss.png', True), (100, 100)), 'wall': load_image('box.png'),
+               'boss': pygame.transform.scale(load_image('boss.png', -1), (100, 100)), 'wall': load_image('box.png'),
                'empty': load_image('grass.png'), 'axe_of_bloodlust': load_image('axe_of_bloodlust.png'),
                'berserker_rage': load_image('berserker_rage.png'),
                'blade_of_despair': load_image('blade_of_despair.png'),
@@ -1797,7 +1792,7 @@ while True:
     text1 = f1.render('coords: ' + str(coords[0] + 1) + ',' + str(coords[1] + 1), 0, (0, 0, 0))
     screen.blit(text1, (760, 392))
     f1 = pygame.font.Font(None, 24)
-    text1 = f1.render('cash: ' + str(pc.cash), 0, (0, 0, 0))
+    text1 = f1.render('cash: ' + str(pc.cash) + ' $', 0, (0, 0, 0))
     screen.blit(text1, (760, 426))
     pygame.display.flip()
     clock.tick(FPS)
