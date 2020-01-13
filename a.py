@@ -1,3 +1,4 @@
+# импорт всех нужных библиотек
 import pygame
 import os
 import sys
@@ -8,6 +9,7 @@ from time import sleep
 from random import choice as c
 
 
+# обновление дб
 def sq(name, cp, hard):
     # переводим переменную в строку
     name = str(name[0]).upper() + str(name[1:])
@@ -216,6 +218,7 @@ def sq(name, cp, hard):
     terminate()
 
 
+# генерация случайной карты
 def create_file():
     f = open("data/map.txt", 'w')
     st = []
@@ -255,6 +258,7 @@ def create_file():
         st = []
 
 
+# класс таймер, где идет работа со временем
 class Timer:
     def __init__(self):
         self.dtime = 0
@@ -264,6 +268,7 @@ class Timer:
         self.atak_time = -1
         self.slep = 0
 
+    # это добавление 1 секунды и регенерация сдоровья
     def tick(self, time=1, h=1):
         for i in range(time):
             self.stime += 1
@@ -285,6 +290,7 @@ class Timer:
             if self.dtime == 10:
                 terminate()
 
+    # при вызове функции, она возращает время ввиде строки
     def print(self):
         d = str(self.dtime) if len(str(self.dtime)) == 2 else '0' + str(self.dtime)
         h = str(self.htime) if len(str(self.htime)) == 2 else '0' + str(self.htime)
@@ -292,6 +298,7 @@ class Timer:
         s = str(self.stime) if len(str(self.stime)) == 2 else '0' + str(self.stime)
         return d + ':' + h + ':' + m + ':' + s
 
+    # тайминг с атакой босса
     def sleep(self):
         if t.stime == t.atak_time:
             b.taking_damage()
@@ -303,12 +310,14 @@ class Timer:
 t = Timer()
 
 
+# взоимодействие с боссом
 class Boss:
     HP = 9999999999
     armor = 9999999999
     damage = 9999999999
     first_kik = 0
 
+    # сохранение характеристик босса в зависимости от уровня сложности
     def __init__(self, hard_of_level):
         if hard_of_level == 1:
             self.HP = 1500000
@@ -323,6 +332,7 @@ class Boss:
             self.armor = 12500
             self.damage = 15000
 
+    # получение урона от игрока
     def geting_damage(self, hard_of_level):
         global player, level_x, level_y, level_map, mapFile, sp, game_map, coords, a, all_sprites, \
             tiles_group, boss_group, player_group, fight, camera, player
@@ -373,6 +383,7 @@ class Boss:
             if b.HP <= 0:
                 b.kill()
 
+    # показ, где нанесёт босс
     def giving_damage(self):
         global player, level_x, level_y, tile_width, tile_height, chance, coords, all_sprites, tiles_group, boss_group, \
             player_group, level_map, mapFile, sp, game_map, atak_time, fight
@@ -413,6 +424,7 @@ class Boss:
             camera.apply(sprite)
         pygame.display.flip()
 
+    # нанесение урона игроку
     def taking_damage(self):
         global player, level_x, level_y, tile_width, tile_height, chance, coords, all_sprites, tiles_group, \
             boss_group, player_group, level_map, mapFile, sp, game_map, a, fight
@@ -474,6 +486,7 @@ class Boss:
                 camera.apply(sprite)
             pygame.display.flip()
 
+    # смерть босса, конец игры
     def kill(self):
         global sp, fight, all_sprites, tiles_group, boss_group, player_group, game_map
         sp = []
@@ -559,6 +572,7 @@ class Boss:
 atak_time = 0
 
 
+# действия с игроком
 class Player_characters:
     SHP = 0
     armor = 0
@@ -571,6 +585,7 @@ class Player_characters:
     physical_penetration = 0
     cash = 0
 
+    # сохранение характеристик игрока
     def __init__(self, hard_of_level):
         if hard_of_level == 1:
             self.SHP = 100
@@ -591,12 +606,14 @@ class Player_characters:
             self.damage = 0
             self.regen = 1
 
+    # получение урона от босса
     def geting_damage(self, hero):
         if hero.damage - pc.armor > 0:
             pc.HP -= (hero.damage - pc.armor)
         if pc.HP <= 0:
             pc.kill()
 
+    # нанесение урона
     def giving_damage(self, hero):
         hero.geting_damage(hard_of_level)
         if (pc.damage - hero.armor > 0) and (pc.HP + ((pc.damage - hero.armor) * (pc.vampirizm / 1000)) < pc.SHP):
@@ -606,6 +623,7 @@ class Player_characters:
             pc.dod = 0
             pc.damage = math.ceil(pc.damage * 1.25)
 
+    # либо возраждение героя, либо смерть и конец игры
     def kill(self):
         if pc.extra_life > 0:
             pc.extra_life -= 1
@@ -625,6 +643,7 @@ class Player_characters:
                 clock.tick(FPS)
 
 
+# как все предметы изменяют характеристики героя
 def blade_of_despair():
     pc.dod += 1
     pc.damage += 170
@@ -772,6 +791,7 @@ def coin(h):
         pc.cash += 50
 
 
+# определение героя
 def what_the_item(item):
     if item == 'a':
         axe_of_bloodlust()
@@ -831,6 +851,7 @@ def what_the_item(item):
         coin(hard_of_level)
 
 
+# выбор управления
 def ma():
     global manage, seti
     stop = True
@@ -860,6 +881,7 @@ def ma():
         clock.tick(FPS)
 
 
+# показ характеристик босса и игрока
 def ch():
     global seti
     stop = True
@@ -879,6 +901,7 @@ def ch():
         clock.tick(FPS)
 
 
+# выбор темы
 def th():
     stop1 = True
     fon = pygame.transform.scale(load_image('theme.jpg', True), (1000, 1000))
@@ -903,6 +926,7 @@ def th():
         clock.tick(FPS)
 
 
+# показ рейтинга всех уровней сложности на начальном уровне сложности
 def rat():
     con = sqlite3.connect('chet.db')
     # Создаём курсор
@@ -1045,6 +1069,7 @@ def rat():
         clock.tick(FPS)
 
 
+# показ начального меню
 def start():
     global hard_of_level, manage, ok
     stop = True
@@ -1078,6 +1103,7 @@ def start():
         clock.tick(FPS)
 
 
+# три точки в паузе
 def setings():
     global hard_of_level, manage, ok, seti
     stop = True
@@ -1108,6 +1134,7 @@ def setings():
         clock.tick(FPS)
 
 
+# выбор уровня сложности, начало игры
 def start_screen():
     global hard_of_level, manage, ok
     fon = pygame.transform.scale(load_image('second_fon.jpg', True), (1000, 1000))
@@ -1139,6 +1166,7 @@ def start_screen():
         clock.tick(FPS)
 
 
+#
 class Bosss(pygame.sprite.Sprite):
     def __init__(self, pos_x, pos_y):
         super().__init__(boss_group, all_sprites)
@@ -1151,6 +1179,7 @@ class Bosss(pygame.sprite.Sprite):
         self.rect = self.image.get_rect().move(tile_width * self.x, tile_height * self.y)
 
 
+# загрузка картинок
 def load_image(name, color_key=None):
     fullname = os.path.join('data', name)
     image = pygame.image.load(fullname).convert()
@@ -1165,6 +1194,7 @@ def load_image(name, color_key=None):
         return pygame.transform.scale(image, (50, 50))
 
 
+#
 def generate_level(level, atak):
     global bx, by, chance
     new_player, x, y = None, None, None
@@ -1247,6 +1277,7 @@ def generate_level(level, atak):
     return new_player, x, y
 
 
+#
 class Tile(pygame.sprite.Sprite):
     x = -5
     y = -5
@@ -1270,6 +1301,7 @@ class Tile(pygame.sprite.Sprite):
                 self.rect = self.image.get_rect().move(tile_width * pos_x, tile_height * pos_y)
 
 
+#
 class Player(pygame.sprite.Sprite):
     def __init__(self, pos_x, pos_y):
         super().__init__(player_group, all_sprites)
@@ -1344,6 +1376,7 @@ class Player(pygame.sprite.Sprite):
                 game_map[coords[1]][coords[0]] = '@'
 
 
+#
 def load_level(filename):
     filename = "data/" + filename
     with open(filename, 'r') as mapFile:
@@ -1352,11 +1385,13 @@ def load_level(filename):
     return list(map(lambda x: x.ljust(max_width, '.'), level_map))
 
 
+# выход из игры
 def terminate():
     pygame.quit()
     sys.exit()
 
 
+#
 class Camera:
     def __init__(self):
         self.dx = 0
@@ -1371,6 +1406,7 @@ class Camera:
         self.dy = -(target.rect.y + target.rect.h // 2 - height // 2)
 
 
+# открытие магазина
 def shop():
     global item1, item2, item3, item4, player_image, player_group, all_sprites, tiles_group, tile_height, tile_width, \
         player, level_y, level_x
@@ -1434,6 +1470,7 @@ def shop():
         clock.tick(FPS)
 
 
+# возращает строку времени
 def clockprint(d, h, m, s):
     d = str(d) if len(str(d)) == 2 else '0' + str(d)
     h = str(h) if len(str(h)) == 2 else '0' + str(h)
@@ -1442,6 +1479,7 @@ def clockprint(d, h, m, s):
     return d + ':' + h + ':' + m + ':' + s
 
 
+# вывод рейтинга в паузе
 def rt(hard):
     fon = pygame.transform.scale(load_image('rt.jpg', True), (1000, 1000))
     screen.blit(fon, (0, 0))
@@ -1508,6 +1546,7 @@ def rt(hard):
         clock.tick(FPS)
 
 
+# пауза
 def menu():
     fon = pygame.transform.scale(load_image('menu.jpg', True), (1000, 1000))
     screen.blit(fon, (0, 0))
@@ -1531,6 +1570,7 @@ def menu():
         clock.tick(FPS)
 
 
+# обозначение всех переменных
 seti = False
 kick_boss = [[149, 148], [150, 148], [151, 149], [151, 150], [150, 151], [149, 151], [148, 150], [148, 149]]
 pygame.init()
@@ -1603,6 +1643,7 @@ camera.update(player)
 name = ''
 for sprite in all_sprites:
     camera.apply(sprite)
+# сама игра
 while True:
     for event in pygame.event.get():
         k = pygame.key.get_pressed()
