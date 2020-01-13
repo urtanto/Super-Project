@@ -926,57 +926,121 @@ def rat():
         f1 = pygame.font.Font(None, 50)
         text1 = f1.render('Easy rating:', 0, (0, 0, 0))
         screen.blit(text1, (400, 0))
+        t.dtime = result[0][1] // 86400
+        t.htime = result[0][1] % 86400 // 3600
+        t.mtime = result[0][1] % 86400 % 3600 // 60
+        t.stime = result[0][1] % 86400 % 3600 % 60
         f1 = pygame.font.Font(None, 30)
-        text1 = f1.render('1: ' + str(result[0][0]) + ' ' + str(result[0][1]) + 'sec', 0, (0, 0, 0))
+        text1 = f1.render('1: ' + str(result[0][0]) + ' ' + t.print(), 0, (0, 0, 0))
         screen.blit(text1, (400, 50))
+        t.dtime = result[1][1] // 86400
+        t.htime = result[1][1] % 86400 // 3600
+        t.mtime = result[1][1] % 86400 % 3600 // 60
+        t.stime = result[1][1] % 86400 % 3600 % 60
         f1 = pygame.font.Font(None, 30)
-        text1 = f1.render('2: ' + str(result[1][0]) + ' ' + str(result[1][1]) + 'sec', 0, (0, 0, 0))
+        text1 = f1.render('2: ' + str(result[1][0]) + ' ' + t.print(), 0, (0, 0, 0))
         screen.blit(text1, (400, 100))
+        t.dtime = result[2][1] // 86400
+        t.htime = result[2][1] % 86400 // 3600
+        t.mtime = result[2][1] % 86400 % 3600 // 60
+        t.stime = result[2][1] % 86400 % 3600 % 60
         f1 = pygame.font.Font(None, 30)
-        text1 = f1.render('3: ' + str(result[2][0]) + ' ' + str(result[2][1]) + 'sec', 0, (0, 0, 0))
+        text1 = f1.render('3: ' + str(result[2][0]) + ' ' + t.print(), 0, (0, 0, 0))
         screen.blit(text1, (400, 150))
+        t.dtime = result[3][1] // 86400
+        t.htime = result[3][1] % 86400 // 3600
+        t.mtime = result[3][1] % 86400 % 3600 // 60
+        t.stime = result[3][1] % 86400 % 3600 % 60
         f1 = pygame.font.Font(None, 30)
-        text1 = f1.render('4: ' + str(result[3][0]) + ' ' + str(result[3][1]) + 'sec', 0, (0, 0, 0))
+        text1 = f1.render('4: ' + str(result[3][0]) + ' ' + t.print(), 0, (0, 0, 0))
         screen.blit(text1, (400, 200))
+        t.dtime = result[4][1] // 86400
+        t.htime = result[4][1] % 86400 // 3600
+        t.mtime = result[4][1] % 86400 % 3600 // 60
+        t.stime = result[4][1] % 86400 % 3600 % 60
         f1 = pygame.font.Font(None, 30)
-        text1 = f1.render('5: ' + str(result[4][0]) + ' ' + str(result[4][1]) + 'sec', 0, (0, 0, 0))
+        text1 = f1.render('5: ' + str(result[4][0]) + ' ' + t.print(), 0, (0, 0, 0))
         screen.blit(text1, (400, 250))
         f1 = pygame.font.Font(None, 50)
         text1 = f1.render('Medium rating:', 0, (0, 0, 0))
         screen.blit(text1, (400, 300))
+        t.dtime = result1[0][1] // 86400
+        t.htime = result1[0][1] % 86400 // 3600
+        t.mtime = result1[0][1] % 86400 % 3600 // 60
+        t.stime = result1[0][1] % 86400 % 3600 % 60
         f1 = pygame.font.Font(None, 30)
-        text1 = f1.render('1: ' + str(result1[0][0]) + ' ' + str(result1[0][1]) + 'sec', 0, (0, 0, 0))
+        text1 = f1.render('1: ' + str(result1[0][0]) + ' ' + t.print(), 0, (0, 0, 0))
         screen.blit(text1, (400, 350))
+        t.dtime = result1[1][1] // 86400
+        t.htime = result1[1][1] % 86400 // 3600
+        t.mtime = result1[1][1] % 86400 % 3600 // 60
+        t.stime = result1[1][1] % 86400 % 3600 % 60
         f1 = pygame.font.Font(None, 30)
-        text1 = f1.render('2: ' + str(result1[1][0]) + ' ' + str(result1[1][1]) + 'sec', 0, (0, 0, 0))
+        text1 = f1.render('2: ' + str(result1[1][0]) + ' ' + t.print(), 0, (0, 0, 0))
         screen.blit(text1, (400, 400))
+        t.dtime = result1[2][1] // 86400
+        t.htime = result1[2][1] % 86400 // 3600
+        t.mtime = result1[2][1] % 86400 % 3600 // 60
+        t.stime = result1[2][1] % 86400 % 3600 % 60
         f1 = pygame.font.Font(None, 30)
-        text1 = f1.render('3: ' + str(result1[2][0]) + ' ' + str(result1[2][1]) + 'sec', 0, (0, 0, 0))
+        text1 = f1.render('3: ' + str(result1[2][0]) + ' ' + t.print(), 0, (0, 0, 0))
         screen.blit(text1, (400, 450))
+        t.dtime = result1[3][1] // 86400
+        t.htime = result1[3][1] % 86400 // 3600
+        t.mtime = result1[3][1] % 86400 % 3600 // 60
+        t.stime = result1[3][1] % 86400 % 3600 % 60
         f1 = pygame.font.Font(None, 30)
-        text1 = f1.render('4: ' + str(result1[3][0]) + ' ' + str(result1[3][1]) + 'sec', 0, (0, 0, 0))
+        text1 = f1.render('4: ' + str(result1[3][0]) + ' ' + t.print(), 0, (0, 0, 0))
         screen.blit(text1, (400, 500))
+        t.dtime = result1[4][1] // 86400
+        t.htime = result1[4][1] % 86400 // 3600
+        t.mtime = result1[4][1] % 86400 % 3600 // 60
+        t.stime = result1[4][1] % 86400 % 3600 % 60
         f1 = pygame.font.Font(None, 30)
-        text1 = f1.render('5: ' + str(result1[4][0]) + ' ' + str(result1[4][1]) + 'sec', 0, (0, 0, 0))
+        text1 = f1.render('5: ' + str(result1[4][0]) + ' ' + t.print(), 0, (0, 0, 0))
         screen.blit(text1, (400, 550))
         f1 = pygame.font.Font(None, 50)
         text1 = f1.render('Hard rating:', 0, (0, 0, 0))
         screen.blit(text1, (400, 600))
+        t.dtime = result2[0][1] // 86400
+        t.htime = result2[0][1] % 86400 // 3600
+        t.mtime = result2[0][1] % 86400 % 3600 // 60
+        t.stime = result2[0][1] % 86400 % 3600 % 60
         f1 = pygame.font.Font(None, 30)
-        text1 = f1.render('1: ' + str(result2[0][0]) + ' ' + str(result2[0][1]) + 'sec', 0, (0, 0, 0))
+        text1 = f1.render('1: ' + str(result2[0][0]) + ' ' + t.print(), 0, (0, 0, 0))
         screen.blit(text1, (400, 650))
+        t.dtime = result2[1][1] // 86400
+        t.htime = result2[1][1] % 86400 // 3600
+        t.mtime = result2[1][1] % 86400 % 3600 // 60
+        t.stime = result2[1][1] % 86400 % 3600 % 60
         f1 = pygame.font.Font(None, 30)
-        text1 = f1.render('2: ' + str(result2[1][0]) + ' ' + str(result2[1][1]) + 'sec', 0, (0, 0, 0))
+        text1 = f1.render('2: ' + str(result2[1][0]) + ' ' + t.print(), 0, (0, 0, 0))
         screen.blit(text1, (400, 700))
+        t.dtime = result2[2][1] // 86400
+        t.htime = result2[2][1] % 86400 // 3600
+        t.mtime = result2[2][1] % 86400 % 3600 // 60
+        t.stime = result2[2][1] % 86400 % 3600 % 60
         f1 = pygame.font.Font(None, 30)
-        text1 = f1.render('3: ' + str(result2[2][0]) + ' ' + str(result2[2][1]) + 'sec', 0, (0, 0, 0))
+        text1 = f1.render('3: ' + str(result2[2][0]) + ' ' + t.print(), 0, (0, 0, 0))
         screen.blit(text1, (400, 750))
+        t.dtime = result2[3][1] // 86400
+        t.htime = result2[3][1] % 86400 // 3600
+        t.mtime = result2[3][1] % 86400 % 3600 // 60
+        t.stime = result2[3][1] % 86400 % 3600 % 60
         f1 = pygame.font.Font(None, 30)
-        text1 = f1.render('4: ' + str(result2[3][0]) + ' ' + str(result2[3][1]) + 'sec', 0, (0, 0, 0))
+        text1 = f1.render('4: ' + str(result2[3][0]) + ' ' + t.print(), 0, (0, 0, 0))
         screen.blit(text1, (400, 800))
+        t.dtime = result2[4][1] // 86400
+        t.htime = result2[4][1] % 86400 // 3600
+        t.mtime = result2[4][1] % 86400 % 3600 // 60
+        t.stime = result2[4][1] % 86400 % 3600 % 60
         f1 = pygame.font.Font(None, 30)
-        text1 = f1.render('5: ' + str(result2[4][0]) + ' ' + str(result2[4][1]) + 'sec', 0, (0, 0, 0))
+        text1 = f1.render('5: ' + str(result2[4][0]) + ' ' + t.print(), 0, (0, 0, 0))
         screen.blit(text1, (400, 850))
+        t.dtime = 0
+        t.htime = 0
+        t.mtime = 0
+        t.stime = 0
         pygame.display.flip()
         clock.tick(FPS)
 
@@ -1036,7 +1100,7 @@ def setings():
                 return ch()
             elif event.type == pygame.MOUSEBUTTONDOWN and (event.pos[0] > 400) and (event.pos[1] > 600) and (
                     event.pos[0] < 600) and (event.pos[1] < 700):
-                return  rt(hard_of_level)
+                return rt(hard_of_level)
             elif event.type == pygame.MOUSEBUTTONDOWN and (event.pos[0] > 400) and (event.pos[1] > 750) and (
                     event.pos[0] < 600) and (event.pos[1] < 850):
                 terminate()
@@ -1370,6 +1434,14 @@ def shop():
         clock.tick(FPS)
 
 
+def clockprint(d, h, m, s):
+    d = str(d) if len(str(d)) == 2 else '0' + str(d)
+    h = str(h) if len(str(h)) == 2 else '0' + str(h)
+    m = str(m) if len(str(m)) == 2 else '0' + str(m)
+    s = str(s) if len(str(s)) == 2 else '0' + str(s)
+    return d + ':' + h + ':' + m + ':' + s
+
+
 def rt(hard):
     fon = pygame.transform.scale(load_image('rt.jpg', True), (1000, 1000))
     screen.blit(fon, (0, 0))
@@ -1397,20 +1469,40 @@ def rt(hard):
         f1 = pygame.font.Font(None, 50)
         text1 = f1.render('Rating:', 0, (0, 0, 0))
         screen.blit(text1, (400, 200))
+        d = result[0][1] // 86400
+        h = result[0][1] % 86400 // 3600
+        m = result[0][1] % 86400 % 3600 // 60
+        s = result[0][1] % 86400 % 3600 % 60
         f1 = pygame.font.Font(None, 50)
-        text1 = f1.render('1: ' + str(result[0][0]) + ' ' + str(result[0][1]) + 'sec', 0, (0, 0, 0))
+        text1 = f1.render('1: ' + str(result[0][0]) + ' ' + clockprint(d, h, m, s), 0, (0, 0, 0))
         screen.blit(text1, (400, 300))
+        d = result[1][1] // 86400
+        h = result[1][1] % 86400 // 3600
+        m = result[1][1] % 86400 % 3600 // 60
+        s = result[1][1] % 86400 % 3600 % 60
         f1 = pygame.font.Font(None, 50)
-        text1 = f1.render('2: ' + str(result[1][0]) + ' ' + str(result[1][1]) + 'sec', 0, (0, 0, 0))
+        text1 = f1.render('2: ' + str(result[1][0]) + ' ' + clockprint(d, h, m, s), 0, (0, 0, 0))
         screen.blit(text1, (400, 400))
+        d = result[2][1] // 86400
+        h = result[2][1] % 86400 // 3600
+        m = result[2][1] % 86400 % 3600 // 60
+        s = result[2][1] % 86400 % 3600 % 60
         f1 = pygame.font.Font(None, 50)
-        text1 = f1.render('3: ' + str(result[2][0]) + ' ' + str(result[2][1]) + 'sec', 0, (0, 0, 0))
+        text1 = f1.render('3: ' + str(result[2][0]) + ' ' + clockprint(d, h, m, s), 0, (0, 0, 0))
         screen.blit(text1, (400, 500))
+        d = result[3][1] // 86400
+        h = result[3][1] % 86400 // 3600
+        m = result[3][1] % 86400 % 3600 // 60
+        s = result[3][1] % 86400 % 3600 % 60
         f1 = pygame.font.Font(None, 50)
-        text1 = f1.render('4: ' + str(result[3][0]) + ' ' + str(result[3][1]) + 'sec', 0, (0, 0, 0))
+        text1 = f1.render('4: ' + str(result[3][0]) + ' ' + clockprint(d, h, m, s), 0, (0, 0, 0))
         screen.blit(text1, (400, 600))
+        d = result[4][1] // 86400
+        h = result[4][1] % 86400 // 3600
+        m = result[4][1] % 86400 % 3600 // 60
+        s = result[4][1] % 86400 % 3600 % 60
         f1 = pygame.font.Font(None, 50)
-        text1 = f1.render('5: ' + str(result[4][0]) + ' ' + str(result[4][1]) + 'sec', 0, (0, 0, 0))
+        text1 = f1.render('5: ' + str(result[4][0]) + ' ' + clockprint(d, h, m, s), 0, (0, 0, 0))
         screen.blit(text1, (400, 700))
         pygame.display.flip()
         clock.tick(FPS)
