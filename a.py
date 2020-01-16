@@ -215,7 +215,7 @@ def sq(name, cp, hard):
         cur.execute(forma).fetchall()
         con.commit()
     con.close()
-    terminate()
+    back()
 
 
 # генерация случайной карты
@@ -636,9 +636,9 @@ class Player_characters:
             while True:
                 for event in pygame.event.get():
                     if event.type == pygame.QUIT:
-                        terminate()
+                        back()
                     elif event.type == pygame.KEYDOWN or event.type == pygame.MOUSEBUTTONDOWN:
-                        terminate()
+                        back()
                 pygame.display.flip()
                 clock.tick(FPS)
 
@@ -1391,6 +1391,10 @@ def terminate():
     sys.exit()
 
 
+def back():
+    okk()
+
+
 #
 class Camera:
     def __init__(self):
@@ -1554,23 +1558,402 @@ def menu():
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 terminate()
-            elif event.type == pygame.MOUSEBUTTONDOWN and (event.pos[0] > 120) and (event.pos[1] > 170) and (
-                    event.pos[0] < 877) and (event.pos[1] < 345):
+            elif event.type == pygame.MOUSEBUTTONDOWN and (event.pos[0] > 185) and (event.pos[1] > 99) and (
+                    event.pos[0] < 814) and (event.pos[1] < 273):
                 return
-            elif event.type == pygame.MOUSEBUTTONDOWN and (event.pos[0] > 121) and (event.pos[1] > 374) and (
-                    event.pos[0] < 878) and (event.pos[1] < 575):
+            elif event.type == pygame.MOUSEBUTTONDOWN and (event.pos[0] > 185) and (event.pos[1] > 290) and (
+                    event.pos[0] < 814) and (event.pos[1] < 460):
                 return shop()
-            elif event.type == pygame.MOUSEBUTTONDOWN and (event.pos[0] > 121) and (event.pos[1] > 592) and (
-                    event.pos[0] < 878) and (event.pos[1] < 817):
+            elif event.type == pygame.MOUSEBUTTONDOWN and (event.pos[0] > 185) and (event.pos[1] > 476) and (
+                    event.pos[0] < 814) and (event.pos[1] < 688):
+                okk()
+            elif event.type == pygame.MOUSEBUTTONDOWN and (event.pos[0] > 185) and (event.pos[1] > 705) and (
+                    event.pos[0] < 814) and (event.pos[1] < 900):
                 terminate()
             elif event.type == pygame.MOUSEBUTTONDOWN and (event.pos[0] > 895) and (event.pos[1] > 0) and (
-                    event.pos[0] < 1000) and (event.pos[1] < 105):
+                    event.pos[0] < 1000) and (event.pos[1] < 100):
                 return setings()
         pygame.display.flip()
         clock.tick(FPS)
 
 
 # обозначение всех переменных
+def okk():
+    global seti, kick_boss, fight, chance, ok, size, width, height, screen, running, a, sp, clock, game_map, dikt, \
+        hard_of_level, sp_of_gotten_things, bx, by, tile_images, tile_width, tile_height, tiles_group, player_group, \
+        player, player_group, player_image, boss_group, item4, item3, item2, item1, name, pc, heal_pc, running, \
+        level_y, all_sprites, dikt, coords, fight, game_map, atak_time, le, level_x, chance, camera, manage, level_map,\
+        b, FPS
+    seti = False
+    kick_boss = [[149, 148], [150, 148], [151, 149], [151, 150], [150, 151], [149, 151], [148, 150], [148, 149]]
+    pygame.init()
+    fight = False
+    chance = None
+    ok = False
+    size = width, height = 1000, 1000
+    screen = pygame.display.set_mode(size)
+    running = True
+    create_file()
+    a = 'map.txt'
+    sp = []
+    clock = pygame.time.Clock()
+    game_map = []
+    dikt = {}
+    hard_of_level = 0
+    sp_of_gotten_things = []
+    with open('data/' + a, 'r') as mapFile:
+        le = [line.strip() for line in mapFile]
+        level_map = le[-1].split()
+        for el in range(len(le)):
+            game_map.append(list(le[el]))
+            for ell in range(len(le[el])):
+                if le[el][ell] == '#' or le[el][ell] == 'B':
+                    sp.append([ell, el])
+    coords = [299, 299]
+    bx, by = 0, 0
+    tile_images = {'coin': load_image('coin.jpg'), 'empty1': load_image('atak_floor.png'),
+                   'boss': pygame.transform.scale(load_image('boss.png', -1), (100, 100)),
+                   'wall': load_image('box.png'),
+                   'empty': load_image('grass.png'), 'axe_of_bloodlust': load_image('axe_of_bloodlust.png'),
+                   'berserker_rage': load_image('berserker_rage.png'),
+                   'blade_of_despair': load_image('blade_of_despair.png'),
+                   'blade_of_seven_seas': load_image('blade_of_the_seven_seas.png'),
+                   'claws_of_chaos': load_image('claws_of_chaos.png'),
+                   'endless_battle': load_image('endless_battle.png'),
+                   'Wind_of_Nature': load_image('Wind_of_Nature.png'),
+                   'the_sword_of_the_legionnaire': load_image('the_sword_of_the_legionnaire.png'),
+                   'the_giants_axe': load_image('the_giants_axe.png'),
+                   'the_belt_of_ares': load_image('the_belt_of_ares.png'),
+                   'the Golden stick': load_image('the Golden stick.png'),
+                   'studded_armor': load_image('studded_armor.png'),
+                   'storm_belt': load_image('storm_belt.png'), 'queens_wings': load_image('queens_wings.png'),
+                   'leather_armor': load_image('leather_armor.png'), 'health_crystal': load_image('health_crystal.png'),
+                   'healing_necklace': load_image('healing_necklace.png'),
+                   'hammer_of_wrath': load_image('hammer_of_wrath.png'),
+                   'Golden meteor': load_image('Golden meteor.png'),
+                   'dagger': load_image('dagger.png'), 'caller_of_the_devil': load_image('caller_of_the_devil.png'),
+                   'benefit_of_courage': load_image('benefit_of_courage.png'),
+                   'armor_blade': load_image('armor_blade.png'),
+                   'an_ordinary_spear': load_image('an_ordinary_spear.png'),
+                   'a_shot_of_the_hunter': load_image('a_shot_of_the_hunter.png'), 'trident': load_image('trident.png'),
+                   'protective_helmet': load_image('protective_helmet.png'),
+                   'immortality': load_image('immortality.png')}
+    player_image = load_image('mar.png', -1)
+    all_sprites = pygame.sprite.Group()
+    tiles_group = pygame.sprite.Group()
+    boss_group = pygame.sprite.Group()
+    player_group = pygame.sprite.Group()
+    tile_width = tile_height = 50
+    manage = 2
+    FPS = 50
+    start()
+    level_map = load_level(a)
+    player, level_x, level_y = generate_level(level_map, False)
+    item1 = True
+    item2 = True
+    item3 = True
+    item4 = True
+    b = Boss(hard_of_level)
+    heal_pc = 0
+    pc = Player_characters(hard_of_level)
+    camera = Camera()
+    how_much = 1
+    camera.update(player)
+    name = ''
+    t.dtime = 0
+    t.htime = 0
+    t.mtime = 0
+    t.stime = 0
+    for sprite in all_sprites:
+        camera.apply(sprite)
+    # сама игра
+    while True:
+        for event in pygame.event.get():
+            k = pygame.key.get_pressed()
+            if event.type == pygame.QUIT:
+                terminate()
+            if k[pygame.K_LEFT] and manage == 2:
+                heal_pc += 1
+                if heal_pc == 25:
+                    t.tick(1, how_much)
+                    heal_pc = 0
+                if coords[0] - 1 > -1:
+                    if dikt[(coords[1]), coords[0] - 1].isalpha():
+                        what_the_item(dikt[(coords[1]), coords[0] - 1])
+                        Player.movel(player)
+                        camera.update(player)
+                        if not item4:
+                            player_image = load_image('armorx2.png', -1)
+                        else:
+                            player_image = load_image('mar.png', -1)
+                        all_sprites = pygame.sprite.Group()
+                        tiles_group = pygame.sprite.Group()
+                        player_group = pygame.sprite.Group()
+                        player, level_x, level_y = generate_level(game_map, False)
+                        tile_width = tile_height = 50
+                        camera.update(player)
+                    else:
+                        Player.movel(player)
+                        camera.update(player)
+                    for sprite in all_sprites:
+                        camera.apply(sprite)
+            elif k[pygame.K_RIGHT] and manage == 2:
+                heal_pc += 1
+                if heal_pc == 25:
+                    t.tick(1, how_much)
+                    heal_pc = 0
+                if coords[0] + 1 < 300:
+                    if dikt[(coords[1]), coords[0] + 1].isalpha():
+                        what_the_item(dikt[(coords[1]), coords[0] + 1])
+                        Player.mover(player)
+                        camera.update(player)
+                        if not item4:
+                            player_image = load_image('armorx2.png', -1)
+                        else:
+                            player_image = load_image('mar.png', -1)
+                        all_sprites = pygame.sprite.Group()
+                        tiles_group = pygame.sprite.Group()
+                        player_group = pygame.sprite.Group()
+                        player, level_x, level_y = generate_level(game_map, False)
+                        tile_width = tile_height = 50
+                        camera.update(player)
+                    else:
+                        Player.mover(player)
+                        camera.update(player)
+                    for sprite in all_sprites:
+                        camera.apply(sprite)
+            elif k[pygame.K_UP] and manage == 2:
+                heal_pc += 1
+                if heal_pc == 25:
+                    t.tick(1, how_much)
+                    heal_pc = 0
+                if coords[1] - 1 > -1:
+                    if dikt[(coords[1] - 1), coords[0]].isalpha():
+                        what_the_item(dikt[(coords[1] - 1), coords[0]])
+                        Player.moveu(player)
+                        camera.update(player)
+                        if not item4:
+                            player_image = load_image('armorx2.png', -1)
+                        else:
+                            player_image = load_image('mar.png', -1)
+                        all_sprites = pygame.sprite.Group()
+                        tiles_group = pygame.sprite.Group()
+                        player_group = pygame.sprite.Group()
+                        player, level_x, level_y = generate_level(game_map, False)
+                        tile_width = tile_height = 50
+                        camera.update(player)
+                    else:
+                        Player.moveu(player)
+                        camera.update(player)
+                    for sprite in all_sprites:
+                        camera.apply(sprite)
+            elif k[pygame.K_DOWN] and manage == 2:
+                heal_pc += 1
+                if heal_pc == 25:
+                    t.tick(1, how_much)
+                    heal_pc = 0
+                if coords[1] + 1 < 300:
+                    if dikt[(coords[1] + 1), coords[0]].isalpha():
+                        what_the_item(dikt[(coords[1] + 1), coords[0]])
+                        Player.moved(player)
+                        camera.update(player)
+                        if not item4:
+                            player_image = load_image('armorx2.png', -1)
+                        else:
+                            player_image = load_image('mar.png', -1)
+                        all_sprites = pygame.sprite.Group()
+                        tiles_group = pygame.sprite.Group()
+                        player_group = pygame.sprite.Group()
+                        player, level_x, level_y = generate_level(game_map, False)
+                        tile_width = tile_height = 50
+                        camera.update(player)
+                    else:
+                        Player.moved(player)
+                        camera.update(player)
+                    for sprite in all_sprites:
+                        camera.apply(sprite)
+            elif k[pygame.K_a] and manage == 1:
+                heal_pc += 1
+                if heal_pc == 25:
+                    t.tick(1, how_much)
+                    heal_pc = 0
+                if coords[0] - 1 > -1:
+                    if dikt[(coords[1]), coords[0] - 1].isalpha():
+                        what_the_item(dikt[(coords[1]), coords[0] - 1])
+                        Player.movel(player)
+                        camera.update(player)
+                        if not item4:
+                            player_image = load_image('armorx2.png', -1)
+                        else:
+                            player_image = load_image('mar.png', -1)
+                        all_sprites = pygame.sprite.Group()
+                        tiles_group = pygame.sprite.Group()
+                        player_group = pygame.sprite.Group()
+                        player, level_x, level_y = generate_level(game_map, False)
+                        tile_width = tile_height = 50
+                        camera.update(player)
+                    else:
+                        Player.movel(player)
+                        camera.update(player)
+                    for sprite in all_sprites:
+                        camera.apply(sprite)
+            elif k[pygame.K_d] and manage == 1:
+                heal_pc += 1
+                if heal_pc == 25:
+                    t.tick(1, how_much)
+                    heal_pc = 0
+                if coords[0] + 1 < 300:
+                    if dikt[(coords[1]), coords[0] + 1].isalpha():
+                        what_the_item(dikt[(coords[1]), coords[0] + 1])
+                        Player.mover(player)
+                        camera.update(player)
+                        if not item4:
+                            player_image = load_image('armorx2.png', -1)
+                        else:
+                            player_image = load_image('mar.png', -1)
+                        all_sprites = pygame.sprite.Group()
+                        tiles_group = pygame.sprite.Group()
+                        player_group = pygame.sprite.Group()
+                        player, level_x, level_y = generate_level(game_map, False)
+                        tile_width = tile_height = 50
+                        camera.update(player)
+                    else:
+                        Player.mover(player)
+                        camera.update(player)
+                    for sprite in all_sprites:
+                        camera.apply(sprite)
+            elif k[pygame.K_w] and manage == 1:
+                heal_pc += 1
+                if heal_pc == 25:
+                    t.tick(1, how_much)
+                    heal_pc = 0
+                if coords[1] - 1 > -1:
+                    if dikt[(coords[1] - 1), coords[0]].isalpha():
+                        what_the_item(dikt[(coords[1] - 1), coords[0]])
+                        Player.moveu(player)
+                        camera.update(player)
+                        if not item4:
+                            player_image = load_image('armorx2.png', -1)
+                        else:
+                            player_image = load_image('mar.png', -1)
+                        all_sprites = pygame.sprite.Group()
+                        tiles_group = pygame.sprite.Group()
+                        player_group = pygame.sprite.Group()
+                        player, level_x, level_y = generate_level(game_map, False)
+                        tile_width = tile_height = 50
+                        camera.update(player)
+                    else:
+                        Player.moveu(player)
+                        camera.update(player)
+                    for sprite in all_sprites:
+                        camera.apply(sprite)
+            elif k[pygame.K_s] and manage == 1:
+                heal_pc += 1
+                if heal_pc == 25:
+                    t.tick(1, how_much)
+                    heal_pc = 0
+                if coords[1] + 1 < 300:
+                    if dikt[(coords[1] + 1), coords[0]].isalpha():
+                        what_the_item(dikt[(coords[1] + 1), coords[0]])
+                        Player.moved(player)
+                        camera.update(player)
+                        if not item4:
+                            player_image = load_image('armorx2.png', -1)
+                        else:
+                            player_image = load_image('mar.png', -1)
+                        all_sprites = pygame.sprite.Group()
+                        tiles_group = pygame.sprite.Group()
+                        player_group = pygame.sprite.Group()
+                        player, level_x, level_y = generate_level(game_map, False)
+                        tile_width = tile_height = 50
+                        camera.update(player)
+                    else:
+                        Player.moved(player)
+                        camera.update(player)
+                    for sprite in all_sprites:
+                        camera.apply(sprite)
+            elif k[pygame.K_SPACE]:
+                heal_pc += 1
+                if heal_pc == 25:
+                    t.tick(1, how_much)
+                    heal_pc = 0
+                if coords in kick_boss:
+                    pc.giving_damage(b)
+                elif coords in [[8, 8], [9, 8], [10, 8], [11, 8],
+                                [8, 9], [8, 10], [11, 9], [11, 10],
+                                [8, 11], [9, 11], [10, 11], [11, 11]] and fight:
+                    pc.giving_damage(b)
+            elif k[pygame.K_t]:
+                heal_pc += 1
+                if heal_pc == 25:
+                    t.tick(1, how_much)
+                    heal_pc = 0
+                t.tick(10, how_much)
+            elif k[pygame.K_ESCAPE]:
+                heal_pc += 1
+                if heal_pc == 25:
+                    t.tick(1, how_much)
+                    heal_pc = 0
+                menu()
+            elif k[pygame.K_m]:
+                heal_pc += 1
+                if heal_pc == 25:
+                    t.tick(1, how_much)
+                    heal_pc = 0
+                how_much = 10
+        heal_pc += 1
+        if heal_pc == 25:
+            t.tick(1, how_much)
+            heal_pc = 0
+        screen.fill((0, 0, 0))
+        all_sprites.draw(screen)
+        tiles_group.draw(screen)
+        player_group.draw(screen)
+        pygame.draw.rect(screen, [0, 0, 200], [750, 0, 1000, 110])
+        pygame.draw.rect(screen, [200, 0, 0], [750, 110, 1000, 354])
+        f1 = pygame.font.Font(None, 24)
+        text1 = f1.render(str(b.HP) + 'HP', 0, (0, 0, 0))
+        screen.blit(text1, (760, 10))
+        f1 = pygame.font.Font(None, 24)
+        text1 = f1.render('armor: ' + str(b.armor), 0, (0, 0, 0))
+        screen.blit(text1, (760, 44))
+        f1 = pygame.font.Font(None, 24)
+        text1 = f1.render('damage: ' + str(b.damage), 0, (0, 0, 0))
+        screen.blit(text1, (760, 78))
+        f1 = pygame.font.Font(None, 24)
+        text1 = f1.render('Time: ' + t.print(), 0, (0, 0, 0))
+        screen.blit(text1, (760, 120))
+        f1 = pygame.font.Font(None, 24)
+        text1 = f1.render(str(pc.HP) + '/' + str(pc.SHP) + 'HP', 0, (0, 0, 0))
+        screen.blit(text1, (760, 154))
+        f1 = pygame.font.Font(None, 24)
+        text1 = f1.render('armor: ' + str(pc.armor), 0, (0, 0, 0))
+        screen.blit(text1, (760, 188))
+        f1 = pygame.font.Font(None, 24)
+        text1 = f1.render('damage: ' + str(pc.damage), 0, (0, 0, 0))
+        screen.blit(text1, (760, 223))
+        f1 = pygame.font.Font(None, 24)
+        text1 = f1.render('vampirizm: ' + str(pc.vampirizm), 0, (0, 0, 0))
+        screen.blit(text1, (760, 256))
+        f1 = pygame.font.Font(None, 24)
+        text1 = f1.render('regen: ' + str(pc.regen), 0, (0, 0, 0))
+        screen.blit(text1, (760, 290))
+        f1 = pygame.font.Font(None, 24)
+        text1 = f1.render('extra life: ' + str(pc.extra_life), 0, (0, 0, 0))
+        screen.blit(text1, (760, 324))
+        f1 = pygame.font.Font(None, 24)
+        text1 = f1.render('physical penetration: ' + str(pc.physical_penetration), 0, (0, 0, 0))
+        screen.blit(text1, (760, 358))
+        f1 = pygame.font.Font(None, 24)
+        text1 = f1.render('coords: ' + str(coords[0] + 1) + ',' + str(coords[1] + 1), 0, (0, 0, 0))
+        screen.blit(text1, (760, 392))
+        f1 = pygame.font.Font(None, 24)
+        text1 = f1.render('cash: ' + str(pc.cash) + ' $', 0, (0, 0, 0))
+        screen.blit(text1, (760, 426))
+        pygame.display.flip()
+        clock.tick(FPS)
+
+
 seti = False
 kick_boss = [[149, 148], [150, 148], [151, 149], [151, 150], [150, 151], [149, 151], [148, 150], [148, 149]]
 pygame.init()
@@ -1627,7 +2010,6 @@ player_group = pygame.sprite.Group()
 tile_width = tile_height = 50
 manage = 2
 FPS = 50
-start()
 level_map = load_level(a)
 player, level_x, level_y = generate_level(level_map, False)
 item1 = True
@@ -1641,291 +2023,4 @@ camera = Camera()
 how_much = 1
 camera.update(player)
 name = ''
-for sprite in all_sprites:
-    camera.apply(sprite)
-# сама игра
-while True:
-    for event in pygame.event.get():
-        k = pygame.key.get_pressed()
-        if event.type == pygame.QUIT:
-            terminate()
-        if k[pygame.K_LEFT] and manage == 2:
-            heal_pc += 1
-            if heal_pc == 25:
-                t.tick(1, how_much)
-                heal_pc = 0
-            if coords[0] - 1 > -1:
-                if dikt[(coords[1]), coords[0] - 1].isalpha():
-                    what_the_item(dikt[(coords[1]), coords[0] - 1])
-                    Player.movel(player)
-                    camera.update(player)
-                    if not item4:
-                        player_image = load_image('armorx2.png', -1)
-                    else:
-                        player_image = load_image('mar.png', -1)
-                    all_sprites = pygame.sprite.Group()
-                    tiles_group = pygame.sprite.Group()
-                    player_group = pygame.sprite.Group()
-                    player, level_x, level_y = generate_level(game_map, False)
-                    tile_width = tile_height = 50
-                    camera.update(player)
-                else:
-                    Player.movel(player)
-                    camera.update(player)
-                for sprite in all_sprites:
-                    camera.apply(sprite)
-        elif k[pygame.K_RIGHT] and manage == 2:
-            heal_pc += 1
-            if heal_pc == 25:
-                t.tick(1, how_much)
-                heal_pc = 0
-            if coords[0] + 1 < 300:
-                if dikt[(coords[1]), coords[0] + 1].isalpha():
-                    what_the_item(dikt[(coords[1]), coords[0] + 1])
-                    Player.mover(player)
-                    camera.update(player)
-                    if not item4:
-                        player_image = load_image('armorx2.png', -1)
-                    else:
-                        player_image = load_image('mar.png', -1)
-                    all_sprites = pygame.sprite.Group()
-                    tiles_group = pygame.sprite.Group()
-                    player_group = pygame.sprite.Group()
-                    player, level_x, level_y = generate_level(game_map, False)
-                    tile_width = tile_height = 50
-                    camera.update(player)
-                else:
-                    Player.mover(player)
-                    camera.update(player)
-                for sprite in all_sprites:
-                    camera.apply(sprite)
-        elif k[pygame.K_UP] and manage == 2:
-            heal_pc += 1
-            if heal_pc == 25:
-                t.tick(1, how_much)
-                heal_pc = 0
-            if coords[1] - 1 > -1:
-                if dikt[(coords[1] - 1), coords[0]].isalpha():
-                    what_the_item(dikt[(coords[1] - 1), coords[0]])
-                    Player.moveu(player)
-                    camera.update(player)
-                    if not item4:
-                        player_image = load_image('armorx2.png', -1)
-                    else:
-                        player_image = load_image('mar.png', -1)
-                    all_sprites = pygame.sprite.Group()
-                    tiles_group = pygame.sprite.Group()
-                    player_group = pygame.sprite.Group()
-                    player, level_x, level_y = generate_level(game_map, False)
-                    tile_width = tile_height = 50
-                    camera.update(player)
-                else:
-                    Player.moveu(player)
-                    camera.update(player)
-                for sprite in all_sprites:
-                    camera.apply(sprite)
-        elif k[pygame.K_DOWN] and manage == 2:
-            heal_pc += 1
-            if heal_pc == 25:
-                t.tick(1, how_much)
-                heal_pc = 0
-            if coords[1] + 1 < 300:
-                if dikt[(coords[1] + 1), coords[0]].isalpha():
-                    what_the_item(dikt[(coords[1] + 1), coords[0]])
-                    Player.moved(player)
-                    camera.update(player)
-                    if not item4:
-                        player_image = load_image('armorx2.png', -1)
-                    else:
-                        player_image = load_image('mar.png', -1)
-                    all_sprites = pygame.sprite.Group()
-                    tiles_group = pygame.sprite.Group()
-                    player_group = pygame.sprite.Group()
-                    player, level_x, level_y = generate_level(game_map, False)
-                    tile_width = tile_height = 50
-                    camera.update(player)
-                else:
-                    Player.moved(player)
-                    camera.update(player)
-                for sprite in all_sprites:
-                    camera.apply(sprite)
-        elif k[pygame.K_a] and manage == 1:
-            heal_pc += 1
-            if heal_pc == 25:
-                t.tick(1, how_much)
-                heal_pc = 0
-            if coords[0] - 1 > -1:
-                if dikt[(coords[1]), coords[0] - 1].isalpha():
-                    what_the_item(dikt[(coords[1]), coords[0] - 1])
-                    Player.movel(player)
-                    camera.update(player)
-                    if not item4:
-                        player_image = load_image('armorx2.png', -1)
-                    else:
-                        player_image = load_image('mar.png', -1)
-                    all_sprites = pygame.sprite.Group()
-                    tiles_group = pygame.sprite.Group()
-                    player_group = pygame.sprite.Group()
-                    player, level_x, level_y = generate_level(game_map, False)
-                    tile_width = tile_height = 50
-                    camera.update(player)
-                else:
-                    Player.movel(player)
-                    camera.update(player)
-                for sprite in all_sprites:
-                    camera.apply(sprite)
-        elif k[pygame.K_d] and manage == 1:
-            heal_pc += 1
-            if heal_pc == 25:
-                t.tick(1, how_much)
-                heal_pc = 0
-            if coords[0] + 1 < 300:
-                if dikt[(coords[1]), coords[0] + 1].isalpha():
-                    what_the_item(dikt[(coords[1]), coords[0] + 1])
-                    Player.mover(player)
-                    camera.update(player)
-                    if not item4:
-                        player_image = load_image('armorx2.png', -1)
-                    else:
-                        player_image = load_image('mar.png', -1)
-                    all_sprites = pygame.sprite.Group()
-                    tiles_group = pygame.sprite.Group()
-                    player_group = pygame.sprite.Group()
-                    player, level_x, level_y = generate_level(game_map, False)
-                    tile_width = tile_height = 50
-                    camera.update(player)
-                else:
-                    Player.mover(player)
-                    camera.update(player)
-                for sprite in all_sprites:
-                    camera.apply(sprite)
-        elif k[pygame.K_w] and manage == 1:
-            heal_pc += 1
-            if heal_pc == 25:
-                t.tick(1, how_much)
-                heal_pc = 0
-            if coords[1] - 1 > -1:
-                if dikt[(coords[1] - 1), coords[0]].isalpha():
-                    what_the_item(dikt[(coords[1] - 1), coords[0]])
-                    Player.moveu(player)
-                    camera.update(player)
-                    if not item4:
-                        player_image = load_image('armorx2.png', -1)
-                    else:
-                        player_image = load_image('mar.png', -1)
-                    all_sprites = pygame.sprite.Group()
-                    tiles_group = pygame.sprite.Group()
-                    player_group = pygame.sprite.Group()
-                    player, level_x, level_y = generate_level(game_map, False)
-                    tile_width = tile_height = 50
-                    camera.update(player)
-                else:
-                    Player.moveu(player)
-                    camera.update(player)
-                for sprite in all_sprites:
-                    camera.apply(sprite)
-        elif k[pygame.K_s] and manage == 1:
-            heal_pc += 1
-            if heal_pc == 25:
-                t.tick(1, how_much)
-                heal_pc = 0
-            if coords[1] + 1 < 300:
-                if dikt[(coords[1] + 1), coords[0]].isalpha():
-                    what_the_item(dikt[(coords[1] + 1), coords[0]])
-                    Player.moved(player)
-                    camera.update(player)
-                    if not item4:
-                        player_image = load_image('armorx2.png', -1)
-                    else:
-                        player_image = load_image('mar.png', -1)
-                    all_sprites = pygame.sprite.Group()
-                    tiles_group = pygame.sprite.Group()
-                    player_group = pygame.sprite.Group()
-                    player, level_x, level_y = generate_level(game_map, False)
-                    tile_width = tile_height = 50
-                    camera.update(player)
-                else:
-                    Player.moved(player)
-                    camera.update(player)
-                for sprite in all_sprites:
-                    camera.apply(sprite)
-        elif k[pygame.K_SPACE]:
-            heal_pc += 1
-            if heal_pc == 25:
-                t.tick(1, how_much)
-                heal_pc = 0
-            if coords in kick_boss:
-                pc.giving_damage(b)
-            elif coords in [[8, 8], [9, 8], [10, 8], [11, 8],
-                            [8, 9], [8, 10], [11, 9], [11, 10],
-                            [8, 11], [9, 11], [10, 11], [11, 11]] and fight:
-                pc.giving_damage(b)
-        elif k[pygame.K_t]:
-            heal_pc += 1
-            if heal_pc == 25:
-                t.tick(1, how_much)
-                heal_pc = 0
-            t.tick(10, how_much)
-        elif k[pygame.K_ESCAPE]:
-            heal_pc += 1
-            if heal_pc == 25:
-                t.tick(1, how_much)
-                heal_pc = 0
-            menu()
-        elif k[pygame.K_m]:
-            heal_pc += 1
-            if heal_pc == 25:
-                t.tick(1, how_much)
-                heal_pc = 0
-            how_much = 10
-    heal_pc += 1
-    if heal_pc == 25:
-        t.tick(1, how_much)
-        heal_pc = 0
-    screen.fill((0, 0, 0))
-    all_sprites.draw(screen)
-    tiles_group.draw(screen)
-    player_group.draw(screen)
-    pygame.draw.rect(screen, [0, 0, 200], [750, 0, 1000, 110])
-    pygame.draw.rect(screen, [200, 0, 0], [750, 110, 1000, 354])
-    f1 = pygame.font.Font(None, 24)
-    text1 = f1.render(str(b.HP) + 'HP', 0, (0, 0, 0))
-    screen.blit(text1, (760, 10))
-    f1 = pygame.font.Font(None, 24)
-    text1 = f1.render('armor: ' + str(b.armor), 0, (0, 0, 0))
-    screen.blit(text1, (760, 44))
-    f1 = pygame.font.Font(None, 24)
-    text1 = f1.render('damage: ' + str(b.damage), 0, (0, 0, 0))
-    screen.blit(text1, (760, 78))
-    f1 = pygame.font.Font(None, 24)
-    text1 = f1.render('Time: ' + t.print(), 0, (0, 0, 0))
-    screen.blit(text1, (760, 120))
-    f1 = pygame.font.Font(None, 24)
-    text1 = f1.render(str(pc.HP) + '/' + str(pc.SHP) + 'HP', 0, (0, 0, 0))
-    screen.blit(text1, (760, 154))
-    f1 = pygame.font.Font(None, 24)
-    text1 = f1.render('armor: ' + str(pc.armor), 0, (0, 0, 0))
-    screen.blit(text1, (760, 188))
-    f1 = pygame.font.Font(None, 24)
-    text1 = f1.render('damage: ' + str(pc.damage), 0, (0, 0, 0))
-    screen.blit(text1, (760, 223))
-    f1 = pygame.font.Font(None, 24)
-    text1 = f1.render('vampirizm: ' + str(pc.vampirizm), 0, (0, 0, 0))
-    screen.blit(text1, (760, 256))
-    f1 = pygame.font.Font(None, 24)
-    text1 = f1.render('regen: ' + str(pc.regen), 0, (0, 0, 0))
-    screen.blit(text1, (760, 290))
-    f1 = pygame.font.Font(None, 24)
-    text1 = f1.render('extra life: ' + str(pc.extra_life), 0, (0, 0, 0))
-    screen.blit(text1, (760, 324))
-    f1 = pygame.font.Font(None, 24)
-    text1 = f1.render('physical penetration: ' + str(pc.physical_penetration), 0, (0, 0, 0))
-    screen.blit(text1, (760, 358))
-    f1 = pygame.font.Font(None, 24)
-    text1 = f1.render('coords: ' + str(coords[0] + 1) + ',' + str(coords[1] + 1), 0, (0, 0, 0))
-    screen.blit(text1, (760, 392))
-    f1 = pygame.font.Font(None, 24)
-    text1 = f1.render('cash: ' + str(pc.cash) + ' $', 0, (0, 0, 0))
-    screen.blit(text1, (760, 426))
-    pygame.display.flip()
-    clock.tick(FPS)
+okk()
