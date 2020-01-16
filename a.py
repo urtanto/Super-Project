@@ -215,7 +215,7 @@ def sq(name, cp, hard):
         cur.execute(forma).fetchall()
         con.commit()
     con.close()
-    back()
+    okk()
 
 
 # генерация случайной карты
@@ -636,9 +636,9 @@ class Player_characters:
             while True:
                 for event in pygame.event.get():
                     if event.type == pygame.QUIT:
-                        back()
+                        okk()
                     elif event.type == pygame.KEYDOWN or event.type == pygame.MOUSEBUTTONDOWN:
-                        back()
+                        okk()
                 pygame.display.flip()
                 clock.tick(FPS)
 
@@ -1389,10 +1389,6 @@ def load_level(filename):
 def terminate():
     pygame.quit()
     sys.exit()
-
-
-def back():
-    okk()
 
 
 #
