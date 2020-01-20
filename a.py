@@ -631,8 +631,7 @@ class Player_characters:
             pc.SHP = math.ceil(pc.SHP)
             pc.HP = pc.SHP
         else:
-            fon = pygame.transform.scale(load_image('game_over.jpg', True), (1000, 1000))
-            screen.blit(fon, (0, 0))
+            animated_game_over()
             while True:
                 for event in pygame.event.get():
                     if event.type == pygame.QUIT:
@@ -642,6 +641,34 @@ class Player_characters:
                 pygame.display.flip()
                 clock.tick(FPS)
 
+def animated_game_over():
+    global screen
+    size = width, height = 600, 300
+    screen = pygame.display.set_mode(size)
+    running = True
+
+    screen.fill(pygame.Color("white"))
+    all_sprites = pygame.sprite.Group()
+    sprite = pygame.sprite.Sprite(all_sprites)
+    sprite.image = pygame.transform.scale(load_image("game_over.png"), (800, 400))
+    sprite.rect = sprite.image.get_rect()
+    sprite.rect.left -= 700
+    fps = 50
+    sprite.rect.top -= 50
+    clock = pygame.time.Clock()
+    while running:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                running = False
+            elif event.type == pygame.KEYDOWN or event.type == pygame.MOUSEBUTTONDOWN:
+                running = False
+                okk()
+        pygame.display.flip()
+        all_sprites.draw(screen)
+        all_sprites.update()
+        if sprite.rect.left < -120:
+            sprite.rect.left += 5
+        clock.tick(fps)
 
 # как все предметы изменяют характеристики героя
 def blade_of_despair():
@@ -1897,6 +1924,8 @@ def okk():
                     t.tick(1, how_much)
                     heal_pc = 0
                 how_much = 10
+            elif k[pygame.K_b]:
+                pc.kill()
         heal_pc += 1
         if heal_pc == 25:
             t.tick(1, how_much)
