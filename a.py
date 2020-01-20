@@ -1578,8 +1578,8 @@ def okk():
     global seti, kick_boss, fight, chance, ok, size, width, height, screen, running, a, sp, clock, game_map, dikt, \
         hard_of_level, sp_of_gotten_things, bx, by, tile_images, tile_width, tile_height, tiles_group, player_group, \
         player, player_group, player_image, boss_group, item4, item3, item2, item1, name, pc, heal_pc, running, \
-        level_y, all_sprites, dikt, coords, fight, game_map, atak_time, le, level_x, chance, camera, manage, level_map,\
-        b, FPS
+        level_y, all_sprites, dikt, coords, fight, game_map, atak_time, le, level_x, chance, camera, manage, \
+        level_map, b, FPS
     seti = False
     kick_boss = [[149, 148], [150, 148], [151, 149], [151, 150], [150, 151], [149, 151], [148, 150], [148, 149]]
     pygame.init()
