@@ -1097,3 +1097,955 @@ def rat():
 
 
 # показ начального меню
+def start():
+    global hard_of_level, manage, ok
+    stop = True
+    fon = pygame.transform.scale(load_image('first_fon.jpg', True), (1000, 1000))
+    screen.blit(fon, (0, 0))
+    while stop:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                terminate()
+            elif event.type == pygame.MOUSEBUTTONDOWN and (event.pos[0] > 800) and (event.pos[1] > 0) and (
+                    event.pos[0] < 1000) and (event.pos[1] < 100):
+                return start_screen()
+            elif event.type == pygame.MOUSEBUTTONDOWN and (event.pos[0] > 800) and (event.pos[1] > 150) and (
+                    event.pos[0] < 1000) and (event.pos[1] < 250):
+                return th()
+            elif event.type == pygame.MOUSEBUTTONDOWN and (event.pos[0] > 800) and (event.pos[1] > 300) and (
+                    event.pos[0] < 1000) and (event.pos[1] < 400):
+                return ma()
+            elif event.type == pygame.MOUSEBUTTONDOWN and (event.pos[0] > 800) and (event.pos[1] > 450) and (
+                    event.pos[0] < 1000) and (event.pos[1] < 550):
+                return ch()
+            elif event.type == pygame.MOUSEBUTTONDOWN and (event.pos[0] > 800) and (event.pos[1] > 600) and (
+                    event.pos[0] < 1000) and (event.pos[1] < 700):
+                return rat()
+            elif event.type == pygame.MOUSEBUTTONDOWN and (event.pos[0] > 800) and (event.pos[1] > 750) and (
+                    event.pos[0] < 1000) and (event.pos[1] < 850):
+                terminate()
+        if ok:
+            return
+        pygame.display.flip()
+        clock.tick(FPS)
+
+
+# три точки в паузе
+def setings():
+    global hard_of_level, manage, ok, seti
+    stop = True
+    seti = True
+    fon = pygame.transform.scale(load_image('settings.jpg', True), (1000, 1000))
+    screen.blit(fon, (0, 0))
+    while stop:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                terminate()
+            elif event.type == pygame.MOUSEBUTTONDOWN and (event.pos[0] > 0) and (event.pos[1] > 0) and (
+                    event.pos[0] < 150) and (event.pos[1] < 200):
+                seti = False
+                return menu()
+            elif event.type == pygame.MOUSEBUTTONDOWN and (event.pos[0] > 400) and (event.pos[1] > 300) and (
+                    event.pos[0] < 600) and (event.pos[1] < 400):
+                return ma()
+            elif event.type == pygame.MOUSEBUTTONDOWN and (event.pos[0] > 400) and (event.pos[1] > 450) and (
+                    event.pos[0] < 600) and (event.pos[1] < 550):
+                return ch()
+            elif event.type == pygame.MOUSEBUTTONDOWN and (event.pos[0] > 400) and (event.pos[1] > 600) and (
+                    event.pos[0] < 600) and (event.pos[1] < 700):
+                return rt(hard_of_level)
+            elif event.type == pygame.MOUSEBUTTONDOWN and (event.pos[0] > 400) and (event.pos[1] > 750) and (
+                    event.pos[0] < 600) and (event.pos[1] < 850):
+                terminate()
+        pygame.display.flip()
+        clock.tick(FPS)
+
+
+# выбор уровня сложности, начало игры
+def start_screen():
+    global hard_of_level, manage, ok
+    fon = pygame.transform.scale(load_image('second_fon.jpg', True), (1000, 1000))
+    screen.blit(fon, (0, 0))
+    stop = True
+    while stop:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                terminate()
+            elif event.type == pygame.MOUSEBUTTONDOWN and (event.pos[0] > 208) and (event.pos[1] > 391) and (
+                    event.pos[0] < 784) and (event.pos[1] < 553):
+                hard_of_level = 1
+                stop = False
+                ok = True
+                return start()
+            elif event.type == pygame.MOUSEBUTTONDOWN and (event.pos[0] > 208) and (event.pos[1] > 570) and (
+                    event.pos[0] < 776) and (event.pos[1] < 728):
+                hard_of_level = 2
+                stop = False
+                ok = True
+                return start()
+            elif event.type == pygame.MOUSEBUTTONDOWN and (event.pos[0] > 208) and (event.pos[1] > 745) and (
+                    event.pos[0] < 774) and (event.pos[1] < 902):
+                hard_of_level = 3
+                stop = False
+                ok = True
+                return start()
+        pygame.display.flip()
+        clock.tick(FPS)
+
+
+#
+class Bosss(pygame.sprite.Sprite):
+    def __init__(self, pos_x, pos_y):
+        super().__init__(boss_group, all_sprites)
+        self.image = tile_images['boss']
+        self.x = pos_x
+        self.y = pos_y
+        self.rect = self.image.get_rect().move(tile_width * self.x, tile_height * self.y)
+
+    def draw(self):
+        self.rect = self.image.get_rect().move(tile_width * self.x, tile_height * self.y)
+
+
+# загрузка картинок
+def load_image(name, color_key=None):
+    fullname = os.path.join('data', name)
+    image = pygame.image.load(fullname).convert()
+    if color_key is not None:
+        if color_key == -1:
+            color_key = image.get_at((0, 0))
+        image.set_colorkey(color_key)
+        image = image.convert_alpha()
+        return image
+    else:
+        image = image.convert_alpha()
+        return pygame.transform.scale(image, (50, 50))
+
+
+#
+def generate_level(level, atak):
+    global bx, by, chance
+    new_player, x, y = None, None, None
+    for y in range(len(level)):
+        for x in range(len(level[y])):
+            if [y, x] in sp_of_gotten_things:
+                Tile('empty', x, y)
+            elif level[y][x] == '.' and chance != [x, y] and atak:
+                Tile('empty1', x, y)
+            elif level[y][x] == '.':
+                Tile('empty', x, y)
+            elif level[y][x] == '#':
+                Tile('wall', x, y)
+                sp.append((x * 50 + 15, y * 50 + 5))
+            elif level[y][x] == '@' and chance != [x, y] and atak:
+                Tile('empty1', x, y)
+                new_player = Player(x, y)
+            elif level[y][x] == '@':
+                Tile('empty', x, y)
+                new_player = Player(x, y)
+            elif level[y][x] == 'a':
+                Tile('axe_of_bloodlust', x, y)
+            elif level[y][x] == 'b':
+                Tile('berserker_rage', x, y)
+            elif level[y][x] == 'c':
+                Tile('blade_of_despair', x, y)
+            elif level[y][x] == 'd':
+                Tile('blade_of_seven_seas', x, y)
+            elif level[y][x] == 'e':
+                Tile('claws_of_chaos', x, y)
+            elif level[y][x] == 'g':
+                Tile('endless_battle', x, y)
+            elif level[y][x] == 'f':
+                Tile('Wind_of_Nature', x, y)
+            elif level[y][x] == 'h':
+                Tile('a_shot_of_the_hunter', x, y)
+            elif level[y][x] == 'i':
+                Tile('an_ordinary_spear', x, y)
+            elif level[y][x] == 'j':
+                Tile('armor_blade', x, y)
+            elif level[y][x] == 'k':
+                Tile('benefit_of_courage', x, y)
+            elif level[y][x] == 'l':
+                Tile('caller_of_the_devil', x, y)
+            elif level[y][x] == 'm':
+                Tile('dagger', x, y)
+            elif level[y][x] == 'n':
+                Tile('Golden meteor', x, y)
+            elif level[y][x] == 'o':
+                Tile('hammer_of_wrath', x, y)
+            elif level[y][x] == 'p':
+                Tile('healing_necklace', x, y)
+            elif level[y][x] == 'q':
+                Tile('health_crystal', x, y)
+            elif level[y][x] == 'r':
+                Tile('leather_armor', x, y)
+            elif level[y][x] == 's':
+                Tile('queens_wings', x, y)
+            elif level[y][x] == 'u':
+                Tile('storm_belt', x, y)
+            elif level[y][x] == 'v':
+                Tile('studded_armor', x, y)
+            elif level[y][x] == 'w':
+                Tile('the Golden stick', x, y)
+            elif level[y][x] == 'x':
+                Tile('the_giants_axe', x, y)
+            elif level[y][x] == 'y':
+                Tile('the_sword_of_the_legionnaire', x, y)
+            elif level[y][x] == 't':
+                Tile('trident', x, y)
+            elif level[y][x] == 'z':
+                Tile('protective_helmet', x, y)
+            elif level[y][x] == 'A':
+                Tile('immortality', x, y)
+            elif level[y][x] == 'B':
+                Tile('boss', x, y)
+            elif level[y][x] == 'C':
+                Tile('coin', x, y)
+            dikt[(y, x)] = level[y][x]
+    return new_player, x, y
+
+
+#
+class Tile(pygame.sprite.Sprite):
+    x = -5
+    y = -5
+    f = False
+
+    def __init__(self, tile_type, pos_x, pos_y):
+        super().__init__(tiles_group, all_sprites)
+        if tile_type == 'boss':
+            Tile.x = pos_x
+            Tile.y = pos_y
+            Tile.f = True
+            self.image = tile_images[tile_type]
+            self.rect = self.image.get_rect().move(tile_width * pos_x, tile_height * pos_y)
+        else:
+            if Tile.f and (pos_x == Tile.x + 1 and pos_y == Tile.y) or (
+                    pos_x == Tile.x + 1 and pos_y == Tile.y + 1) or (pos_x == Tile.x and pos_y == Tile.y + 1):
+                self.image = tile_images[tile_type]
+                self.rect = self.image.get_rect().move(-1000, -1000)
+            else:
+                self.image = tile_images[tile_type]
+                self.rect = self.image.get_rect().move(tile_width * pos_x, tile_height * pos_y)
+
+
+#
+class Player(pygame.sprite.Sprite):
+    def __init__(self, pos_x, pos_y):
+        super().__init__(player_group, all_sprites)
+        self.image = player_image
+        self.rect = self.image.get_rect().move(tile_width * pos_x + 15, tile_height * pos_y + 5)
+
+    def rect(self):
+        return self.rect.topleft
+
+    def movel(self):
+        global coords
+        if (self.rect.left - 50 > 0) and (self.rect.left - 50 < 1000) and [coords[0] - 1, coords[1]] not in sp and \
+                coords[0] - 1 != -1:
+            if fight and coords in [[11, 9], [11, 10]]:
+                return
+            else:
+                self.rect.topleft = (self.rect.left - 50, self.rect.top)
+                game_map[coords[1]][coords[0]] = '.'
+                coords = [coords[0] - 1, coords[1]]
+                game_map[coords[1]][coords[0]] = '@'
+
+    def mover(self):
+        global coords, fight
+        if fight:
+            if (self.rect.left + 50 > 0) and (self.rect.left + 50 < 1000) and [coords[0] + 1, coords[1]] not in sp and \
+                    coords[0] + 1 != 20:
+                if coords == [8, 10]:
+                    return
+                else:
+                    self.rect.topleft = (self.rect.left + 50, self.rect.top)
+                    game_map[coords[1]][coords[0]] = '.'
+                    coords = [coords[0] + 1, coords[1]]
+                    game_map[coords[1]][coords[0]] = '@'
+        else:
+            if (self.rect.left + 50 > 0) and (self.rect.left + 50 < 1000) and [coords[0] + 1, coords[1]] not in sp and \
+                    coords[0] + 1 != 300:
+                self.rect.topleft = (self.rect.left + 50, self.rect.top)
+                game_map[coords[1]][coords[0]] = '.'
+                coords = [coords[0] + 1, coords[1]]
+                game_map[coords[1]][coords[0]] = '@'
+
+    def moveu(self):
+        global coords
+        if (self.rect.top - 50 > 0) and (self.rect.top - 50 < 1000) and [coords[0], coords[1] - 1] not in sp and \
+                coords[1] - 1 != -1:
+            if fight and coords in [[9, 11], [10, 11]]:
+                return
+            else:
+                self.rect.topleft = (self.rect.left, self.rect.top - 50)
+                game_map[coords[1]][coords[0]] = '.'
+                coords = [coords[0], coords[1] - 1]
+                game_map[coords[1]][coords[0]] = '@'
+
+    def moved(self):
+        global coords, fight
+        if fight:
+            if (self.rect.top + 50 > 0) and (self.rect.top + 50 < 1000) and [coords[0], coords[1] + 1] not in sp and \
+                    coords[1] + 1 != 20:
+                if coords == [10, 8]:
+                    return
+                else:
+                    self.rect.topleft = (self.rect.left, self.rect.top + 50)
+                    game_map[coords[1]][coords[0]] = '.'
+                    coords = [coords[0], coords[1] + 1]
+                    game_map[coords[1]][coords[0]] = '@'
+        else:
+            if (self.rect.top + 50 > 0) and (self.rect.top + 50 < 1000) and [coords[0], coords[1] + 1] not in sp and \
+                    coords[1] + 1 != 300:
+                self.rect.topleft = (self.rect.left, self.rect.top + 50)
+                game_map[coords[1]][coords[0]] = '.'
+                coords = [coords[0], coords[1] + 1]
+                game_map[coords[1]][coords[0]] = '@'
+
+
+#
+def load_level(filename):
+    filename = "data/" + filename
+    with open(filename, 'r') as mapFile:
+        level_map = [line.strip() for line in mapFile]
+    max_width = max(map(len, level_map))
+    return list(map(lambda x: x.ljust(max_width, '.'), level_map))
+
+
+# выход из игры
+def terminate():
+    pygame.quit()
+    sys.exit()
+
+
+#
+class Camera:
+    def __init__(self):
+        self.dx = 0
+        self.dy = 0
+
+    def apply(self, obj):
+        obj.rect.x += self.dx
+        obj.rect.y += self.dy
+
+    def update(self, target):
+        self.dx = -(target.rect.x + target.rect.w // 2 - width // 2)
+        self.dy = -(target.rect.y + target.rect.h // 2 - height // 2)
+
+
+# открытие магазина
+def shop():
+    global item1, item2, item3, item4, player_image, player_group, all_sprites, tiles_group, tile_height, tile_width, \
+        player, level_y, level_x
+    stop = True
+    fon = pygame.transform.scale(load_image('shop.jpg', True), (1000, 1000))
+    screen.blit(fon, (0, 0))
+    if not item1:
+        pygame.draw.rect(screen, [200, 0, 0], [59, 179, 451, 390])
+    if not item2:
+        pygame.draw.rect(screen, [200, 0, 0], [559, 179, 951, 391])
+    if not item3:
+        pygame.draw.rect(screen, [200, 0, 0], [59, 579, 451, 1000])
+    if not item4:
+        pygame.draw.rect(screen, [200, 0, 0], [559, 579, 951, 1000])
+    while stop:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                terminate()
+            elif event.type == pygame.MOUSEBUTTONDOWN and (event.pos[0] > 100) and (event.pos[1] > 200) and (
+                    event.pos[0] < 400) and (event.pos[1] < 500) and item1 and pc.cash >= 1500:
+                item1 = False
+                pc.cash -= 1500
+                pc.SHP = pc.SHP * 2
+                pygame.draw.rect(screen, [200, 0, 0], [59, 179, 451, 390])
+            elif event.type == pygame.MOUSEBUTTONDOWN and (event.pos[0] > 600) and (event.pos[1] > 200) and (
+                    event.pos[0] < 900) and (event.pos[1] < 500) and item2 and pc.cash >= 1500:
+                item2 = False
+                pc.cash -= 1500
+                pc.physical_penetration += 1000
+                pygame.draw.rect(screen, [200, 0, 0], [559, 179, 951, 391])
+            elif event.type == pygame.MOUSEBUTTONDOWN and (event.pos[0] > 100) and (event.pos[1] > 600) and (
+                    event.pos[0] < 400) and (event.pos[1] < 900) and item3 and pc.cash >= 1500:
+                item3 = False
+                pc.cash -= 1500
+                pc.damage = pc.damage * 2
+                pygame.draw.rect(screen, [200, 0, 0], [59, 579, 451, 1000])
+            elif event.type == pygame.MOUSEBUTTONDOWN and (event.pos[0] > 600) and (event.pos[1] > 600) and (
+                    event.pos[0] < 900) and (event.pos[1] < 900) and item4 and pc.cash >= 1500:
+                item4 = False
+                pc.cash -= 1500
+                pc.armor *= 2
+                pygame.draw.rect(screen, [200, 0, 0], [559, 579, 951, 1000])
+                player_image = load_image('armorx2.png', -1)
+                all_sprites = pygame.sprite.Group()
+                tiles_group = pygame.sprite.Group()
+                player_group = pygame.sprite.Group()
+                player, level_x, level_y = generate_level(game_map, False)
+                tile_width = tile_height = 50
+                camera.update(player)
+                for sprite in all_sprites:
+                    camera.apply(sprite)
+                pygame.display.flip()
+            elif event.type == pygame.MOUSEBUTTONDOWN and (event.pos[0] > 5) and (event.pos[1] > 10) and (
+                    event.pos[0] < 210) and (event.pos[1] < 125):
+                return menu()
+        pygame.draw.rect(screen, [200, 0, 0], [800, 0, 1000, 100])
+        f1 = pygame.font.Font(None, 36)
+        text1 = f1.render('cash: ' + str(pc.cash), 0, (0, 0, 0))
+        screen.blit(text1, (810, 10))
+        pygame.display.flip()
+        clock.tick(FPS)
+
+
+# возращает строку времени
+def clockprint(d, h, m, s):
+    d = str(d) if len(str(d)) == 2 else '0' + str(d)
+    h = str(h) if len(str(h)) == 2 else '0' + str(h)
+    m = str(m) if len(str(m)) == 2 else '0' + str(m)
+    s = str(s) if len(str(s)) == 2 else '0' + str(s)
+    return d + ':' + h + ':' + m + ':' + s
+
+
+# вывод рейтинга в паузе
+def rt(hard):
+    fon = pygame.transform.scale(load_image('rt.jpg', True), (1000, 1000))
+    screen.blit(fon, (0, 0))
+    con = sqlite3.connect('chet.db')
+    # Создаём курсор
+    cur = con.cursor()
+    result = None
+    if hard == 1:
+        result = cur.execute("SELECT name, s FROM che1 ORDER BY s DESC, name").fetchall()
+        result = [list(i) for i in result]
+    elif hard == 2:
+        result = cur.execute("SELECT name, s FROM che2 ORDER BY s DESC, name").fetchall()
+        result = [list(i) for i in result]
+    elif hard == 3:
+        result = cur.execute("SELECT name, s FROM che3 ORDER BY s DESC, name").fetchall()
+        result = [list(i) for i in result]
+    result = result[:: -1]
+    while True:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                terminate()
+            elif event.type == pygame.MOUSEBUTTONDOWN and (event.pos[0] > 0) and (event.pos[1] > 0) and (
+                    event.pos[0] < 205) and (event.pos[1] < 203):
+                return setings()
+        f1 = pygame.font.Font(None, 50)
+        text1 = f1.render('Rating:', 0, (0, 0, 0))
+        screen.blit(text1, (400, 200))
+        d = result[0][1] // 86400
+        h = result[0][1] % 86400 // 3600
+        m = result[0][1] % 86400 % 3600 // 60
+        s = result[0][1] % 86400 % 3600 % 60
+        f1 = pygame.font.Font(None, 50)
+        text1 = f1.render('1: ' + str(result[0][0]) + ' ' + clockprint(d, h, m, s), 0, (0, 0, 0))
+        screen.blit(text1, (400, 300))
+        d = result[1][1] // 86400
+        h = result[1][1] % 86400 // 3600
+        m = result[1][1] % 86400 % 3600 // 60
+        s = result[1][1] % 86400 % 3600 % 60
+        f1 = pygame.font.Font(None, 50)
+        text1 = f1.render('2: ' + str(result[1][0]) + ' ' + clockprint(d, h, m, s), 0, (0, 0, 0))
+        screen.blit(text1, (400, 400))
+        d = result[2][1] // 86400
+        h = result[2][1] % 86400 // 3600
+        m = result[2][1] % 86400 % 3600 // 60
+        s = result[2][1] % 86400 % 3600 % 60
+        f1 = pygame.font.Font(None, 50)
+        text1 = f1.render('3: ' + str(result[2][0]) + ' ' + clockprint(d, h, m, s), 0, (0, 0, 0))
+        screen.blit(text1, (400, 500))
+        d = result[3][1] // 86400
+        h = result[3][1] % 86400 // 3600
+        m = result[3][1] % 86400 % 3600 // 60
+        s = result[3][1] % 86400 % 3600 % 60
+        f1 = pygame.font.Font(None, 50)
+        text1 = f1.render('4: ' + str(result[3][0]) + ' ' + clockprint(d, h, m, s), 0, (0, 0, 0))
+        screen.blit(text1, (400, 600))
+        d = result[4][1] // 86400
+        h = result[4][1] % 86400 // 3600
+        m = result[4][1] % 86400 % 3600 // 60
+        s = result[4][1] % 86400 % 3600 % 60
+        f1 = pygame.font.Font(None, 50)
+        text1 = f1.render('5: ' + str(result[4][0]) + ' ' + clockprint(d, h, m, s), 0, (0, 0, 0))
+        screen.blit(text1, (400, 700))
+        pygame.display.flip()
+        clock.tick(FPS)
+
+
+# пауза
+def menu():
+    fon = pygame.transform.scale(load_image('menu.jpg', True), (1000, 1000))
+    screen.blit(fon, (0, 0))
+    while True:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                terminate()
+            elif event.type == pygame.MOUSEBUTTONDOWN and (event.pos[0] > 185) and (event.pos[1] > 99) and (
+                    event.pos[0] < 814) and (event.pos[1] < 273):
+                return
+            elif event.type == pygame.MOUSEBUTTONDOWN and (event.pos[0] > 185) and (event.pos[1] > 290) and (
+                    event.pos[0] < 814) and (event.pos[1] < 460):
+                return shop()
+            elif event.type == pygame.MOUSEBUTTONDOWN and (event.pos[0] > 185) and (event.pos[1] > 476) and (
+                    event.pos[0] < 814) and (event.pos[1] < 688):
+                okk()
+            elif event.type == pygame.MOUSEBUTTONDOWN and (event.pos[0] > 185) and (event.pos[1] > 705) and (
+                    event.pos[0] < 814) and (event.pos[1] < 900):
+                terminate()
+            elif event.type == pygame.MOUSEBUTTONDOWN and (event.pos[0] > 895) and (event.pos[1] > 0) and (
+                    event.pos[0] < 1000) and (event.pos[1] < 100):
+                return setings()
+        pygame.display.flip()
+        clock.tick(FPS)
+
+
+# обозначение всех переменных
+def okk():
+    global seti, kick_boss, fight, chance, ok, size, width, height, screen, running, a, sp, clock, game_map, dikt, \
+        hard_of_level, sp_of_gotten_things, bx, by, tile_images, tile_width, tile_height, tiles_group, player_group, \
+        player, player_group, player_image, boss_group, item4, item3, item2, item1, name, pc, heal_pc, running, \
+        level_y, all_sprites, dikt, coords, fight, game_map, atak_time, le, level_x, chance, camera, manage, \
+        level_map, b, FPS
+    seti = False
+    kick_boss = [[149, 148], [150, 148], [151, 149], [151, 150], [150, 151], [149, 151], [148, 150], [148, 149]]
+    pygame.init()
+    fight = False
+    chance = None
+    ok = False
+    size = width, height = 1000, 1000
+    screen = pygame.display.set_mode(size)
+    running = True
+    create_file()
+    a = 'map.txt'
+    sp = []
+    clock = pygame.time.Clock()
+    game_map = []
+    dikt = {}
+    hard_of_level = 0
+    sp_of_gotten_things = []
+    with open('data/' + a, 'r') as mapFile:
+        le = [line.strip() for line in mapFile]
+        level_map = le[-1].split()
+        for el in range(len(le)):
+            game_map.append(list(le[el]))
+            for ell in range(len(le[el])):
+                if le[el][ell] == '#' or le[el][ell] == 'B':
+                    sp.append([ell, el])
+    coords = [299, 299]
+    bx, by = 0, 0
+    tile_images = {'coin': load_image('coin.jpg'), 'empty1': load_image('atak_floor.png'),
+                   'boss': pygame.transform.scale(load_image('boss.png', -1), (100, 100)),
+                   'wall': load_image('box.png'),
+                   'empty': load_image('grass.png'), 'axe_of_bloodlust': load_image('axe_of_bloodlust.png'),
+                   'berserker_rage': load_image('berserker_rage.png'),
+                   'blade_of_despair': load_image('blade_of_despair.png'),
+                   'blade_of_seven_seas': load_image('blade_of_the_seven_seas.png'),
+                   'claws_of_chaos': load_image('claws_of_chaos.png'),
+                   'endless_battle': load_image('endless_battle.png'),
+                   'Wind_of_Nature': load_image('Wind_of_Nature.png'),
+                   'the_sword_of_the_legionnaire': load_image('the_sword_of_the_legionnaire.png'),
+                   'the_giants_axe': load_image('the_giants_axe.png'),
+                   'the_belt_of_ares': load_image('the_belt_of_ares.png'),
+                   'the Golden stick': load_image('the Golden stick.png'),
+                   'studded_armor': load_image('studded_armor.png'),
+                   'storm_belt': load_image('storm_belt.png'), 'queens_wings': load_image('queens_wings.png'),
+                   'leather_armor': load_image('leather_armor.png'), 'health_crystal': load_image('health_crystal.png'),
+                   'healing_necklace': load_image('healing_necklace.png'),
+                   'hammer_of_wrath': load_image('hammer_of_wrath.png'),
+                   'Golden meteor': load_image('Golden meteor.png'),
+                   'dagger': load_image('dagger.png'), 'caller_of_the_devil': load_image('caller_of_the_devil.png'),
+                   'benefit_of_courage': load_image('benefit_of_courage.png'),
+                   'armor_blade': load_image('armor_blade.png'),
+                   'an_ordinary_spear': load_image('an_ordinary_spear.png'),
+                   'a_shot_of_the_hunter': load_image('a_shot_of_the_hunter.png'), 'trident': load_image('trident.png'),
+                   'protective_helmet': load_image('protective_helmet.png'),
+                   'immortality': load_image('immortality.png')}
+    player_image = load_image('mar.png', -1)
+    all_sprites = pygame.sprite.Group()
+    tiles_group = pygame.sprite.Group()
+    boss_group = pygame.sprite.Group()
+    player_group = pygame.sprite.Group()
+    tile_width = tile_height = 50
+    manage = 2
+    FPS = 50
+    start()
+    level_map = load_level(a)
+    player, level_x, level_y = generate_level(level_map, False)
+    item1 = True
+    item2 = True
+    item3 = True
+    item4 = True
+    b = Boss(hard_of_level)
+    heal_pc = 0
+    pc = Player_characters(hard_of_level)
+    camera = Camera()
+    how_much = 1
+    camera.update(player)
+    name = ''
+    t.dtime = 0
+    t.htime = 0
+    t.mtime = 0
+    t.stime = 0
+    for sprite in all_sprites:
+        camera.apply(sprite)
+    # сама игра
+    while True:
+        for event in pygame.event.get():
+            k = pygame.key.get_pressed()
+            if event.type == pygame.QUIT:
+                terminate()
+            if k[pygame.K_LEFT] and manage == 2:
+                heal_pc += 1
+                if heal_pc == 25:
+                    t.tick(1, how_much)
+                    heal_pc = 0
+                if coords[0] - 1 > -1:
+                    if dikt[(coords[1]), coords[0] - 1].isalpha():
+                        what_the_item(dikt[(coords[1]), coords[0] - 1])
+                        Player.movel(player)
+                        camera.update(player)
+                        if not item4:
+                            player_image = load_image('armorx2.png', -1)
+                        else:
+                            player_image = load_image('mar.png', -1)
+                        all_sprites = pygame.sprite.Group()
+                        tiles_group = pygame.sprite.Group()
+                        player_group = pygame.sprite.Group()
+                        player, level_x, level_y = generate_level(game_map, False)
+                        tile_width = tile_height = 50
+                        camera.update(player)
+                    else:
+                        Player.movel(player)
+                        camera.update(player)
+                    for sprite in all_sprites:
+                        camera.apply(sprite)
+            elif k[pygame.K_RIGHT] and manage == 2:
+                heal_pc += 1
+                if heal_pc == 25:
+                    t.tick(1, how_much)
+                    heal_pc = 0
+                if coords[0] + 1 < 300:
+                    if dikt[(coords[1]), coords[0] + 1].isalpha():
+                        what_the_item(dikt[(coords[1]), coords[0] + 1])
+                        Player.mover(player)
+                        camera.update(player)
+                        if not item4:
+                            player_image = load_image('armorx2.png', -1)
+                        else:
+                            player_image = load_image('mar.png', -1)
+                        all_sprites = pygame.sprite.Group()
+                        tiles_group = pygame.sprite.Group()
+                        player_group = pygame.sprite.Group()
+                        player, level_x, level_y = generate_level(game_map, False)
+                        tile_width = tile_height = 50
+                        camera.update(player)
+                    else:
+                        Player.mover(player)
+                        camera.update(player)
+                    for sprite in all_sprites:
+                        camera.apply(sprite)
+            elif k[pygame.K_UP] and manage == 2:
+                heal_pc += 1
+                if heal_pc == 25:
+                    t.tick(1, how_much)
+                    heal_pc = 0
+                if coords[1] - 1 > -1:
+                    if dikt[(coords[1] - 1), coords[0]].isalpha():
+                        what_the_item(dikt[(coords[1] - 1), coords[0]])
+                        Player.moveu(player)
+                        camera.update(player)
+                        if not item4:
+                            player_image = load_image('armorx2.png', -1)
+                        else:
+                            player_image = load_image('mar.png', -1)
+                        all_sprites = pygame.sprite.Group()
+                        tiles_group = pygame.sprite.Group()
+                        player_group = pygame.sprite.Group()
+                        player, level_x, level_y = generate_level(game_map, False)
+                        tile_width = tile_height = 50
+                        camera.update(player)
+                    else:
+                        Player.moveu(player)
+                        camera.update(player)
+                    for sprite in all_sprites:
+                        camera.apply(sprite)
+            elif k[pygame.K_DOWN] and manage == 2:
+                heal_pc += 1
+                if heal_pc == 25:
+                    t.tick(1, how_much)
+                    heal_pc = 0
+                if coords[1] + 1 < 300:
+                    if dikt[(coords[1] + 1), coords[0]].isalpha():
+                        what_the_item(dikt[(coords[1] + 1), coords[0]])
+                        Player.moved(player)
+                        camera.update(player)
+                        if not item4:
+                            player_image = load_image('armorx2.png', -1)
+                        else:
+                            player_image = load_image('mar.png', -1)
+                        all_sprites = pygame.sprite.Group()
+                        tiles_group = pygame.sprite.Group()
+                        player_group = pygame.sprite.Group()
+                        player, level_x, level_y = generate_level(game_map, False)
+                        tile_width = tile_height = 50
+                        camera.update(player)
+                    else:
+                        Player.moved(player)
+                        camera.update(player)
+                    for sprite in all_sprites:
+                        camera.apply(sprite)
+            elif k[pygame.K_a] and manage == 1:
+                heal_pc += 1
+                if heal_pc == 25:
+                    t.tick(1, how_much)
+                    heal_pc = 0
+                if coords[0] - 1 > -1:
+                    if dikt[(coords[1]), coords[0] - 1].isalpha():
+                        what_the_item(dikt[(coords[1]), coords[0] - 1])
+                        Player.movel(player)
+                        camera.update(player)
+                        if not item4:
+                            player_image = load_image('armorx2.png', -1)
+                        else:
+                            player_image = load_image('mar.png', -1)
+                        all_sprites = pygame.sprite.Group()
+                        tiles_group = pygame.sprite.Group()
+                        player_group = pygame.sprite.Group()
+                        player, level_x, level_y = generate_level(game_map, False)
+                        tile_width = tile_height = 50
+                        camera.update(player)
+                    else:
+                        Player.movel(player)
+                        camera.update(player)
+                    for sprite in all_sprites:
+                        camera.apply(sprite)
+            elif k[pygame.K_d] and manage == 1:
+                heal_pc += 1
+                if heal_pc == 25:
+                    t.tick(1, how_much)
+                    heal_pc = 0
+                if coords[0] + 1 < 300:
+                    if dikt[(coords[1]), coords[0] + 1].isalpha():
+                        what_the_item(dikt[(coords[1]), coords[0] + 1])
+                        Player.mover(player)
+                        camera.update(player)
+                        if not item4:
+                            player_image = load_image('armorx2.png', -1)
+                        else:
+                            player_image = load_image('mar.png', -1)
+                        all_sprites = pygame.sprite.Group()
+                        tiles_group = pygame.sprite.Group()
+                        player_group = pygame.sprite.Group()
+                        player, level_x, level_y = generate_level(game_map, False)
+                        tile_width = tile_height = 50
+                        camera.update(player)
+                    else:
+                        Player.mover(player)
+                        camera.update(player)
+                    for sprite in all_sprites:
+                        camera.apply(sprite)
+            elif k[pygame.K_w] and manage == 1:
+                heal_pc += 1
+                if heal_pc == 25:
+                    t.tick(1, how_much)
+                    heal_pc = 0
+                if coords[1] - 1 > -1:
+                    if dikt[(coords[1] - 1), coords[0]].isalpha():
+                        what_the_item(dikt[(coords[1] - 1), coords[0]])
+                        Player.moveu(player)
+                        camera.update(player)
+                        if not item4:
+                            player_image = load_image('armorx2.png', -1)
+                        else:
+                            player_image = load_image('mar.png', -1)
+                        all_sprites = pygame.sprite.Group()
+                        tiles_group = pygame.sprite.Group()
+                        player_group = pygame.sprite.Group()
+                        player, level_x, level_y = generate_level(game_map, False)
+                        tile_width = tile_height = 50
+                        camera.update(player)
+                    else:
+                        Player.moveu(player)
+                        camera.update(player)
+                    for sprite in all_sprites:
+                        camera.apply(sprite)
+            elif k[pygame.K_s] and manage == 1:
+                heal_pc += 1
+                if heal_pc == 25:
+                    t.tick(1, how_much)
+                    heal_pc = 0
+                if coords[1] + 1 < 300:
+                    if dikt[(coords[1] + 1), coords[0]].isalpha():
+                        what_the_item(dikt[(coords[1] + 1), coords[0]])
+                        Player.moved(player)
+                        camera.update(player)
+                        if not item4:
+                            player_image = load_image('armorx2.png', -1)
+                        else:
+                            player_image = load_image('mar.png', -1)
+                        all_sprites = pygame.sprite.Group()
+                        tiles_group = pygame.sprite.Group()
+                        player_group = pygame.sprite.Group()
+                        player, level_x, level_y = generate_level(game_map, False)
+                        tile_width = tile_height = 50
+                        camera.update(player)
+                    else:
+                        Player.moved(player)
+                        camera.update(player)
+                    for sprite in all_sprites:
+                        camera.apply(sprite)
+            elif k[pygame.K_SPACE]:
+                heal_pc += 1
+                if heal_pc == 25:
+                    t.tick(1, how_much)
+                    heal_pc = 0
+                if coords in kick_boss:
+                    pc.giving_damage(b)
+                elif coords in [[8, 8], [9, 8], [10, 8], [11, 8],
+                                [8, 9], [8, 10], [11, 9], [11, 10],
+                                [8, 11], [9, 11], [10, 11], [11, 11]] and fight:
+                    pc.giving_damage(b)
+            elif k[pygame.K_t]:
+                heal_pc += 1
+                if heal_pc == 25:
+                    t.tick(1, how_much)
+                    heal_pc = 0
+                t.tick(10, how_much)
+            elif k[pygame.K_ESCAPE]:
+                heal_pc += 1
+                if heal_pc == 25:
+                    t.tick(1, how_much)
+                    heal_pc = 0
+                menu()
+            elif k[pygame.K_m]:
+                heal_pc += 1
+                if heal_pc == 25:
+                    t.tick(1, how_much)
+                    heal_pc = 0
+                how_much = 10
+            elif k[pygame.K_b]:
+                pc.kill()
+        heal_pc += 1
+        if heal_pc == 25:
+            t.tick(1, how_much)
+            heal_pc = 0
+        screen.fill((0, 0, 0))
+        all_sprites.draw(screen)
+        tiles_group.draw(screen)
+        player_group.draw(screen)
+        pygame.draw.rect(screen, [0, 0, 200], [750, 0, 1000, 110])
+        pygame.draw.rect(screen, [200, 0, 0], [750, 110, 1000, 354])
+        f1 = pygame.font.Font(None, 24)
+        text1 = f1.render(str(b.HP) + 'HP', 0, (0, 0, 0))
+        screen.blit(text1, (760, 10))
+        f1 = pygame.font.Font(None, 24)
+        text1 = f1.render('armor: ' + str(b.armor), 0, (0, 0, 0))
+        screen.blit(text1, (760, 44))
+        f1 = pygame.font.Font(None, 24)
+        text1 = f1.render('damage: ' + str(b.damage), 0, (0, 0, 0))
+        screen.blit(text1, (760, 78))
+        f1 = pygame.font.Font(None, 24)
+        text1 = f1.render('Time: ' + t.print(), 0, (0, 0, 0))
+        screen.blit(text1, (760, 120))
+        f1 = pygame.font.Font(None, 24)
+        text1 = f1.render(str(pc.HP) + '/' + str(pc.SHP) + 'HP', 0, (0, 0, 0))
+        screen.blit(text1, (760, 154))
+        f1 = pygame.font.Font(None, 24)
+        text1 = f1.render('armor: ' + str(pc.armor), 0, (0, 0, 0))
+        screen.blit(text1, (760, 188))
+        f1 = pygame.font.Font(None, 24)
+        text1 = f1.render('damage: ' + str(pc.damage), 0, (0, 0, 0))
+        screen.blit(text1, (760, 223))
+        f1 = pygame.font.Font(None, 24)
+        text1 = f1.render('vampirizm: ' + str(pc.vampirizm), 0, (0, 0, 0))
+        screen.blit(text1, (760, 256))
+        f1 = pygame.font.Font(None, 24)
+        text1 = f1.render('regen: ' + str(pc.regen), 0, (0, 0, 0))
+        screen.blit(text1, (760, 290))
+        f1 = pygame.font.Font(None, 24)
+        text1 = f1.render('extra life: ' + str(pc.extra_life), 0, (0, 0, 0))
+        screen.blit(text1, (760, 324))
+        f1 = pygame.font.Font(None, 24)
+        text1 = f1.render('physical penetration: ' + str(pc.physical_penetration), 0, (0, 0, 0))
+        screen.blit(text1, (760, 358))
+        f1 = pygame.font.Font(None, 24)
+        text1 = f1.render('coords: ' + str(coords[0] + 1) + ',' + str(coords[1] + 1), 0, (0, 0, 0))
+        screen.blit(text1, (760, 392))
+        f1 = pygame.font.Font(None, 24)
+        text1 = f1.render('cash: ' + str(pc.cash) + ' $', 0, (0, 0, 0))
+        screen.blit(text1, (760, 426))
+        pygame.display.flip()
+        clock.tick(FPS)
+
+
+seti = False
+kick_boss = [[149, 148], [150, 148], [151, 149], [151, 150], [150, 151], [149, 151], [148, 150], [148, 149]]
+pygame.init()
+fight = False
+chance = None
+ok = False
+size = width, height = 1000, 1000
+screen = pygame.display.set_mode(size)
+running = True
+create_file()
+a = 'map.txt'
+sp = []
+clock = pygame.time.Clock()
+game_map = []
+dikt = {}
+hard_of_level = 0
+sp_of_gotten_things = []
+with open('data/' + a, 'r') as mapFile:
+    le = [line.strip() for line in mapFile]
+    level_map = le[-1].split()
+    for el in range(len(le)):
+        game_map.append(list(le[el]))
+        for ell in range(len(le[el])):
+            if le[el][ell] == '#' or le[el][ell] == 'B':
+                sp.append([ell, el])
+coords = [299, 299]
+bx, by = 0, 0
+tile_images = {'coin': load_image('coin.jpg'), 'empty1': load_image('atak_floor.png'),
+               'boss': pygame.transform.scale(load_image('boss.png', -1), (100, 100)), 'wall': load_image('box.png'),
+               'empty': load_image('grass.png'), 'axe_of_bloodlust': load_image('axe_of_bloodlust.png'),
+               'berserker_rage': load_image('berserker_rage.png'),
+               'blade_of_despair': load_image('blade_of_despair.png'),
+               'blade_of_seven_seas': load_image('blade_of_the_seven_seas.png'),
+               'claws_of_chaos': load_image('claws_of_chaos.png'), 'endless_battle': load_image('endless_battle.png'),
+               'Wind_of_Nature': load_image('Wind_of_Nature.png'),
+               'the_sword_of_the_legionnaire': load_image('the_sword_of_the_legionnaire.png'),
+               'the_giants_axe': load_image('the_giants_axe.png'),
+               'the_belt_of_ares': load_image('the_belt_of_ares.png'),
+               'the Golden stick': load_image('the Golden stick.png'), 'studded_armor': load_image('studded_armor.png'),
+               'storm_belt': load_image('storm_belt.png'), 'queens_wings': load_image('queens_wings.png'),
+               'leather_armor': load_image('leather_armor.png'), 'health_crystal': load_image('health_crystal.png'),
+               'healing_necklace': load_image('healing_necklace.png'),
+               'hammer_of_wrath': load_image('hammer_of_wrath.png'), 'Golden meteor': load_image('Golden meteor.png'),
+               'dagger': load_image('dagger.png'), 'caller_of_the_devil': load_image('caller_of_the_devil.png'),
+               'benefit_of_courage': load_image('benefit_of_courage.png'), 'armor_blade': load_image('armor_blade.png'),
+               'an_ordinary_spear': load_image('an_ordinary_spear.png'),
+               'a_shot_of_the_hunter': load_image('a_shot_of_the_hunter.png'), 'trident': load_image('trident.png'),
+               'protective_helmet': load_image('protective_helmet.png'), 'immortality': load_image('immortality.png')}
+player_image = load_image('mar.png', -1)
+all_sprites = pygame.sprite.Group()
+tiles_group = pygame.sprite.Group()
+boss_group = pygame.sprite.Group()
+player_group = pygame.sprite.Group()
+tile_width = tile_height = 50
+manage = 2
+FPS = 50
+level_map = load_level(a)
+player, level_x, level_y = generate_level(level_map, False)
+item1 = True
+item2 = True
+item3 = True
+item4 = True
+b = Boss(hard_of_level)
+heal_pc = 0
+pc = Player_characters(hard_of_level)
+camera = Camera()
+how_much = 1
+camera.update(player)
+name = ''
+okk()
