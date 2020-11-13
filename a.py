@@ -13,7 +13,7 @@ from random import choice as c
 def sq(name, cp, hard):
     # переводим переменную в строку
     name = str(name[0]).upper() + str(name[1:])
-    con = sqlite3.connect('chet.db')
+    con = sqlite3.connect('data/chet.db')
     # Создаём курсор
     cur = con.cursor()
     r2esult = None
@@ -641,6 +641,7 @@ class Player_characters:
                 pygame.display.flip()
                 clock.tick(FPS)
 
+
 def animated_game_over():
     global screen
     size = width, height = 600, 300
@@ -669,6 +670,7 @@ def animated_game_over():
         if sprite.rect.left < -120:
             sprite.rect.left += 5
         clock.tick(fps)
+
 
 # как все предметы изменяют характеристики героя
 def blade_of_despair():
@@ -955,7 +957,7 @@ def th():
 
 # показ рейтинга всех уровней сложности на начальном уровне сложности
 def rat():
-    con = sqlite3.connect('chet.db')
+    con = sqlite3.connect('data/chet.db')
     # Создаём курсор
     cur = con.cursor()
     result = cur.execute("SELECT name, s FROM che1 ORDER BY s DESC, name").fetchall()
@@ -1510,7 +1512,7 @@ def clockprint(d, h, m, s):
 def rt(hard):
     fon = pygame.transform.scale(load_image('rt.jpg', True), (1000, 1000))
     screen.blit(fon, (0, 0))
-    con = sqlite3.connect('chet.db')
+    con = sqlite3.connect('data/chet.db')
     # Создаём курсор
     cur = con.cursor()
     result = None
@@ -1774,6 +1776,7 @@ def okk():
                 heal_pc += 1
                 if heal_pc == 25:
                     t.tick(1, how_much)
+
                     heal_pc = 0
                 if coords[1] + 1 < 300:
                     if dikt[(coords[1] + 1), coords[0]].isalpha():
@@ -2043,6 +2046,7 @@ item3 = True
 item4 = True
 b = Boss(hard_of_level)
 heal_pc = 0
+
 pc = Player_characters(hard_of_level)
 camera = Camera()
 how_much = 1
